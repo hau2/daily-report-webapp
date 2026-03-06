@@ -98,11 +98,12 @@ Plans:
   2. User can highlight text on any webpage and trigger a quick-add popup pre-filled with the highlighted text and current page URL
   3. User can enter estimated hours and optional notes in the popup and save the task
   4. Tasks created via the extension appear immediately in the user's daily report on the web app
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md — Backend auth changes: dual JWT extraction (cookie + Bearer), extension-login/refresh endpoints, CORS update
+- [ ] 05-02-PLAN.md — Chrome extension build: MV3 workspace, service worker, context menu, popup (login + quick-add), Bearer auth API client
+- [ ] 05-03-PLAN.md — Human verification of complete Phase 5 end-to-end flows
 
 ## Progress
 
@@ -115,4 +116,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Team Management | 4/4 | Complete   | 2026-03-06 |
 | 3. Task Management and Daily Reports | 4/4 | Complete   | 2026-03-06 |
 | 4. Manager Dashboard and Export | 3/3 | Complete | 2026-03-06 |
-| 5. Chrome Extension | 0/0 | Not started | - |
+| 5. Chrome Extension | 0/3 | Not started | - |
