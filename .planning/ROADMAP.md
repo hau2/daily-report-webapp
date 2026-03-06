@@ -12,7 +12,7 @@ This roadmap delivers a daily reporting web app where team members log tasks thr
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation and Auth** - Monorepo scaffold, database schema, user registration/login, session management
+- [x] **Phase 1: Foundation and Auth** - Monorepo scaffold, database schema, user registration/login, session management (completed 2026-03-06)
 - [ ] **Phase 2: Team Management** - Team creation, member invitations, role separation (manager vs member)
 - [ ] **Phase 3: Task Management and Daily Reports** - Task CRUD, daily report view, end-of-day review, report submission
 - [ ] **Phase 4: Manager Dashboard and Export** - Manager views, submission tracking, CSV export, responsive design
@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can reset a forgotten password via an email link
   4. User can update their profile (name, email, password) from a settings page
   5. Monorepo builds and runs locally with NestJS API, Next.js frontend, and Supabase database connected
-**Plans:** 3/5 plans executed
+**Plans:** 5/5 plans complete
 
 Plans:
 - [ ] 01-01-PLAN.md — Remove Prisma, install Supabase JS + auth deps, create SupabaseModule, shared types, test mocks
@@ -105,7 +105,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Auth | 3/5 | In Progress|  |
+| 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
 | 2. Team Management | 0/0 | Not started | - |
 | 3. Task Management and Daily Reports | 0/0 | Not started | - |
 | 4. Manager Dashboard and Export | 0/0 | Not started | - |

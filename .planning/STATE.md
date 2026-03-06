@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation-and-auth-04-PLAN.md
-last_updated: "2026-03-06T07:50:01.169Z"
+stopped_at: "Completed 01-foundation-and-auth-05-PLAN.md (Task 3 checkpoint: human-verify)"
+last_updated: "2026-03-06T08:22:02.151Z"
 last_activity: 2026-03-06 -- Roadmap created
 progress:
   total_phases: 5
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 5
-  completed_plans: 4
+  completed_plans: 5
   percent: 20
 ---
 
@@ -54,6 +54,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 01-foundation-and-auth P02 | 7 | 2 tasks | 14 files |
 | Phase 01-foundation-and-auth P03 | 8 | 3 tasks | 21 files |
 | Phase 01-foundation-and-auth P04 | 6 | 2 tasks | 5 files |
+| Phase 01-foundation-and-auth P05 | 3 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,9 @@ Recent decisions affecting current work:
 - [Phase 01-foundation-and-auth]: vi.mock with inline class (class MockResend) avoids ESM hoisting limitation where outer-scope variables are undefined in vi.mock factories
 - [Phase 01-foundation-and-auth]: forgot-password page uses finally block to always show success UI regardless of API error -- prevents email enumeration
 - [Phase 01-foundation-and-auth]: reset-password uses local Zod schema with .refine() for confirmPassword match, not shared resetPasswordSchema
+- [Phase 01-foundation-and-auth]: UsersService.getProfile uses narrow SELECT (no password_hash/refresh_token_hash) to prevent accidental exposure
+- [Phase 01-foundation-and-auth]: Password change nullifies refresh_token_hash to force re-login (settings page calls logout after success)
+- [Phase 01-foundation-and-auth]: Settings page uses three independent form Cards (Profile/Email/Password) -- each has isolated react-hook-form instance and useMutation
 
 ### Pending Todos
 
@@ -89,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T07:50:01.167Z
-Stopped at: Completed 01-foundation-and-auth-04-PLAN.md
+Last session: 2026-03-06T08:22:02.149Z
+Stopped at: Completed 01-foundation-and-auth-05-PLAN.md (Task 3 checkpoint: human-verify)
 Resume file: None
