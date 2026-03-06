@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import * as argon2 from 'argon2';
@@ -45,6 +46,7 @@ export class UsersService {
       .single();
 
     if (error) {
+      if (error.code === 'PGRST116') throw new NotFoundException('User not found');
       throw new Error(`Database error: ${error.message}`);
     }
 
