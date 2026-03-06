@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
@@ -38,6 +39,12 @@ export default function DashboardLayout({
           <h1 className="text-xl font-semibold">Daily Report</h1>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600">{user?.email}</span>
+            <Link
+              href="/settings"
+              className="text-sm text-gray-600 underline hover:text-gray-900"
+            >
+              Settings
+            </Link>
             <Button
               variant="outline"
               size="sm"
