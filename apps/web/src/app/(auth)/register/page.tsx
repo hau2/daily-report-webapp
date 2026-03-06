@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { registerSchema, type RegisterInput } from '@daily-report/shared';
 import { useAuth } from '@/hooks/use-auth';
@@ -27,6 +28,9 @@ import { Button } from '@/components/ui/button';
 
 export default function RegisterPage() {
   const { register } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get('next');
 
   const form = useForm<RegisterInput>({
     resolver: zodResolver(registerSchema),
@@ -40,6 +44,8 @@ export default function RegisterPage() {
   async function onSubmit(data: RegisterInput) {
     try {
       await register.mutateAsync(data);
+      // Forward ?next= to login so the token survives through registration
+      if (next) router.push(`/login?next=${encodeURIComponent(next)}`);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : 'Registration failed',
