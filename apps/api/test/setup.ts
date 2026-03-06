@@ -7,6 +7,11 @@ interface MockQueryBuilder {
   delete: Mock;
   eq: Mock;
   neq: Mock;
+  in: Mock;
+  not: Mock;
+  is: Mock;
+  order: Mock;
+  limit: Mock;
   single: Mock;
   maybeSingle: Mock;
 }
@@ -40,6 +45,11 @@ export function createMockSupabaseService(): MockSupabaseService {
     delete: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
     neq: vi.fn().mockReturnThis(),
+    in: vi.fn().mockReturnThis(),
+    not: vi.fn().mockReturnThis(),
+    is: vi.fn().mockReturnThis(),
+    order: vi.fn().mockReturnThis(),
+    limit: vi.fn().mockReturnThis(),
     single: vi.fn().mockResolvedValue({ data: null, error: null }),
     maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
   };
