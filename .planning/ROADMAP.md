@@ -33,11 +33,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 5 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Monorepo restructure, Prisma schema, shared types, Vitest infrastructure
-- [ ] 01-02-PLAN.md — NestJS auth backend (register, login, JWT cookies, refresh, logout)
-- [ ] 01-03-PLAN.md — Next.js BFF proxy, auth pages (login, register), protected dashboard
-- [ ] 01-04-PLAN.md — Email verification and password reset (Resend integration)
-- [ ] 01-05-PLAN.md — User profile settings page (name, email, password, timezone)
+- [ ] 01-01-PLAN.md — Remove Prisma, install Supabase JS + auth deps, create SupabaseModule, shared types, test mocks
+- [ ] 01-02-PLAN.md — NestJS auth backend (register, login, dual JWT cookies, refresh, logout)
+- [ ] 01-03-PLAN.md — Next.js auth pages (login, register), API client, auth hook, protected dashboard
+- [ ] 01-04-PLAN.md — Email verification and password reset (Resend EmailService, backend endpoints, frontend pages)
+- [ ] 01-05-PLAN.md — User profile settings (UsersModule, GET/PATCH /users/me, settings page)
 
 ### Phase 2: Team Management
 **Goal**: Users can form teams with clear manager/member roles and invite others to join
