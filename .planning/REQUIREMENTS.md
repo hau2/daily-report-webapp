@@ -39,11 +39,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Chrome Extension
 
-- [ ] **EXT-01**: User can log in to the extension to link their account
+- [x] **EXT-01**: User can log in to the extension to link their account
 - [ ] **EXT-02**: User can highlight text on any webpage and trigger quick-add popup
 - [ ] **EXT-03**: Extension auto-captures current page URL as source link (user can edit it)
 - [ ] **EXT-04**: User can enter estimated hours and optional notes in the quick-add popup
-- [ ] **EXT-05**: Task created via extension appears in user's daily report on the web app
+- [x] **EXT-05**: Task created via extension appears in user's daily report on the web app
 
 ### UI/UX
 
@@ -113,11 +113,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MGMT-01 | Phase 4 | Complete |
 | MGMT-02 | Phase 4 | Complete |
 | MGMT-03 | Phase 4 | Complete |
-| EXT-01 | Phase 5 | Pending |
+| EXT-01 | Phase 5 | Complete |
 | EXT-02 | Phase 5 | Pending |
 | EXT-03 | Phase 5 | Pending |
 | EXT-04 | Phase 5 | Pending |
-| EXT-05 | Phase 5 | Pending |
+| EXT-05 | Phase 5 | Complete |
 | UI-01 | Phase 4 | Complete |
 
 **Coverage:**
