@@ -19,12 +19,6 @@ function createMockQueryBuilder() {
   qb.single = vi.fn().mockResolvedValue({ data: null, error: null });
   qb.maybeSingle = vi.fn().mockResolvedValue({ data: null, error: null });
 
-  // Helper: make the mock resolve with data on the next call to any method
-  // This is useful for terminal chain calls.
-  qb._resolve = (method: string, value: { data: unknown; error: unknown }) => {
-    qb[method].mockResolvedValueOnce(value);
-  };
-
   return qb;
 }
 

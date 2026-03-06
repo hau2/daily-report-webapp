@@ -7,6 +7,7 @@ import { SupabaseModule } from './supabase/supabase.module';
 import { UsersModule } from './users/users.module';
 import { TeamsModule } from './teams/teams.module';
 import { TasksModule } from './tasks/tasks.module';
+import { ManagerModule } from './manager/manager.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { TasksModule } from './tasks/tasks.module';
     UsersModule,
     TeamsModule,
     TasksModule,
+    ManagerModule,
   ],
   controllers: [AppController],
   providers: [AppService],
