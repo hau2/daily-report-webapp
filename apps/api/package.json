@@ -28,10 +28,14 @@
     "@daily-report/tsconfig": "workspace:*",
     "@nestjs/cli": "^11.0.0",
     "@nestjs/schematics": "^11.0.0",
+    "@swc/core": "^1.15.18",
     "@types/cookie-parser": "^1.4.0",
     "@types/node": "^22.0.0",
     "@types/pg": "^8.18.0",
+    "@vitest/coverage-v8": "^4.0.18",
     "prisma": "^7.4.2",
-    "typescript": "^5.7.0"
+    "typescript": "^5.7.0",
+    "unplugin-swc": "^1.5.9",
+    "vitest": "^4.0.18"
   }
 }
