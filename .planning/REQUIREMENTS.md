@@ -23,12 +23,12 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Task Management
 
-- [ ] **TASK-01**: User can create a task with title, estimated hours, source link, and notes
-- [ ] **TASK-02**: User can edit a task (title, hours, link, notes) before report is submitted
-- [ ] **TASK-03**: User can delete a task before report is submitted
-- [ ] **TASK-04**: User can view today's tasks as a daily report
-- [ ] **TASK-05**: User can adjust hours on tasks during end-of-day review
-- [ ] **TASK-06**: User can submit daily report to manager (draft -> submitted, locks editing)
+- [x] **TASK-01**: User can create a task with title, estimated hours, source link, and notes
+- [x] **TASK-02**: User can edit a task (title, hours, link, notes) before report is submitted
+- [x] **TASK-03**: User can delete a task before report is submitted
+- [x] **TASK-04**: User can view today's tasks as a daily report
+- [x] **TASK-05**: User can adjust hours on tasks during end-of-day review
+- [x] **TASK-06**: User can submit daily report to manager (draft -> submitted, locks editing)
 - [ ] **TASK-07**: User can navigate to view/edit reports from previous days
 
 ### Manager Dashboard
@@ -103,12 +103,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TEAM-02 | Phase 2 | Complete |
 | TEAM-03 | Phase 2 | Complete |
 | TEAM-04 | Phase 1 | Complete |
-| TASK-01 | Phase 3 | Pending |
-| TASK-02 | Phase 3 | Pending |
-| TASK-03 | Phase 3 | Pending |
-| TASK-04 | Phase 3 | Pending |
-| TASK-05 | Phase 3 | Pending |
-| TASK-06 | Phase 3 | Pending |
+| TASK-01 | Phase 3 | Complete |
+| TASK-02 | Phase 3 | Complete |
+| TASK-03 | Phase 3 | Complete |
+| TASK-04 | Phase 3 | Complete |
+| TASK-05 | Phase 3 | Complete |
+| TASK-06 | Phase 3 | Complete |
 | TASK-07 | Phase 3 | Pending |
 | MGMT-01 | Phase 4 | Pending |
 | MGMT-02 | Phase 4 | Pending |
