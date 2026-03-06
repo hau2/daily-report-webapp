@@ -1,5 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="UTF-8"><title>Daily Report</title></head>
-<body><div id="app">Stub</div></body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daily Report - Quick Add</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Login View -->
+    <div id="login-view" class="view hidden">
+      <div class="branding">
+        <h1>Daily Report</h1>
+        <p class="subtitle">Quick Add</p>
+      </div>
+      <form id="login-form">
+        <div class="field">
+          <label for="login-email">Email</label>
+          <input type="email" id="login-email" placeholder="you@example.com" required />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input type="password" id="login-password" placeholder="Password" required />
+        </div>
+        <div id="login-error" class="error-msg hidden"></div>
+        <button type="submit" id="login-btn" class="btn-primary">Log In</button>
+      </form>
+    </div>
+
+    <!-- Task View -->
+    <div id="task-view" class="view hidden">
+      <div class="header">
+        <span id="user-email" class="user-email"></span>
+        <button id="logout-btn" class="btn-link">Logout</button>
+      </div>
+      <form id="task-form">
+        <div class="field">
+          <label for="task-title">Task Title</label>
+          <textarea id="task-title" rows="2" placeholder="What did you work on?" required></textarea>
+        </div>
+        <div class="field">
+          <label for="task-source">Source Link</label>
+          <input type="url" id="task-source" placeholder="https://..." />
+        </div>
+        <div class="field-row">
+          <div class="field field-half">
+            <label for="task-hours">Hours</label>
+            <input type="number" id="task-hours" step="0.25" min="0.25" max="24" placeholder="1.0" required />
+          </div>
+          <div class="field field-half">
+            <label for="task-team">Team</label>
+            <select id="task-team" required>
+              <option value="">Select team</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="task-notes">Notes <span class="optional">(optional)</span></label>
+          <textarea id="task-notes" rows="2" placeholder="Additional context..."></textarea>
+        </div>
+        <div id="task-status" class="status-msg hidden"></div>
+        <div id="task-error" class="error-msg hidden"></div>
+        <button type="submit" id="save-btn" class="btn-primary">Save Task</button>
+      </form>
+    </div>
+  </div>
+  <script type="module" src="popup.ts"></script>
+</body>
 </html>

@@ -1,10 +1,18 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
-import { copyFileSync, mkdirSync, existsSync } from 'fs';
+import {
+  copyFileSync,
+  mkdirSync,
+  existsSync,
+  renameSync,
+  rmSync,
+} from 'fs';
 
 export default defineConfig({
+  root: resolve(__dirname, 'src'),
+  base: './',
   build: {
-    outDir: 'dist',
+    outDir: resolve(__dirname, 'dist'),
     emptyOutDir: true,
     rollupOptions: {
       input: {
@@ -20,21 +28,24 @@ export default defineConfig({
   },
   plugins: [
     {
-      name: 'copy-manifest-and-icons',
+      name: 'copy-extension-assets',
       closeBundle() {
+        const distDir = resolve(__dirname, 'dist');
+
         // Copy manifest.json to dist/
         copyFileSync(
           resolve(__dirname, 'manifest.json'),
-          resolve(__dirname, 'dist/manifest.json'),
+          resolve(distDir, 'manifest.json'),
         );
+
         // Copy icons to dist/icons/
-        const iconsDir = resolve(__dirname, 'dist/icons');
+        const iconsDir = resolve(distDir, 'icons');
         if (!existsSync(iconsDir)) {
           mkdirSync(iconsDir, { recursive: true });
         }
         for (const size of ['16', '48', '128']) {
           const src = resolve(__dirname, `src/icons/icon-${size}.png`);
-          const dest = resolve(__dirname, `dist/icons/icon-${size}.png`);
+          const dest = resolve(iconsDir, `icon-${size}.png`);
           if (existsSync(src)) {
             copyFileSync(src, dest);
           }
