@@ -15,6 +15,7 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ExtensionRefreshDto } from './dto/extension-refresh.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
@@ -86,6 +87,22 @@ export class AuthController {
     @Body() dto: ResetPasswordDto,
   ): Promise<{ message: string }> {
     return this.authService.resetPassword(dto);
+  }
+
+  @Post('extension-login')
+  @HttpCode(HttpStatus.OK)
+  async extensionLogin(
+    @Body() dto: LoginDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.authService.extensionLogin(dto);
+  }
+
+  @Post('extension-refresh')
+  @HttpCode(HttpStatus.OK)
+  async extensionRefresh(
+    @Body() dto: ExtensionRefreshDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.authService.extensionRefresh(dto.refreshToken);
   }
 
   @Get('me')

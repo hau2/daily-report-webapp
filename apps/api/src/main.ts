@@ -19,9 +19,24 @@ async function bootstrap() {
     }),
   );
 
-  // CORS - allow Next.js frontend
+  // CORS - allow Next.js frontend and Chrome extension origins
   app.enableCors({
-    origin: process.env.FRONTEND_URL,
+    origin: (
+      origin: string | undefined,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
+      const allowedOrigins = [process.env.FRONTEND_URL];
+      // Allow requests with no origin (Chrome extension, Postman, server-to-server)
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        origin.startsWith('chrome-extension://')
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true,
   });
 
