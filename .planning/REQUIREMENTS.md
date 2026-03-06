@@ -16,9 +16,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Team Management
 
-- [ ] **TEAM-01**: User can create a new team (creator becomes manager/owner)
-- [ ] **TEAM-02**: Manager can invite members via email link
-- [ ] **TEAM-03**: Invited user can join team via invitation link
+- [x] **TEAM-01**: User can create a new team (creator becomes manager/owner)
+- [x] **TEAM-02**: Manager can invite members via email link
+- [x] **TEAM-03**: Invited user can join team via invitation link
 - [x] **TEAM-04**: User can update their profile (name, email, password)
 
 ### Task Management
@@ -99,9 +99,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| TEAM-01 | Phase 2 | Pending |
-| TEAM-02 | Phase 2 | Pending |
-| TEAM-03 | Phase 2 | Pending |
+| TEAM-01 | Phase 2 | Complete |
+| TEAM-02 | Phase 2 | Complete |
+| TEAM-03 | Phase 2 | Complete |
 | TEAM-04 | Phase 1 | Complete |
 | TASK-01 | Phase 3 | Pending |
 | TASK-02 | Phase 3 | Pending |

@@ -47,7 +47,7 @@ Plans:
   1. User can create a new team and is automatically assigned as manager/owner
   2. Manager can send an email invitation link to add new members to the team
   3. An invited user can click the invitation link and join the team as a member
-**Plans:** 4 plans
+**Plans:** 1/4 plans executed
 
 Plans:
 - [ ] 02-01-PLAN.md — DB migration (teams/team_members/team_invitations), shared Team types/schemas, Wave 0 test stubs
@@ -109,7 +109,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
-| 2. Team Management | 0/4 | Not started | - |
+| 2. Team Management | 1/4 | In Progress|  |
 | 3. Task Management and Daily Reports | 0/0 | Not started | - |
 | 4. Manager Dashboard and Export | 0/0 | Not started | - |
 | 5. Chrome Extension | 0/0 | Not started | - |
