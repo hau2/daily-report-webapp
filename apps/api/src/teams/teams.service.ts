@@ -72,9 +72,10 @@ export class TeamsService {
       throw new Error(`Database error: ${error.message}`);
     }
 
-    return (data ?? []).map((row: { role: string; teams: Record<string, unknown> }) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return (data ?? []).map((row: any) => ({
       team: row.teams,
-      role: row.role,
+      role: row.role as string,
     }));
   }
 

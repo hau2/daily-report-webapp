@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { SupabaseModule } from './supabase/supabase.module';
 import { UsersModule } from './users/users.module';
+import { TeamsModule } from './teams/teams.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UsersModule } from './users/users.module';
     SupabaseModule,
     AuthModule,
     UsersModule,
+    TeamsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
