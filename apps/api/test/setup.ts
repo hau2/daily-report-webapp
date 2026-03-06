@@ -1,4 +1,25 @@
-import { vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
+
+interface MockQueryBuilder {
+  select: Mock;
+  insert: Mock;
+  update: Mock;
+  delete: Mock;
+  eq: Mock;
+  neq: Mock;
+  single: Mock;
+  maybeSingle: Mock;
+}
+
+interface MockClient {
+  from: Mock;
+}
+
+interface MockSupabaseService {
+  service: { getClient: Mock };
+  mockClient: MockClient;
+  mockQueryBuilder: MockQueryBuilder;
+}
 
 /**
  * Creates a mock SupabaseService for unit testing.
@@ -11,8 +32,8 @@ import { vi } from 'vitest';
  *   // Inject:
  *   { provide: SupabaseService, useValue: service }
  */
-export function createMockSupabaseService() {
-  const mockQueryBuilder = {
+export function createMockSupabaseService(): MockSupabaseService {
+  const mockQueryBuilder: MockQueryBuilder = {
     select: vi.fn().mockReturnThis(),
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
@@ -23,7 +44,7 @@ export function createMockSupabaseService() {
     maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
   };
 
-  const mockClient = {
+  const mockClient: MockClient = {
     from: vi.fn().mockReturnValue(mockQueryBuilder),
   };
 
