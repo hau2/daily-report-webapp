@@ -15,7 +15,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface TeamWithRole {
   team: Team;
-  role: 'manager' | 'member';
+  role: 'owner' | 'member';
 }
 
 export default function TeamsPage() {
@@ -63,8 +63,8 @@ export default function TeamsPage() {
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-base font-medium">{team.name}</CardTitle>
                 <div className="flex items-center gap-3">
-                  <Badge variant={role === 'manager' ? 'default' : 'secondary'}>
-                    {role === 'manager' ? 'Manager' : 'Member'}
+                  <Badge variant={role === 'owner' ? 'default' : 'secondary'}>
+                    {role === 'owner' ? 'Owner' : 'Member'}
                   </Badge>
                   <Button asChild size="sm" variant="outline">
                     <Link href={`/teams/${team.id}`}>View</Link>

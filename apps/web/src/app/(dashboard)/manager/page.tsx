@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface TeamWithRole {
   team: Team;
-  role: 'manager' | 'member';
+  role: 'owner' | 'member';
 }
 
 export default function ManagerIndexPage() {
@@ -27,7 +27,7 @@ export default function ManagerIndexPage() {
     queryFn: () => api.get<TeamWithRole[]>('/teams/my'),
   });
 
-  const managedTeams = teams?.filter((t) => t.role === 'manager') ?? [];
+  const managedTeams = teams?.filter((t) => t.role === 'owner') ?? [];
 
   useEffect(() => {
     if (!isLoading && managedTeams.length === 1) {
@@ -50,7 +50,7 @@ export default function ManagerIndexPage() {
         <Card>
           <CardContent className="py-8 text-center">
             <p className="text-muted-foreground">
-              You are not a manager of any team.
+              You are not an owner of any team.
             </p>
           </CardContent>
         </Card>
@@ -78,7 +78,7 @@ export default function ManagerIndexPage() {
                 <CardTitle className="text-base font-medium">
                   {team.name}
                 </CardTitle>
-                <Badge>Manager</Badge>
+                <Badge>Owner</Badge>
               </CardHeader>
             </Card>
           </Link>

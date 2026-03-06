@@ -44,7 +44,7 @@ describe('TeamsService', () => {
   });
 
   describe('createTeam', () => {
-    it('should insert team row then insert team_members row as manager', async () => {
+    it('should insert team row then insert team_members row as owner', async () => {
       const teamRow = {
         id: 'team-1',
         name: 'My Team',
@@ -56,7 +56,7 @@ describe('TeamsService', () => {
         id: 'member-1',
         team_id: 'team-1',
         user_id: 'user-1',
-        role: 'manager',
+        role: 'owner',
       };
 
       mockQueryBuilder.single
@@ -70,7 +70,7 @@ describe('TeamsService', () => {
       expect(mockQueryBuilder.single).toHaveBeenCalledTimes(2);
     });
 
-    it('should return the created team with role manager', async () => {
+    it('should return the created team with role owner', async () => {
       const teamRow = {
         id: 'team-1',
         name: 'My Team',
@@ -82,7 +82,7 @@ describe('TeamsService', () => {
         id: 'member-1',
         team_id: 'team-1',
         user_id: 'user-1',
-        role: 'manager',
+        role: 'owner',
       };
 
       mockQueryBuilder.single
@@ -97,7 +97,7 @@ describe('TeamsService', () => {
   });
 
   describe('inviteMember', () => {
-    it('should throw ForbiddenException if caller is not a manager', async () => {
+    it('should throw ForbiddenException if caller is not an owner', async () => {
       // Return role='member' when checking team_members
       mockQueryBuilder.single.mockResolvedValueOnce({
         data: { role: 'member' },
@@ -110,9 +110,9 @@ describe('TeamsService', () => {
     });
 
     it('should store token_hash and call emailService.sendTeamInvitationEmail', async () => {
-      // First single() - team_members check (manager)
+      // First single() - team_members check (owner)
       mockQueryBuilder.single
-        .mockResolvedValueOnce({ data: { role: 'manager' }, error: null })
+        .mockResolvedValueOnce({ data: { role: 'owner' }, error: null })
         // Second single() - team info
         .mockResolvedValueOnce({ data: { name: 'My Team', created_by: 'user-1' }, error: null })
         // Third single() - inviter info

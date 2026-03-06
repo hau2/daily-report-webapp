@@ -26,7 +26,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface TeamWithRole {
   team: Team;
-  role: 'manager' | 'member';
+  role: 'owner' | 'member';
 }
 
 // ---- Status Badge ----

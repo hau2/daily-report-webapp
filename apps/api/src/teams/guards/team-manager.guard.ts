@@ -18,6 +18,6 @@ export class TeamManagerGuard implements CanActivate {
       .eq('team_id', teamId)
       .eq('user_id', user.userId)
       .single();
-    return data?.role === 'manager';
+    return data?.role === 'owner';
   }
 }

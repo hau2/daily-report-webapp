@@ -12,7 +12,7 @@ import type { Team } from '@daily-report/shared';
 
 interface TeamWithRole {
   team: Team;
-  role: 'manager' | 'member';
+  role: 'owner' | 'member';
 }
 
 function NavLink({
@@ -69,7 +69,7 @@ export default function DashboardLayout({
     enabled: isAuthenticated,
   });
 
-  const isManager = teams?.some((t) => t.role === 'manager') ?? false;
+  const isManager = teams?.some((t) => t.role === 'owner') ?? false;
 
   if (isLoading) {
     return (

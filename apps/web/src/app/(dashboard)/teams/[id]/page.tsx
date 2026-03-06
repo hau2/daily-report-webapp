@@ -28,7 +28,7 @@ import { Badge } from '@/components/ui/badge';
 
 interface TeamWithRole {
   team: Team;
-  role: 'manager' | 'member';
+  role: 'owner' | 'member';
 }
 
 interface TeamMemberRow {
@@ -162,8 +162,8 @@ export default function TeamDetailPage({ params }: { params: { id: string } }) {
 
       <div className="mb-6 flex items-center gap-3">
         <h1 className="text-2xl font-bold">{team.name}</h1>
-        <Badge variant={role === 'manager' ? 'default' : 'secondary'}>
-          {role === 'manager' ? 'Manager' : 'Member'}
+        <Badge variant={role === 'owner' ? 'default' : 'secondary'}>
+          {role === 'owner' ? 'Owner' : 'Member'}
         </Badge>
       </div>
 
@@ -181,8 +181,8 @@ export default function TeamDetailPage({ params }: { params: { id: string } }) {
                       <p className="font-medium">{m.displayName || m.email}</p>
                       {m.displayName && <p className="text-sm text-muted-foreground">{m.email}</p>}
                     </div>
-                    <Badge variant={m.role === 'manager' ? 'default' : 'secondary'}>
-                      {m.role === 'manager' ? 'Manager' : 'Member'}
+                    <Badge variant={m.role === 'owner' ? 'default' : 'secondary'}>
+                      {m.role === 'owner' ? 'Owner' : 'Member'}
                     </Badge>
                   </div>
                 ))}
@@ -193,7 +193,7 @@ export default function TeamDetailPage({ params }: { params: { id: string } }) {
           </CardContent>
         </Card>
 
-        {role === 'manager' && <InviteForm teamId={id} />}
+        {role === 'owner' && <InviteForm teamId={id} />}
       </div>
     </div>
   );

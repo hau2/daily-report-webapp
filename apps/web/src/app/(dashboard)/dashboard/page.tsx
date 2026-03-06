@@ -16,7 +16,7 @@ import {
 
 interface TeamWithRole {
   team: Team;
-  role: 'manager' | 'member';
+  role: 'owner' | 'member';
 }
 
 export default function DashboardPage() {

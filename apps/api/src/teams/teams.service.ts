@@ -47,7 +47,7 @@ export class TeamsService {
 
     const { error: memberError } = await client
       .from('team_members')
-      .insert({ team_id: team.id, user_id: userId, role: 'manager' })
+      .insert({ team_id: team.id, user_id: userId, role: 'owner' })
       .select()
       .single();
 
@@ -105,7 +105,7 @@ export class TeamsService {
   ): Promise<void> {
     const client = this.supabaseService.getClient();
 
-    // Verify caller is a manager of this team
+    // Verify caller is an owner of this team
     const { data: membership } = await client
       .from('team_members')
       .select('role')
@@ -113,8 +113,8 @@ export class TeamsService {
       .eq('user_id', invitingUserId)
       .single();
 
-    if (membership?.role !== 'manager') {
-      throw new ForbiddenException('Only team managers can invite members');
+    if (membership?.role !== 'owner') {
+      throw new ForbiddenException('Only team owners can invite members');
     }
 
     // Get team info for the email
@@ -134,7 +134,7 @@ export class TeamsService {
     const inviterName: string =
       (inviter as { display_name?: string; email?: string } | null)?.display_name ??
       (inviter as { display_name?: string; email?: string } | null)?.email ??
-      'A team manager';
+      'A team owner';
     const teamName: string = (team as { name?: string } | null)?.name ?? 'a team';
 
     const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
