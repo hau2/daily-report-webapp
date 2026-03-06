@@ -33,9 +33,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Manager Dashboard
 
-- [ ] **MGMT-01**: Manager can view each team member's daily report by date
-- [ ] **MGMT-02**: Manager can see a list of members who haven't submitted today
-- [ ] **MGMT-03**: Manager can export team reports to CSV file
+- [x] **MGMT-01**: Manager can view each team member's daily report by date
+- [x] **MGMT-02**: Manager can see a list of members who haven't submitted today
+- [x] **MGMT-03**: Manager can export team reports to CSV file
 
 ### Chrome Extension
 
@@ -110,9 +110,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TASK-05 | Phase 3 | Complete |
 | TASK-06 | Phase 3 | Complete |
 | TASK-07 | Phase 3 | Complete |
-| MGMT-01 | Phase 4 | Pending |
-| MGMT-02 | Phase 4 | Pending |
-| MGMT-03 | Phase 4 | Pending |
+| MGMT-01 | Phase 4 | Complete |
+| MGMT-02 | Phase 4 | Complete |
+| MGMT-03 | Phase 4 | Complete |
 | EXT-01 | Phase 5 | Pending |
 | EXT-02 | Phase 5 | Pending |
 | EXT-03 | Phase 5 | Pending |

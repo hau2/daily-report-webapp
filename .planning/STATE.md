@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: completed
-stopped_at: Completed 03-04-PLAN.md
-last_updated: "2026-03-06T14:39:50.375Z"
-last_activity: 2026-03-06 -- Completed 03-04-PLAN.md
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-03-06T14:59:42Z"
+last_activity: 2026-03-06 -- Completed 04-01-PLAN.md
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 13
-  completed_plans: 13
-  percent: 100
+  total_plans: 16
+  completed_plans: 14
+  percent: 87
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-06)
 
 **Core value:** Make daily reporting effortless -- quick task entry throughout the day, easy review and adjustment at end of day, clear visibility for managers.
-**Current focus:** Phase 3 complete. Next: Phase 4: Manager Dashboard and Export
+**Current focus:** Phase 4: Manager Dashboard and Export -- Plan 01 (backend API) complete
 
 ## Current Position
 
-Phase: 3 of 5 (Task Management and Daily Reports)
-Plan: 4 of 4 in current phase
-Status: Phase Complete
-Last activity: 2026-03-06 -- Completed 03-04-PLAN.md
+Phase: 4 of 5 (Manager Dashboard and Export)
+Plan: 1 of 3 in current phase
+Status: In Progress
+Last activity: 2026-03-06 -- Completed 04-01-PLAN.md
 
-Progress: [██████████] 100%
+Progress: [██████████████░░░░░░] 70%
 
 ## Performance Metrics
 
@@ -62,6 +62,7 @@ Progress: [██████████] 100%
 | Phase 03 P02 | 4 | 2 tasks | 7 files |
 | Phase 03 P03 | 3 | 2 tasks | 4 files |
 | Phase 03 P04 | 2 | 1 tasks | 0 files |
+| Phase 04 P01 | 4 | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -105,6 +106,8 @@ Recent decisions affecting current work:
 - [Phase 03]: Inline edit toggle pattern for task rows -- simpler than modal approach
 - [Phase 03]: Active nav state uses pathname.startsWith() for route group matching
 - [Phase 03]: All 8 browser test scenarios passed -- Phase 3 task management and daily reports verified complete
+- [Phase 04]: Call-order-based mock pattern for multi-table query testing -- separate query builders per from() call with index counter
+- [Phase 04]: CSV export via @Res passthrough:false with explicit try/catch -- NestJS exception filters bypassed when using raw Response
 
 ### Pending Todos
 
@@ -117,6 +120,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T14:35:51.750Z
-Stopped at: Completed 03-04-PLAN.md
+Last session: 2026-03-06T14:59:42Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
