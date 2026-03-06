@@ -82,11 +82,12 @@ Plans:
   2. Manager can see a clear list of members who have not submitted their report today
   3. Manager can export team reports to a CSV file
   4. The web app is responsive and usable on mobile browsers for both members and managers
-**Plans**: TBD
+**Plans:** 3 plans
 
 Plans:
-- [ ] 04-01: TBD
-- [ ] 04-02: TBD
+- [ ] 04-01-PLAN.md — Backend ManagerModule (shared types, service with tests, controller, 3 endpoints behind TeamManagerGuard)
+- [ ] 04-02-PLAN.md — Frontend manager dashboard pages (/manager, /manager/[teamId]), CSV export, mobile-responsive nav
+- [ ] 04-03-PLAN.md — Human verification of complete Phase 4 end-to-end flows
 
 ### Phase 5: Chrome Extension
 **Goal**: Users can capture tasks directly from any webpage without switching to the web app
@@ -113,5 +114,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
 | 2. Team Management | 4/4 | Complete   | 2026-03-06 |
 | 3. Task Management and Daily Reports | 4/4 | Complete   | 2026-03-06 |
-| 4. Manager Dashboard and Export | 0/0 | Not started | - |
+| 4. Manager Dashboard and Export | 0/3 | Planned | - |
 | 5. Chrome Extension | 0/0 | Not started | - |
