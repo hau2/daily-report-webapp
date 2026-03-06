@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 01-foundation-and-auth-02-PLAN.md
-last_updated: "2026-03-06T07:40:04.045Z"
+stopped_at: Completed 01-foundation-and-auth-03-PLAN.md
+last_updated: "2026-03-06T07:48:10.888Z"
 last_activity: 2026-03-06 -- Roadmap created
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 5
-  completed_plans: 2
+  completed_plans: 3
   percent: 20
 ---
 
@@ -52,6 +52,7 @@ Progress: [██░░░░░░░░] 20%
 *Updated after each plan completion*
 | Phase 01-foundation-and-auth P01 | 3 | 3 tasks | 9 files |
 | Phase 01-foundation-and-auth P02 | 7 | 2 tasks | 14 files |
+| Phase 01-foundation-and-auth P03 | 8 | 3 tasks | 21 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,9 @@ Recent decisions affecting current work:
 - [Phase 01-foundation-and-auth]: Express types use 'import type' throughout auth module — express is transitive dep only, not direct; avoids ESM runtime resolution failure
 - [Phase 01-foundation-and-auth]: vi.mock('argon2', ...) at module level required for ESM native modules — vi.spyOn cannot override non-configurable exports
 - [Phase 01-foundation-and-auth]: JwtModule.register({}) with empty config — signing options (secret, expiresIn) passed per-call in signAsync for per-token control
+- [Phase 01-foundation-and-auth]: useEffect redirect in route group layouts (not Next.js middleware) for client-side auth state management
+- [Phase 01-foundation-and-auth]: GET /auth/me returns JWT payload {userId, email} as lightweight auth check; Plan 05 adds full /users/me profile endpoint
+- [Phase 01-foundation-and-auth]: 401-to-refresh interceptor in api-client.ts retries once before failing — prevents loops while providing transparent token rotation
 
 ### Pending Todos
 
@@ -81,6 +85,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T07:40:04.043Z
-Stopped at: Completed 01-foundation-and-auth-02-PLAN.md
+Last session: 2026-03-06T07:48:10.884Z
+Stopped at: Completed 01-foundation-and-auth-03-PLAN.md
 Resume file: None
