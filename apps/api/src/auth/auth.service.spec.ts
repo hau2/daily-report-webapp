@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createMockSupabaseService } from '../../test/setup';
+import { EmailService } from '../email/email.service';
 import { SupabaseService } from '../supabase/supabase.service';
 import { AuthService } from './auth.service';
 
@@ -15,8 +16,9 @@ vi.mock('argon2', () => ({
 describe('AuthService', () => {
   let service: AuthService;
   let mockSupabase: ReturnType<typeof createMockSupabaseService>;
-  let mockJwtService: { signAsync: ReturnType<typeof vi.fn> };
+  let mockJwtService: { signAsync: ReturnType<typeof vi.fn>; verifyAsync: ReturnType<typeof vi.fn> };
   let mockConfigService: { getOrThrow: ReturnType<typeof vi.fn>; get: ReturnType<typeof vi.fn> };
+  let mockEmailService: { sendVerificationEmail: ReturnType<typeof vi.fn>; sendPasswordResetEmail: ReturnType<typeof vi.fn> };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockRes: any;
 
@@ -27,11 +29,17 @@ describe('AuthService', () => {
 
     mockJwtService = {
       signAsync: vi.fn().mockResolvedValue('mock-jwt-token'),
+      verifyAsync: vi.fn().mockResolvedValue({ sub: 'user-123', purpose: 'email-verification' }),
     };
 
     mockConfigService = {
       getOrThrow: vi.fn().mockReturnValue('test-secret'),
       get: vi.fn().mockReturnValue(undefined), // Not production
+    };
+
+    mockEmailService = {
+      sendVerificationEmail: vi.fn().mockResolvedValue(undefined),
+      sendPasswordResetEmail: vi.fn().mockResolvedValue(undefined),
     };
 
     mockRes = {
@@ -44,6 +52,7 @@ describe('AuthService', () => {
         { provide: SupabaseService, useValue: mockSupabase.service },
         { provide: JwtService, useValue: mockJwtService },
         { provide: ConfigService, useValue: mockConfigService },
+        { provide: EmailService, useValue: mockEmailService },
       ],
     }).compile();
 
@@ -238,6 +247,144 @@ describe('AuthService', () => {
         expect.objectContaining({ maxAge: 0, path: '/auth/refresh' }),
       );
       expect(result).toEqual({ message: 'Logged out' });
+    });
+  });
+
+  describe('register (with email verification)', () => {
+    it('sends verification email after successful registration', async () => {
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'user-123', email: 'test@example.com' },
+        error: null,
+      });
+
+      await service.register({
+        email: 'test@example.com',
+        password: 'password123',
+        displayName: 'Test User',
+      });
+
+      expect(mockJwtService.signAsync).toHaveBeenCalledWith(
+        { sub: 'user-123', purpose: 'email-verification' },
+        { secret: 'test-secret', expiresIn: '1h' },
+      );
+      expect(mockEmailService.sendVerificationEmail).toHaveBeenCalledWith(
+        'test@example.com',
+        'mock-jwt-token',
+      );
+    });
+  });
+
+  describe('verifyEmail', () => {
+    it('marks user as verified with valid email-verification token', async () => {
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'user-123',
+        purpose: 'email-verification',
+      });
+
+      const result = await service.verifyEmail({ token: 'valid-token' });
+
+      expect(mockJwtService.verifyAsync).toHaveBeenCalledWith('valid-token', {
+        secret: 'test-secret',
+      });
+      expect(mockSupabase.mockQueryBuilder.update).toHaveBeenCalledWith({
+        email_verified: true,
+      });
+      expect(result).toEqual({ message: 'Email verified successfully' });
+    });
+
+    it('throws BadRequestException with expired/invalid token', async () => {
+      mockJwtService.verifyAsync.mockRejectedValueOnce(new Error('jwt expired'));
+
+      await expect(service.verifyEmail({ token: 'expired-token' })).rejects.toThrow(
+        'Invalid or expired verification link',
+      );
+    });
+
+    it('throws BadRequestException when token purpose is wrong', async () => {
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'user-123',
+        purpose: 'password-reset', // Wrong purpose
+      });
+
+      await expect(service.verifyEmail({ token: 'wrong-purpose-token' })).rejects.toThrow(
+        'Invalid or expired verification link',
+      );
+    });
+  });
+
+  describe('forgotPassword', () => {
+    it('sends password reset email when user exists', async () => {
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'user-123', email: 'user@example.com' },
+        error: null,
+      });
+
+      const result = await service.forgotPassword({ email: 'user@example.com' });
+
+      expect(mockJwtService.signAsync).toHaveBeenCalledWith(
+        { sub: 'user-123', purpose: 'password-reset' },
+        { secret: 'test-secret', expiresIn: '1h' },
+      );
+      expect(mockEmailService.sendPasswordResetEmail).toHaveBeenCalledWith(
+        'user@example.com',
+        'mock-jwt-token',
+      );
+      expect(result).toEqual({ message: "If an account exists, a reset link has been sent" });
+    });
+
+    it('returns success even when email not found (no enumeration leak)', async () => {
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+      const result = await service.forgotPassword({ email: 'nonexistent@example.com' });
+
+      expect(mockEmailService.sendPasswordResetEmail).not.toHaveBeenCalled();
+      expect(result).toEqual({ message: "If an account exists, a reset link has been sent" });
+    });
+  });
+
+  describe('resetPassword', () => {
+    it('validates token, updates password hash, and nullifies refresh token', async () => {
+      const argon2Module = await import('argon2');
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'user-123',
+        purpose: 'password-reset',
+      });
+
+      const result = await service.resetPassword({ token: 'valid-reset-token', password: 'newpassword123' });
+
+      expect(mockJwtService.verifyAsync).toHaveBeenCalledWith('valid-reset-token', {
+        secret: 'test-secret',
+      });
+      expect(argon2Module.hash).toHaveBeenCalledWith('newpassword123');
+      expect(mockSupabase.mockQueryBuilder.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          password_hash: 'hashed-value',
+          refresh_token_hash: null,
+        }),
+      );
+      expect(result).toEqual({ message: 'Password reset successfully' });
+    });
+
+    it('throws BadRequestException with expired/invalid reset token', async () => {
+      mockJwtService.verifyAsync.mockRejectedValueOnce(new Error('jwt expired'));
+
+      await expect(service.resetPassword({ token: 'expired-token', password: 'newpassword123' })).rejects.toThrow(
+        'Invalid or expired reset link',
+      );
+    });
+
+    it('throws BadRequestException when reset token has wrong purpose', async () => {
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'user-123',
+        purpose: 'email-verification', // Wrong purpose
+      });
+
+      await expect(service.resetPassword({ token: 'wrong-purpose', password: 'newpassword123' })).rejects.toThrow(
+        'Invalid or expired reset link',
+      );
     });
   });
 });

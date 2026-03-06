@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   UnauthorizedException,
@@ -7,9 +8,13 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as argon2 from 'argon2';
 import type { Response } from 'express';
+import { EmailService } from '../email/email.service';
 import { SupabaseService } from '../supabase/supabase.service';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,13 +22,14 @@ export class AuthService {
     private readonly supabaseService: SupabaseService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly emailService: EmailService,
   ) {}
 
   async register(dto: RegisterDto): Promise<{ message: string }> {
     const passwordHash = await argon2.hash(dto.password);
 
     const client = this.supabaseService.getClient();
-    const { error } = await client
+    const { data: user, error } = await client
       .from('users')
       .insert({
         email: dto.email,
@@ -43,7 +49,84 @@ export class AuthService {
       throw new Error(`Database error: ${error.message}`);
     }
 
+    if (user) {
+      const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
+      const verificationToken = await this.jwtService.signAsync(
+        { sub: user.id, purpose: 'email-verification' },
+        { secret: jwtSecret, expiresIn: '1h' },
+      );
+      await this.emailService.sendVerificationEmail(user.email, verificationToken);
+    }
+
     return { message: 'Registration successful' };
+  }
+
+  async verifyEmail(dto: VerifyEmailDto): Promise<{ message: string }> {
+    const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
+
+    let payload: { sub: string; purpose: string };
+    try {
+      payload = await this.jwtService.verifyAsync(dto.token, { secret: jwtSecret });
+    } catch {
+      throw new BadRequestException('Invalid or expired verification link');
+    }
+
+    if (payload.purpose !== 'email-verification') {
+      throw new BadRequestException('Invalid or expired verification link');
+    }
+
+    const client = this.supabaseService.getClient();
+    await client
+      .from('users')
+      .update({ email_verified: true })
+      .eq('id', payload.sub);
+
+    return { message: 'Email verified successfully' };
+  }
+
+  async forgotPassword(dto: ForgotPasswordDto): Promise<{ message: string }> {
+    const client = this.supabaseService.getClient();
+    const { data: user } = await client
+      .from('users')
+      .select('*')
+      .eq('email', dto.email)
+      .single();
+
+    if (user) {
+      const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
+      const resetToken = await this.jwtService.signAsync(
+        { sub: user.id, purpose: 'password-reset' },
+        { secret: jwtSecret, expiresIn: '1h' },
+      );
+      await this.emailService.sendPasswordResetEmail(user.email, resetToken);
+    }
+
+    return { message: "If an account exists, a reset link has been sent" };
+  }
+
+  async resetPassword(dto: ResetPasswordDto): Promise<{ message: string }> {
+    const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
+
+    let payload: { sub: string; purpose: string };
+    try {
+      payload = await this.jwtService.verifyAsync(dto.token, { secret: jwtSecret });
+    } catch {
+      throw new BadRequestException('Invalid or expired reset link');
+    }
+
+    if (payload.purpose !== 'password-reset') {
+      throw new BadRequestException('Invalid or expired reset link');
+    }
+
+    const newPasswordHash = await argon2.hash(dto.password);
+
+    const client = this.supabaseService.getClient();
+    await client
+      .from('users')
+      .update({ password_hash: newPasswordHash, refresh_token_hash: null })
+      .eq('id', payload.sub);
+
+    return { message: 'Password reset successfully' };
   }
 
   async login(dto: LoginDto, res: Response): Promise<{ message: string }> {
