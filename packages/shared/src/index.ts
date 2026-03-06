@@ -9,6 +9,7 @@ export type {
   AuthResponse,
   UpdateProfileRequest,
 } from './types/auth';
+export type { Team, TeamMember } from './types/team';
 
 // Schemas
 export {
@@ -18,6 +19,11 @@ export {
   resetPasswordSchema,
   updateProfileSchema,
 } from './schemas/auth.schema';
+export {
+  createTeamSchema,
+  inviteMemberSchema,
+  acceptInvitationSchema,
+} from './schemas/team.schema';
 
 // Schema inferred types
 export type {
@@ -27,3 +33,8 @@ export type {
   ResetPasswordInput,
   UpdateProfileInput,
 } from './schemas/auth.schema';
+export type {
+  CreateTeamInput,
+  InviteMemberInput,
+  AcceptInvitationInput,
+} from './schemas/team.schema';
