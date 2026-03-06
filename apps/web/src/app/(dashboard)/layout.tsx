@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 
@@ -13,12 +13,13 @@ export default function DashboardLayout({
 }) {
   const { user, isLoading, isAuthenticated, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
+      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
     }
-  }, [isAuthenticated, isLoading, router]);
+  }, [isAuthenticated, isLoading, router, pathname]);
 
   if (isLoading) {
     return (
@@ -38,6 +39,12 @@ export default function DashboardLayout({
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">Daily Report</h1>
           <div className="flex items-center gap-4">
+            <Link
+              href="/teams"
+              className="text-sm text-gray-600 underline hover:text-gray-900"
+            >
+              Teams
+            </Link>
             <span className="text-sm text-gray-600">{user?.email}</span>
             <Link
               href="/settings"
