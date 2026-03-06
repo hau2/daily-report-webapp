@@ -1,47 +1,37 @@
 import { vi } from 'vitest';
 
 /**
- * Creates a mock PrismaService with jest-style mocks for all model methods.
- * Use this in test files to inject a mock PrismaService into NestJS testing modules.
+ * Creates a mock SupabaseService for unit testing.
+ * The mock query builder supports chaining: from('table').select().eq().single()
  *
- * @example
- * ```ts
- * const module = await Test.createTestingModule({
- *   providers: [
- *     AuthService,
- *     { provide: PrismaService, useValue: createMockPrismaService() },
- *   ],
- * }).compile();
- * ```
+ * Usage:
+ *   const { service, mockClient, mockQueryBuilder } = createMockSupabaseService();
+ *   // Configure return value:
+ *   mockQueryBuilder.single.mockResolvedValue({ data: { id: '1', email: 'test@test.com' }, error: null });
+ *   // Inject:
+ *   { provide: SupabaseService, useValue: service }
  */
-export function createMockPrismaService() {
-  const modelMethods = {
-    findUnique: vi.fn(),
-    findUniqueOrThrow: vi.fn(),
-    findFirst: vi.fn(),
-    findFirstOrThrow: vi.fn(),
-    findMany: vi.fn(),
-    create: vi.fn(),
-    createMany: vi.fn(),
-    update: vi.fn(),
-    updateMany: vi.fn(),
-    upsert: vi.fn(),
-    delete: vi.fn(),
-    deleteMany: vi.fn(),
-    count: vi.fn(),
-    aggregate: vi.fn(),
-    groupBy: vi.fn(),
+export function createMockSupabaseService() {
+  const mockQueryBuilder = {
+    select: vi.fn().mockReturnThis(),
+    insert: vi.fn().mockReturnThis(),
+    update: vi.fn().mockReturnThis(),
+    delete: vi.fn().mockReturnThis(),
+    eq: vi.fn().mockReturnThis(),
+    neq: vi.fn().mockReturnThis(),
+    single: vi.fn().mockResolvedValue({ data: null, error: null }),
+    maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+  };
+
+  const mockClient = {
+    from: vi.fn().mockReturnValue(mockQueryBuilder),
   };
 
   return {
-    user: { ...modelMethods },
-    team: { ...modelMethods },
-    teamMember: { ...modelMethods },
-    task: { ...modelMethods },
-    reportSubmission: { ...modelMethods },
-    invitation: { ...modelMethods },
-    $connect: vi.fn(),
-    $disconnect: vi.fn(),
-    $transaction: vi.fn(),
+    service: {
+      getClient: vi.fn().mockReturnValue(mockClient),
+    },
+    mockClient,
+    mockQueryBuilder,
   };
 }

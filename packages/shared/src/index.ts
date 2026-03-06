@@ -1,5 +1,6 @@
 // Types
 export type { User } from './types/user';
+export type { DbUser, DbUserInsert, DbUserUpdate } from './types/database';
 export type {
   LoginRequest,
   RegisterRequest,
