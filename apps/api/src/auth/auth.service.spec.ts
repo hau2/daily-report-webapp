@@ -387,4 +387,182 @@ describe('AuthService', () => {
       );
     });
   });
+
+  describe('extensionLogin', () => {
+    it('returns accessToken and refreshToken with valid credentials', async () => {
+      const argon2Module = await import('argon2');
+      vi.mocked(argon2Module.verify).mockResolvedValueOnce(true);
+
+      const mockUser = {
+        id: 'user-123',
+        email: 'test@example.com',
+        password_hash: 'hashed-password',
+      };
+
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: mockUser,
+        error: null,
+      });
+
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('access-token-jwt')
+        .mockResolvedValueOnce('refresh-token-jwt');
+
+      const result = await service.extensionLogin({
+        email: 'test@example.com',
+        password: 'password123',
+      });
+
+      expect(result).toEqual({
+        accessToken: 'access-token-jwt',
+        refreshToken: 'refresh-token-jwt',
+      });
+      expect(mockJwtService.signAsync).toHaveBeenCalledWith(
+        { sub: 'user-123', email: 'test@example.com' },
+        { secret: 'test-secret', expiresIn: '15m' },
+      );
+      expect(mockJwtService.signAsync).toHaveBeenCalledWith(
+        { sub: 'user-123', email: 'test@example.com' },
+        { secret: 'test-secret', expiresIn: '7d' },
+      );
+    });
+
+    it('throws UnauthorizedException with invalid email', async () => {
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+      await expect(
+        service.extensionLogin({
+          email: 'nonexistent@example.com',
+          password: 'password123',
+        }),
+      ).rejects.toThrow('Invalid credentials');
+    });
+
+    it('throws UnauthorizedException with wrong password', async () => {
+      const argon2Module = await import('argon2');
+      vi.mocked(argon2Module.verify).mockResolvedValueOnce(false);
+
+      const mockUser = {
+        id: 'user-123',
+        email: 'test@example.com',
+        password_hash: 'hashed-password',
+      };
+
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: mockUser,
+        error: null,
+      });
+
+      await expect(
+        service.extensionLogin({
+          email: 'test@example.com',
+          password: 'wrongpassword',
+        }),
+      ).rejects.toThrow('Invalid credentials');
+    });
+
+    it('stores hashed refresh token in DB', async () => {
+      const argon2Module = await import('argon2');
+      vi.mocked(argon2Module.verify).mockResolvedValueOnce(true);
+
+      const mockUser = {
+        id: 'user-123',
+        email: 'test@example.com',
+        password_hash: 'hashed-password',
+      };
+
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: mockUser,
+        error: null,
+      });
+
+      await service.extensionLogin({
+        email: 'test@example.com',
+        password: 'password123',
+      });
+
+      expect(argon2Module.hash).toHaveBeenCalled();
+      expect(mockSupabase.mockQueryBuilder.update).toHaveBeenCalledWith({
+        refresh_token_hash: 'hashed-value',
+      });
+    });
+  });
+
+  describe('extensionRefresh', () => {
+    it('returns new accessToken and refreshToken with valid refresh token', async () => {
+      const argon2Module = await import('argon2');
+      vi.mocked(argon2Module.verify).mockResolvedValueOnce(true);
+
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'user-123',
+        email: 'test@example.com',
+      });
+
+      const mockUser = {
+        id: 'user-123',
+        email: 'test@example.com',
+        refresh_token_hash: 'stored-hash',
+      };
+
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: mockUser,
+        error: null,
+      });
+
+      mockJwtService.signAsync
+        .mockResolvedValueOnce('new-access-token')
+        .mockResolvedValueOnce('new-refresh-token');
+
+      const result = await service.extensionRefresh('valid-refresh-token');
+
+      expect(result).toEqual({
+        accessToken: 'new-access-token',
+        refreshToken: 'new-refresh-token',
+      });
+    });
+
+    it('throws UnauthorizedException with invalid refresh token', async () => {
+      const argon2Module = await import('argon2');
+      vi.mocked(argon2Module.verify).mockResolvedValueOnce(false);
+
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'user-123',
+        email: 'test@example.com',
+      });
+
+      const mockUser = {
+        id: 'user-123',
+        email: 'test@example.com',
+        refresh_token_hash: 'stored-hash',
+      };
+
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: mockUser,
+        error: null,
+      });
+
+      await expect(
+        service.extensionRefresh('tampered-refresh-token'),
+      ).rejects.toThrow('Invalid refresh token');
+    });
+
+    it('throws UnauthorizedException when no user found', async () => {
+      mockJwtService.verifyAsync.mockResolvedValueOnce({
+        sub: 'nonexistent-user',
+        email: 'test@example.com',
+      });
+
+      mockSupabase.mockQueryBuilder.single.mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+      await expect(
+        service.extensionRefresh('some-refresh-token'),
+      ).rejects.toThrow('Invalid refresh token');
+    });
+  });
 });

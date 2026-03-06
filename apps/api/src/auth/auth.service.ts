@@ -205,13 +205,69 @@ export class AuthService {
     return { message: 'Logged out' };
   }
 
-  private async generateTokensAndSetCookies(
+  async extensionLogin(
+    dto: LoginDto,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const client = this.supabaseService.getClient();
+    const { data: user } = await client
+      .from('users')
+      .select('*')
+      .eq('email', dto.email)
+      .single();
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    const passwordValid = await argon2.verify(user.password_hash, dto.password);
+    if (!passwordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
+    return this.generateTokens(user.id, user.email);
+  }
+
+  async extensionRefresh(
+    refreshTokenValue: string,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
+
+    let payload: { sub: string; email: string };
+    try {
+      payload = await this.jwtService.verifyAsync(refreshTokenValue, {
+        secret: jwtSecret,
+      });
+    } catch {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const client = this.supabaseService.getClient();
+    const { data: user } = await client
+      .from('users')
+      .select('*')
+      .eq('id', payload.sub)
+      .single();
+
+    if (!user || !user.refresh_token_hash) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    const tokenValid = await argon2.verify(
+      user.refresh_token_hash,
+      refreshTokenValue,
+    );
+    if (!tokenValid) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    return this.generateTokens(user.id, user.email);
+  }
+
+  private async generateTokens(
     userId: string,
     email: string,
-    res: Response,
-  ): Promise<void> {
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
-    const isProduction = this.configService.get('NODE_ENV') === 'production';
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
@@ -231,6 +287,20 @@ export class AuthService {
       .from('users')
       .update({ refresh_token_hash: refreshTokenHash })
       .eq('id', userId);
+
+    return { accessToken, refreshToken };
+  }
+
+  private async generateTokensAndSetCookies(
+    userId: string,
+    email: string,
+    res: Response,
+  ): Promise<void> {
+    const isProduction = this.configService.get('NODE_ENV') === 'production';
+    const { accessToken, refreshToken } = await this.generateTokens(
+      userId,
+      email,
+    );
 
     res.cookie('access_token', accessToken, {
       httpOnly: true,
