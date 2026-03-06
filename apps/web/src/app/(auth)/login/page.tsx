@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import { loginSchema, type LoginInput } from '@daily-report/shared';
-import { useAuth } from '@/hooks/use-auth';
+import { api } from '@/lib/api-client';
 import {
   Card,
   CardContent,
@@ -26,7 +28,10 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get('next');
+  const queryClient = useQueryClient();
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -36,9 +41,21 @@ export default function LoginPage() {
     },
   });
 
+  const loginMutation = useMutation({
+    mutationFn: (credentials: LoginInput) =>
+      api.post<{ message: string }>('/auth/login', credentials),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+      router.push(next ?? '/dashboard');
+    },
+    onError: (error: Error) => {
+      toast.error(error.message || 'Login failed');
+    },
+  });
+
   async function onSubmit(data: LoginInput) {
     try {
-      await login.mutateAsync(data);
+      await loginMutation.mutateAsync(data);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : 'Login failed',
@@ -98,9 +115,9 @@ export default function LoginPage() {
             <Button
               type="submit"
               className="w-full"
-              disabled={login.isPending}
+              disabled={loginMutation.isPending}
             >
-              {login.isPending ? 'Signing in...' : 'Sign in'}
+              {loginMutation.isPending ? 'Signing in...' : 'Sign in'}
             </Button>
           </form>
         </Form>
