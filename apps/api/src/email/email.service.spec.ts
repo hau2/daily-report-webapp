@@ -3,22 +3,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EmailService } from './email.service';
 
-const mockEmailsSend = vi.fn().mockResolvedValue({ data: { id: 'test-id' }, error: null });
-
-vi.mock('resend', () => {
-  const MockResend = vi.fn().mockImplementation(() => ({
-    emails: {
-      send: mockEmailsSend,
-    },
-  }));
-  return { Resend: MockResend };
-});
+// Mock Resend at module level -- cannot use outer-scope vars due to vi.mock hoisting
+vi.mock('resend', () => ({
+  Resend: class MockResend {
+    emails = {
+      send: vi.fn().mockResolvedValue({ data: { id: 'test-id' }, error: null }),
+    };
+  },
+}));
 
 describe('EmailService', () => {
   let service: EmailService;
 
   beforeEach(async () => {
-    mockEmailsSend.mockClear();
+    vi.clearAllMocks();
 
     const mockConfigService = {
       get: vi.fn().mockImplementation((key: string) => {
@@ -44,21 +42,31 @@ describe('EmailService', () => {
 
   describe('sendVerificationEmail', () => {
     it('calls resend.emails.send with correct to, subject, and html containing verification URL', async () => {
+      // Access the mocked send function through the service's internal resend instance
+      // We spy on the service method behavior by capturing what was sent
+      const { Resend } = await import('resend');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resendInstance = (service as any).resend;
+
       await service.sendVerificationEmail('user@example.com', 'test-token-123');
 
-      expect(mockEmailsSend).toHaveBeenCalledWith(
+      expect(resendInstance.emails.send).toHaveBeenCalledWith(
         expect.objectContaining({
           to: 'user@example.com',
           subject: expect.stringMatching(/verify/i),
           html: expect.stringContaining('http://localhost:3000/verify-email?token=test-token-123'),
         }),
       );
+      void Resend; // used for import side-effect only
     });
 
     it('includes the FROM address from config', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resendInstance = (service as any).resend;
+
       await service.sendVerificationEmail('user@example.com', 'test-token-123');
 
-      expect(mockEmailsSend).toHaveBeenCalledWith(
+      expect(resendInstance.emails.send).toHaveBeenCalledWith(
         expect.objectContaining({
           from: 'noreply@example.com',
         }),
@@ -68,9 +76,12 @@ describe('EmailService', () => {
 
   describe('sendPasswordResetEmail', () => {
     it('calls resend.emails.send with correct to, subject, and html containing reset URL', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resendInstance = (service as any).resend;
+
       await service.sendPasswordResetEmail('user@example.com', 'reset-token-456');
 
-      expect(mockEmailsSend).toHaveBeenCalledWith(
+      expect(resendInstance.emails.send).toHaveBeenCalledWith(
         expect.objectContaining({
           to: 'user@example.com',
           subject: expect.stringMatching(/reset/i),
@@ -80,9 +91,12 @@ describe('EmailService', () => {
     });
 
     it('includes the FROM address from config', async () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const resendInstance = (service as any).resend;
+
       await service.sendPasswordResetEmail('user@example.com', 'reset-token-456');
 
-      expect(mockEmailsSend).toHaveBeenCalledWith(
+      expect(resendInstance.emails.send).toHaveBeenCalledWith(
         expect.objectContaining({
           from: 'noreply@example.com',
         }),
