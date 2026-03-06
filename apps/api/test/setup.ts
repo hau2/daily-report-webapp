@@ -5,11 +5,16 @@ interface MockQueryBuilder {
   insert: Mock;
   update: Mock;
   delete: Mock;
+  upsert: Mock;
   eq: Mock;
   neq: Mock;
   in: Mock;
   not: Mock;
   is: Mock;
+  gt: Mock;
+  lt: Mock;
+  gte: Mock;
+  lte: Mock;
   order: Mock;
   limit: Mock;
   single: Mock;
@@ -43,11 +48,16 @@ export function createMockSupabaseService(): MockSupabaseService {
     insert: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
     delete: vi.fn().mockReturnThis(),
+    upsert: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
     neq: vi.fn().mockReturnThis(),
     in: vi.fn().mockReturnThis(),
     not: vi.fn().mockReturnThis(),
     is: vi.fn().mockReturnThis(),
+    gt: vi.fn().mockReturnThis(),
+    lt: vi.fn().mockReturnThis(),
+    gte: vi.fn().mockReturnThis(),
+    lte: vi.fn().mockReturnThis(),
     order: vi.fn().mockReturnThis(),
     limit: vi.fn().mockReturnThis(),
     single: vi.fn().mockResolvedValue({ data: null, error: null }),
