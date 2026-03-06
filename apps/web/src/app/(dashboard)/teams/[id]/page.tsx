@@ -31,6 +31,14 @@ interface TeamWithRole {
   role: 'manager' | 'member';
 }
 
+interface TeamMemberRow {
+  userId: string;
+  role: string;
+  joinedAt: string;
+  email: string;
+  displayName: string | null;
+}
+
 interface InviteFormProps {
   teamId: string;
 }
@@ -105,6 +113,12 @@ export default function TeamDetailPage({ params }: { params: { id: string } }) {
     queryFn: () => api.get<TeamWithRole[]>('/teams/my'),
   });
 
+  const { data: members } = useQuery({
+    queryKey: ['teams', id, 'members'],
+    queryFn: () => api.get<TeamMemberRow[]>(`/teams/${id}/members`),
+    enabled: !!id,
+  });
+
   if (isLoading) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
@@ -157,10 +171,26 @@ export default function TeamDetailPage({ params }: { params: { id: string } }) {
         <Card>
           <CardHeader>
             <CardTitle>Members</CardTitle>
-            <CardDescription>
-              Member management will be available once members join.
-            </CardDescription>
           </CardHeader>
+          <CardContent>
+            {members && members.length > 0 ? (
+              <div className="space-y-3">
+                {members.map((m) => (
+                  <div key={m.userId} className="flex items-center justify-between rounded-md border p-3">
+                    <div>
+                      <p className="font-medium">{m.displayName || m.email}</p>
+                      {m.displayName && <p className="text-sm text-muted-foreground">{m.email}</p>}
+                    </div>
+                    <Badge variant={m.role === 'manager' ? 'default' : 'secondary'}>
+                      {m.role === 'manager' ? 'Manager' : 'Member'}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">No members yet.</p>
+            )}
+          </CardContent>
         </Card>
 
         {role === 'manager' && <InviteForm teamId={id} />}

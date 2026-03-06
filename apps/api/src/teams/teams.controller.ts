@@ -49,6 +49,11 @@ export class TeamsController {
     return { message: 'Joined team', teamId: result.teamId };
   }
 
+  @Get(':id/members')
+  async getTeamMembers(@Param('id') teamId: string) {
+    return this.teamsService.getTeamMembers(teamId);
+  }
+
   @Post(':id/invitations')
   @UseGuards(TeamManagerGuard)
   @HttpCode(HttpStatus.CREATED)

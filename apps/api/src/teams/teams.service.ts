@@ -208,20 +208,15 @@ export class TeamsService {
       throw new BadRequestException('Invitation already used or not found');
     }
 
-    try {
-      await client
-        .from('team_members')
-        .insert({ team_id: payload.teamId, user_id: currentUser.userId, role: 'member' });
-    } catch (err: unknown) {
-      if (
-        typeof err === 'object' &&
-        err !== null &&
-        'code' in err &&
-        (err as { code: string }).code === '23505'
-      ) {
+    const { error: insertError } = await client
+      .from('team_members')
+      .insert({ team_id: payload.teamId, user_id: currentUser.userId, role: 'member' });
+
+    if (insertError) {
+      if (insertError.code === '23505') {
         throw new ConflictException('Already a member of this team');
       }
-      throw err;
+      throw new Error(`Database error: ${insertError.message}`);
     }
 
     await client
@@ -230,5 +225,49 @@ export class TeamsService {
       .eq('id', (invitation as { id: string }).id);
 
     return { teamId: payload.teamId };
+  }
+
+  async getTeamMembers(
+    teamId: string,
+  ): Promise<Array<{ userId: string; role: string; joinedAt: string; email: string; displayName: string | null }>> {
+    const client = this.supabaseService.getClient();
+
+    const { data: members, error: membersError } = await client
+      .from('team_members')
+      .select('user_id, role, joined_at')
+      .eq('team_id', teamId);
+
+    if (membersError) {
+      throw new Error(`Database error: ${membersError.message}`);
+    }
+
+    if (!members || members.length === 0) {
+      return [];
+    }
+
+    const userIds = members.map((m) => m.user_id as string);
+    const { data: users, error: usersError } = await client
+      .from('users')
+      .select('id, email, display_name')
+      .in('id', userIds);
+
+    if (usersError) {
+      throw new Error(`Database error: ${usersError.message}`);
+    }
+
+    const usersById = new Map(
+      (users ?? []).map((u) => [u.id as string, u]),
+    );
+
+    return members.map((m) => {
+      const user = usersById.get(m.user_id as string);
+      return {
+        userId: m.user_id as string,
+        role: m.role as string,
+        joinedAt: m.joined_at as string,
+        email: (user?.email as string) ?? '',
+        displayName: (user?.display_name as string) ?? null,
+      };
+    });
   }
 }
