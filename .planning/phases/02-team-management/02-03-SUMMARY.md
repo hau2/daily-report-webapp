@@ -125,6 +125,10 @@ None - no external service configuration required.
 - Phase 03 (daily reports) can assume teams exist and users are members; team_id available from `/teams/my`
 - Note: Member list on `/teams/[id]` shows placeholder — a `GET /teams/:id/members` endpoint would be needed to display actual members (deferred to future scope)
 
+## Self-Check: PASSED
+
+All 7 files confirmed on disk. Commits 57590b0 and 950410c confirmed in git log.
+
 ---
 *Phase: 02-team-management*
 *Completed: 2026-03-06*
