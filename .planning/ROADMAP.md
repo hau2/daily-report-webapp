@@ -65,11 +65,13 @@ Plans:
   3. User can view all of today's tasks as a daily report and adjust hours during end-of-day review
   4. User can submit the daily report, which locks it from further editing
   5. User can navigate to previous days to view or edit past reports (if not yet submitted)
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — DB migration (daily_reports/tasks), shared Task types/schemas, Wave 0 test stubs
+- [ ] 03-02-PLAN.md — TasksModule backend (service, controller, DTOs, report status guard, all tests GREEN)
+- [ ] 03-03-PLAN.md — Frontend daily report page (/reports/[date]), task CRUD, date navigation, report submission
+- [ ] 03-04-PLAN.md — Human verification of complete Phase 3 end-to-end flows
 
 ### Phase 4: Manager Dashboard and Export
 **Goal**: Managers can see their team's daily reports, track who has submitted, and export data
@@ -110,6 +112,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
 | 2. Team Management | 4/4 | Complete   | 2026-03-06 |
-| 3. Task Management and Daily Reports | 0/0 | Not started | - |
+| 3. Task Management and Daily Reports | 0/4 | Not started | - |
 | 4. Manager Dashboard and Export | 0/0 | Not started | - |
 | 5. Chrome Extension | 0/0 | Not started | - |
