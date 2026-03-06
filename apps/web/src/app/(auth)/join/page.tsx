@@ -91,7 +91,7 @@ export default function JoinPage() {
         <CardFooter className="flex gap-3">
           <Button
             onClick={() =>
-              router.push(`/login?next=/join?token=${encodeURIComponent(token)}`)
+              router.push(`/login?next=${encodeURIComponent(`/join?token=${token}`)}`)
             }
           >
             Log in
@@ -99,7 +99,7 @@ export default function JoinPage() {
           <Button
             variant="outline"
             onClick={() =>
-              router.push(`/register?next=/join?token=${encodeURIComponent(token)}`)
+              router.push(`/register?next=${encodeURIComponent(`/join?token=${token}`)}`)
             }
           >
             Register
