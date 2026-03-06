@@ -63,19 +63,38 @@ export class TeamsService {
   ): Promise<Array<{ team: Record<string, unknown>; role: string }>> {
     const client = this.supabaseService.getClient();
 
-    const { data, error } = await client
+    // Step 1: get membership rows
+    const { data: memberships, error: membershipsError } = await client
       .from('team_members')
-      .select('role, teams(id, name, created_by, created_at, updated_at)')
+      .select('team_id, role')
       .eq('user_id', userId);
 
-    if (error) {
-      throw new Error(`Database error: ${error.message}`);
+    if (membershipsError) {
+      throw new Error(`Database error: ${membershipsError.message}`);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return (data ?? []).map((row: any) => ({
-      team: row.teams,
-      role: row.role as string,
+    if (!memberships || memberships.length === 0) {
+      return [];
+    }
+
+    // Step 2: fetch the teams by id
+    const teamIds = memberships.map((m) => m.team_id as string);
+    const { data: teams, error: teamsError } = await client
+      .from('teams')
+      .select('id, name, created_by, created_at, updated_at')
+      .in('id', teamIds);
+
+    if (teamsError) {
+      throw new Error(`Database error: ${teamsError.message}`);
+    }
+
+    const teamsById = new Map(
+      (teams ?? []).map((t) => [t.id as string, t]),
+    );
+
+    return memberships.map((m) => ({
+      team: teamsById.get(m.team_id as string) ?? {},
+      role: m.role as string,
     }));
   }
 

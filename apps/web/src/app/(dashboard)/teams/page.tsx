@@ -19,7 +19,7 @@ interface TeamWithRole {
 }
 
 export default function TeamsPage() {
-  const { data: teams, isLoading } = useQuery({
+  const { data: teams, isLoading, error } = useQuery({
     queryKey: ['teams', 'my'],
     queryFn: () => api.get<TeamWithRole[]>('/teams/my'),
   });
@@ -35,6 +35,14 @@ export default function TeamsPage() {
 
       {isLoading && (
         <p className="text-muted-foreground">Loading your teams...</p>
+      )}
+
+      {error && (
+        <Card>
+          <CardContent className="py-8 text-center">
+            <p className="text-destructive">Failed to load teams: {error.message}</p>
+          </CardContent>
+        </Card>
       )}
 
       {!isLoading && teams && teams.length === 0 && (
