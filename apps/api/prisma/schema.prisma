@@ -1,0 +1,108 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id               String   @id @default(uuid())
+  email            String   @unique
+  passwordHash     String   @map("password_hash")
+  displayName      String?  @map("display_name")
+  timezone         String   @default("UTC")
+  emailVerified    Boolean  @default(false) @map("email_verified")
+  refreshTokenHash String?  @map("refresh_token_hash")
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  teamMembers       TeamMember[]
+  tasks             Task[]
+  reportSubmissions ReportSubmission[]
+  createdTeams      Team[]             @relation("TeamCreator")
+  invitations       Invitation[]       @relation("InvitationInviter")
+
+  @@map("users")
+}
+
+model Team {
+  id        String   @id @default(uuid())
+  name      String
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  creator           User               @relation("TeamCreator", fields: [createdBy], references: [id])
+  members           TeamMember[]
+  tasks             Task[]
+  reportSubmissions ReportSubmission[]
+  invitations       Invitation[]
+
+  @@map("teams")
+}
+
+model TeamMember {
+  id       String   @id @default(uuid())
+  userId   String   @map("user_id")
+  teamId   String   @map("team_id")
+  role     String   @default("member")
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId])
+  @@map("team_members")
+}
+
+model Task {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  teamId    String   @map("team_id")
+  date      DateTime @db.Date
+  title     String
+  hours     Float    @default(0)
+  sourceUrl String?  @map("source_url")
+  notes     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@index([userId, teamId, date])
+  @@map("tasks")
+}
+
+model ReportSubmission {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  teamId      String    @map("team_id")
+  date        DateTime  @db.Date
+  status      String    @default("draft")
+  submittedAt DateTime? @map("submitted_at")
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  @@unique([userId, teamId, date])
+  @@map("report_submissions")
+}
+
+model Invitation {
+  id        String   @id @default(uuid())
+  teamId    String   @map("team_id")
+  email     String
+  token     String   @unique
+  invitedBy String   @map("invited_by")
+  status    String   @default("pending")
+  createdAt DateTime @default(now()) @map("created_at")
+  expiresAt DateTime @map("expires_at")
+
+  team    Team @relation(fields: [teamId], references: [id])
+  inviter User @relation("InvitationInviter", fields: [invitedBy], references: [id])
+
+  @@map("invitations")
+}
