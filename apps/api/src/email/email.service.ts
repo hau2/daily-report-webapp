@@ -88,8 +88,9 @@ export class EmailService {
   ): Promise<void> {
     const invitationUrl = `${this.frontendUrl}/join?token=${token}`;
 
+    this.logger.log(`[DEV] Team invitation URL for ${to}: ${invitationUrl}`);
+
     if (!this.resend) {
-      this.logger.log(`[DEV] Team invitation URL for ${to}: ${invitationUrl}`);
       return;
     }
 
