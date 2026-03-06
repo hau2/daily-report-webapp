@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: in-progress
-stopped_at: Completed 05-01-PLAN.md
-last_updated: "2026-03-06T16:18:41Z"
-last_activity: 2026-03-06 -- Completed 05-01-PLAN.md (Bearer token auth for Chrome extension)
+status: executing
+stopped_at: Completed 05-02-PLAN.md
+last_updated: "2026-03-06T16:26:24.361Z"
+last_activity: 2026-03-06 -- Completed 05-02-PLAN.md (Chrome extension UI with login and quick-add)
 progress:
   total_phases: 5
   completed_phases: 4
-  total_plans: 16
-  completed_plans: 16
-  percent: 100
+  total_plans: 19
+  completed_plans: 18
+  percent: 95
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-06)
 ## Current Position
 
 Phase: 5 of 5 (Chrome Extension)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In Progress
-Last activity: 2026-03-06 -- Completed 05-01-PLAN.md (Bearer token auth for Chrome extension)
+Last activity: 2026-03-06 -- Completed 05-02-PLAN.md (Chrome extension UI with login and quick-add)
 
-Progress: [██████████] 100%
+Progress: [██████████] 95%
 
 ## Performance Metrics
 
@@ -66,6 +66,7 @@ Progress: [██████████] 100%
 | Phase 04 P02 | 3 | 2 tasks | 3 files |
 | Phase 04 P03 | 3 | 1 tasks | 0 files |
 | Phase 05 P01 | 2 | 2 tasks | 6 files |
+| Phase 05 P02 | 3 | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -119,6 +120,9 @@ Recent decisions affecting current work:
 - [Phase 05]: Cookie extractor first, Bearer header second in AccessTokenStrategy -- web app priority, extension fallback
 - [Phase 05]: RefreshTokenStrategy unchanged -- extension uses dedicated /auth/extension-refresh with body-based token
 - [Phase 05]: CORS allows any chrome-extension:// origin (extension ID changes between dev loads)
+- [Phase 05]: Plain Vite with custom plugin instead of @crxjs/vite-plugin (beta) -- simpler for MV3 extension
+- [Phase 05]: Relative base path (./) in Vite config -- Chrome extensions load files relative to extension root
+- [Phase 05]: Auto-select first team for single-team users in extension popup -- matches web app Phase 3 behavior
 
 ### Pending Todos
 
@@ -131,6 +135,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T16:18:41Z
-Stopped at: Completed 05-01-PLAN.md
+Last session: 2026-03-06T16:26:24.359Z
+Stopped at: Completed 05-02-PLAN.md
 Resume file: None
