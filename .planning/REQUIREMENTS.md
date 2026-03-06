@@ -47,7 +47,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### UI/UX
 
-- [ ] **UI-01**: Web app is responsive and usable on mobile browsers
+- [x] **UI-01**: Web app is responsive and usable on mobile browsers
 
 ## v2 Requirements
 
@@ -118,7 +118,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXT-03 | Phase 5 | Pending |
 | EXT-04 | Phase 5 | Pending |
 | EXT-05 | Phase 5 | Pending |
-| UI-01 | Phase 4 | Pending |
+| UI-01 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 24 total
