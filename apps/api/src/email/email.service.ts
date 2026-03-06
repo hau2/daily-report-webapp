@@ -79,4 +79,38 @@ export class EmailService {
       `,
     });
   }
+
+  async sendTeamInvitationEmail(
+    to: string,
+    inviterName: string,
+    teamName: string,
+    token: string,
+  ): Promise<void> {
+    const invitationUrl = `${this.frontendUrl}/join?token=${token}`;
+
+    if (!this.resend) {
+      this.logger.log(`[DEV] Team invitation URL for ${to}: ${invitationUrl}`);
+      return;
+    }
+
+    await this.resend.emails.send({
+      from: this.emailFrom,
+      to,
+      subject: `You've been invited to join ${teamName}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+          <h2>You've been invited to join ${teamName}</h2>
+          <p>${inviterName} has invited you to join their team <strong>${teamName}</strong> on Daily Report.</p>
+          <p>
+            <a href="${invitationUrl}" style="display: inline-block; padding: 12px 24px; background-color: #0070f3; color: white; text-decoration: none; border-radius: 6px;">
+              Accept Invitation
+            </a>
+          </p>
+          <p>Or copy and paste this URL into your browser:</p>
+          <p style="word-break: break-all; color: #666;">${invitationUrl}</p>
+          <p style="color: #666; font-size: 14px;">This invitation expires in 7 days. If you did not expect this invitation, you can safely ignore this email.</p>
+        </div>
+      `,
+    });
+  }
 }
