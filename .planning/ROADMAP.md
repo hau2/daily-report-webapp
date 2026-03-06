@@ -15,7 +15,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 1: Foundation and Auth** - Monorepo scaffold, database schema, user registration/login, session management (completed 2026-03-06)
 - [x] **Phase 2: Team Management** - Team creation, member invitations, role separation (manager vs member) (completed 2026-03-06)
 - [x] **Phase 3: Task Management and Daily Reports** - Task CRUD, daily report view, end-of-day review, report submission (completed 2026-03-06)
-- [ ] **Phase 4: Manager Dashboard and Export** - Manager views, submission tracking, CSV export, responsive design
+- [x] **Phase 4: Manager Dashboard and Export** - Manager views, submission tracking, CSV export, responsive design (completed 2026-03-06)
 - [ ] **Phase 5: Chrome Extension** - Highlight-to-add workflow, auto-captured URLs, extension auth
 
 ## Phase Details
@@ -85,9 +85,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Backend ManagerModule (shared types, service with tests, controller, 3 endpoints behind TeamManagerGuard)
-- [ ] 04-02-PLAN.md — Frontend manager dashboard pages (/manager, /manager/[teamId]), CSV export, mobile-responsive nav
-- [ ] 04-03-PLAN.md — Human verification of complete Phase 4 end-to-end flows
+- [x] 04-01-PLAN.md — Backend ManagerModule (shared types, service with tests, controller, 3 endpoints behind TeamManagerGuard)
+- [x] 04-02-PLAN.md — Frontend manager dashboard pages (/manager, /manager/[teamId]), CSV export, mobile-responsive nav
+- [x] 04-03-PLAN.md — Human verification of complete Phase 4 end-to-end flows
 
 ### Phase 5: Chrome Extension
 **Goal**: Users can capture tasks directly from any webpage without switching to the web app
@@ -114,5 +114,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
 | 2. Team Management | 4/4 | Complete   | 2026-03-06 |
 | 3. Task Management and Daily Reports | 4/4 | Complete   | 2026-03-06 |
-| 4. Manager Dashboard and Export | 0/3 | Planned | - |
+| 4. Manager Dashboard and Export | 3/3 | Complete | 2026-03-06 |
 | 5. Chrome Extension | 0/0 | Not started | - |
