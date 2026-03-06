@@ -29,7 +29,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **TASK-04**: User can view today's tasks as a daily report
 - [x] **TASK-05**: User can adjust hours on tasks during end-of-day review
 - [x] **TASK-06**: User can submit daily report to manager (draft -> submitted, locks editing)
-- [ ] **TASK-07**: User can navigate to view/edit reports from previous days
+- [x] **TASK-07**: User can navigate to view/edit reports from previous days
 
 ### Manager Dashboard
 
@@ -109,7 +109,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | TASK-04 | Phase 3 | Complete |
 | TASK-05 | Phase 3 | Complete |
 | TASK-06 | Phase 3 | Complete |
-| TASK-07 | Phase 3 | Pending |
+| TASK-07 | Phase 3 | Complete |
 | MGMT-01 | Phase 4 | Pending |
 | MGMT-02 | Phase 4 | Pending |
 | MGMT-03 | Phase 4 | Pending |
