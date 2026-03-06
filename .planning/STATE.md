@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Completed 02-team-management-01-PLAN.md (2 tasks)
-last_updated: "2026-03-06T10:24:54.029Z"
+stopped_at: Completed 02-team-management-02-PLAN.md (2 tasks)
+last_updated: "2026-03-06T10:30:23.263Z"
 last_activity: 2026-03-06 -- Roadmap created
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 9
-  completed_plans: 6
+  completed_plans: 7
   percent: 20
 ---
 
@@ -56,6 +56,7 @@ Progress: [██░░░░░░░░] 20%
 | Phase 01-foundation-and-auth P04 | 6 | 2 tasks | 5 files |
 | Phase 01-foundation-and-auth P05 | 3 | 2 tasks | 10 files |
 | Phase 02-team-management P01 | 3 | 2 tasks | 6 files |
+| Phase 02-team-management P02 | 4 | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -85,6 +86,8 @@ Recent decisions affecting current work:
 - [Phase 02-team-management]: SHA-256 used for team_invitations token_hash (not argon2) — invitation tokens have JWT entropy; no password-stretching needed
 - [Phase 02-team-management]: Invitations logic kept inside TeamsModule (not separate module) to avoid circular injection
 - [Phase 02-team-management]: Partial unique index WHERE used_at IS NULL on team_invitations (team_id, invitee_email) allows re-invitation after acceptance
+- [Phase 02-team-management]: Route literal before param: POST /teams/invitations/accept declared before POST /teams/:id/invitations to prevent NestJS matching 'invitations' as :id
+- [Phase 02-team-management]: DTO properties use ! definite-assignment assertion in strict TypeScript — class-validator initializes at runtime, not compile time
 
 ### Pending Todos
 
@@ -97,6 +100,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-06T10:24:54.027Z
-Stopped at: Completed 02-team-management-01-PLAN.md (2 tasks)
+Last session: 2026-03-06T10:30:23.262Z
+Stopped at: Completed 02-team-management-02-PLAN.md (2 tasks)
 Resume file: None
