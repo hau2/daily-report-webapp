@@ -30,11 +30,14 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can reset a forgotten password via an email link
   4. User can update their profile (name, email, password) from a settings page
   5. Monorepo builds and runs locally with NestJS API, Next.js frontend, and Supabase database connected
-**Plans**: TBD
+**Plans:** 5 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — Monorepo restructure, Prisma schema, shared types, Vitest infrastructure
+- [ ] 01-02-PLAN.md — NestJS auth backend (register, login, JWT cookies, refresh, logout)
+- [ ] 01-03-PLAN.md — Next.js BFF proxy, auth pages (login, register), protected dashboard
+- [ ] 01-04-PLAN.md — Email verification and password reset (Resend integration)
+- [ ] 01-05-PLAN.md — User profile settings page (name, email, password, timezone)
 
 ### Phase 2: Team Management
 **Goal**: Users can form teams with clear manager/member roles and invite others to join
@@ -102,7 +105,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation and Auth | 0/0 | Not started | - |
+| 1. Foundation and Auth | 0/5 | Planning complete | - |
 | 2. Team Management | 0/0 | Not started | - |
 | 3. Task Management and Daily Reports | 0/0 | Not started | - |
 | 4. Manager Dashboard and Export | 0/0 | Not started | - |
