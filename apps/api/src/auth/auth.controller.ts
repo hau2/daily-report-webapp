@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -58,5 +59,11 @@ export class AuthController {
   ): Promise<{ message: string }> {
     const user = req.user as AccessTokenUser;
     return this.authService.logout(user.userId, res);
+  }
+
+  @Get('me')
+  @UseGuards(AccessTokenGuard)
+  getMe(@Req() req: Request): AccessTokenUser {
+    return req.user as AccessTokenUser;
   }
 }
