@@ -21,3 +21,11 @@ export interface ResetPasswordRequest {
 export interface AuthResponse {
   message: string;
 }
+
+export interface UpdateProfileRequest {
+  displayName?: string;
+  email?: string;
+  newPassword?: string;
+  currentPassword?: string;
+  timezone?: string;
+}

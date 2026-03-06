@@ -7,6 +7,7 @@ export type {
   ForgotPasswordRequest,
   ResetPasswordRequest,
   AuthResponse,
+  UpdateProfileRequest,
 } from './types/auth';
 
 // Schemas
@@ -15,6 +16,7 @@ export {
   registerSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
+  updateProfileSchema,
 } from './schemas/auth.schema';
 
 // Schema inferred types
@@ -23,4 +25,5 @@ export type {
   RegisterInput,
   ForgotPasswordInput,
   ResetPasswordInput,
+  UpdateProfileInput,
 } from './schemas/auth.schema';
