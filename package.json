@@ -5,9 +5,7 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
-    "test": "turbo test",
-    "db:generate": "turbo db:generate",
-    "db:push": "turbo db:push"
+    "test": "turbo test"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.18",
@@ -19,9 +17,8 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@nestjs/core",
+      "argon2",
       "sharp",
-      "@prisma/engines",
-      "prisma",
       "esbuild",
       "@swc/core"
     ]
