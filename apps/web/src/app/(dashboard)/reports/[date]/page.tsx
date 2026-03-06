@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -39,6 +39,200 @@ import { Badge } from '@/components/ui/badge';
 interface TeamWithRole {
   team: Team;
   role: 'manager' | 'member';
+}
+
+// ---- Searchable Team Select (form field) ----
+
+function SearchableTeamSelect({
+  teams,
+  value,
+  onChange,
+}: {
+  teams: TeamWithRole[];
+  value: string;
+  onChange: (teamId: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = teams.filter((t) =>
+    t.team.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const selected = teams.find((t) => t.team.id === value);
+
+  useEffect(() => {
+    function handleClick(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setSearch('');
+      }
+    }
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(!open);
+          if (!open) setTimeout(() => inputRef.current?.focus(), 0);
+          else setSearch('');
+        }}
+        className="flex w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background hover:bg-accent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+      >
+        <span className="truncate">{selected?.team.name ?? 'Select team'}</span>
+        <svg className={`ml-2 h-4 w-4 shrink-0 opacity-50 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute left-0 z-50 mt-1 w-full rounded-md border bg-popover shadow-md">
+          <div className="p-2">
+            <input
+              ref={inputRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search teams..."
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+          <div className="max-h-48 overflow-y-auto px-1 pb-1">
+            {filtered.length === 0 ? (
+              <p className="px-2 py-1.5 text-sm text-muted-foreground">No teams found</p>
+            ) : (
+              filtered.map((t) => (
+                <button
+                  key={t.team.id}
+                  type="button"
+                  onClick={() => {
+                    onChange(t.team.id);
+                    setOpen(false);
+                    setSearch('');
+                  }}
+                  className={`flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-accent ${
+                    t.team.id === value ? 'bg-accent font-medium' : ''
+                  }`}
+                >
+                  {t.team.name}
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---- Team Selector (searchable dropdown) ----
+
+function TeamSelector({
+  teams,
+  selectedTeamId,
+  onSelect,
+}: {
+  teams: TeamWithRole[];
+  selectedTeamId: string;
+  onSelect: (teamId: string) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const containerRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const filtered = teams.filter((t) =>
+    t.team.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const selectedTeam = teams.find((t) => t.team.id === selectedTeamId);
+
+  const handleClickOutside = useCallback((e: MouseEvent) => {
+    if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      setOpen(false);
+      setSearch('');
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [handleClickOutside]);
+
+  if (teams.length <= 1) return null;
+
+  return (
+    <div ref={containerRef} className="relative">
+      <button
+        type="button"
+        onClick={() => {
+          setOpen(!open);
+          if (!open) {
+            setTimeout(() => inputRef.current?.focus(), 0);
+          } else {
+            setSearch('');
+          }
+        }}
+        className="inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+      >
+        <span className="max-w-[200px] truncate">
+          {selectedTeam?.team.name ?? 'Select team'}
+        </span>
+        <svg
+          className={`h-4 w-4 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="absolute left-0 z-50 mt-1 w-64 rounded-md border bg-popover shadow-md">
+          <div className="p-2">
+            <input
+              ref={inputRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search teams..."
+              className="w-full rounded-md border px-2 py-1.5 text-sm outline-none focus:ring-2 focus:ring-ring"
+            />
+          </div>
+          <div className="max-h-48 overflow-y-auto px-1 pb-1">
+            {filtered.length === 0 ? (
+              <p className="px-2 py-1.5 text-sm text-muted-foreground">No teams found</p>
+            ) : (
+              filtered.map((t) => (
+                <button
+                  key={t.team.id}
+                  type="button"
+                  onClick={() => {
+                    onSelect(t.team.id);
+                    setOpen(false);
+                    setSearch('');
+                  }}
+                  className={`flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm hover:bg-accent ${
+                    t.team.id === selectedTeamId ? 'bg-accent font-medium' : ''
+                  }`}
+                >
+                  <span className="truncate">{t.team.name}</span>
+                  <Badge variant="outline" className="ml-2 shrink-0 text-xs">
+                    {t.role}
+                  </Badge>
+                </button>
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // ---- Task Row ----
@@ -263,9 +457,13 @@ function TaskRow({
 function CreateTaskForm({
   date,
   teamId,
+  teams,
+  onTeamChange,
 }: {
   date: string;
   teamId: string;
+  teams: TeamWithRole[];
+  onTeamChange: (teamId: string) => void;
 }) {
   const queryClient = useQueryClient();
 
@@ -358,6 +556,28 @@ function CreateTaskForm({
                 )}
               />
             </div>
+            {teams.length > 1 && (
+              <FormField
+                control={form.control}
+                name="teamId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Team *</FormLabel>
+                    <FormControl>
+                      <SearchableTeamSelect
+                        teams={teams}
+                        value={field.value}
+                        onChange={(val) => {
+                          field.onChange(val);
+                          onTeamChange(val);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
             <FormField
               control={form.control}
               name="sourceLink"
@@ -449,6 +669,7 @@ export default function DailyReportPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const date = params.date;
+  const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
 
   // Validate date format
   const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
@@ -459,7 +680,18 @@ export default function DailyReportPage() {
     queryFn: () => api.get<TeamWithRole[]>('/teams/my'),
   });
 
-  const teamId = teams?.[0]?.team.id ?? null;
+  // Auto-select first team if none selected, or restore selection
+  useEffect(() => {
+    if (teams && teams.length > 0 && !selectedTeamId) {
+      setSelectedTeamId(teams[0].team.id);
+    }
+    // If selected team is no longer in the list, reset
+    if (teams && selectedTeamId && !teams.find((t) => t.team.id === selectedTeamId)) {
+      setSelectedTeamId(teams[0]?.team.id ?? null);
+    }
+  }, [teams, selectedTeamId]);
+
+  const teamId = selectedTeamId;
 
   // Fetch daily report
   const {
@@ -562,6 +794,18 @@ export default function DailyReportPage() {
         <DateNavigation date={date} />
       </div>
 
+      {/* Team selector */}
+      {teams && teams.length > 1 && teamId && (
+        <div className="mb-6 flex items-center gap-3">
+          <span className="text-sm font-medium text-muted-foreground">Team:</span>
+          <TeamSelector
+            teams={teams}
+            selectedTeamId={teamId}
+            onSelect={setSelectedTeamId}
+          />
+        </div>
+      )}
+
       {/* Report status */}
       {report && report.status === 'submitted' && (
         <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
@@ -611,8 +855,13 @@ export default function DailyReportPage() {
       </Card>
 
       {/* Create task form - only for drafts */}
-      {isDraft && teamId && (
-        <CreateTaskForm date={date} teamId={teamId} />
+      {isDraft && teamId && teams && (
+        <CreateTaskForm
+          date={date}
+          teamId={teamId}
+          teams={teams}
+          onTeamChange={setSelectedTeamId}
+        />
       )}
 
       {/* Submit button */}
