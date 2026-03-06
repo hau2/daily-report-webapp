@@ -11,6 +11,11 @@ export type {
 } from './types/auth';
 export type { Team, TeamMember } from './types/team';
 export type { Task, DailyReport, DailyReportWithTasks } from './types/task';
+export type {
+  TeamMemberReport,
+  PendingMember,
+  TeamReportsResponse,
+} from './types/manager';
 
 // Schemas
 export {
