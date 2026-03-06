@@ -47,10 +47,13 @@ Plans:
   1. User can create a new team and is automatically assigned as manager/owner
   2. Manager can send an email invitation link to add new members to the team
   3. An invited user can click the invitation link and join the team as a member
-**Plans**: TBD
+**Plans:** 4 plans
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md — DB migration (teams/team_members/team_invitations), shared Team types/schemas, Wave 0 test stubs
+- [ ] 02-02-PLAN.md — TeamsModule backend (service, controller, DTOs, TeamManagerGuard, invitation email method)
+- [ ] 02-03-PLAN.md — Frontend teams pages (/teams, /teams/new, /teams/[id]), /join accept page, login ?next= redirect
+- [ ] 02-04-PLAN.md — Human verification of complete Phase 2 end-to-end flows
 
 ### Phase 3: Task Management and Daily Reports
 **Goal**: Users can log tasks throughout the day, review and adjust them, and submit a daily report
@@ -106,7 +109,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
-| 2. Team Management | 0/0 | Not started | - |
+| 2. Team Management | 0/4 | Not started | - |
 | 3. Task Management and Daily Reports | 0/0 | Not started | - |
 | 4. Manager Dashboard and Export | 0/0 | Not started | - |
 | 5. Chrome Extension | 0/0 | Not started | - |
