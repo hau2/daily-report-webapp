@@ -118,8 +118,22 @@ export async function extensionLogin(
   await saveTokens(data.accessToken, data.refreshToken);
 
   // Fetch user teams after successful login
-  const teams = await apiFetch<StoredTeam[]>('/teams/my');
+  await fetchAndStoreTeams();
+}
+
+/**
+ * Fetch teams from API and store mapped to StoredTeam shape.
+ * API returns { team: { id, name, ... }, role }[] — we flatten it.
+ */
+export async function fetchAndStoreTeams(): Promise<StoredTeam[]> {
+  const raw = await apiFetch<Array<{ team: { id: string; name: string }; role: string }>>('/teams/my');
+  const teams: StoredTeam[] = raw.map((m) => ({
+    id: m.team.id,
+    name: m.team.name,
+    role: m.role,
+  }));
   await saveUserTeams(teams);
+  return teams;
 }
 
 export interface CreateTaskData {

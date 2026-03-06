@@ -1,7 +1,7 @@
 /** Popup script: handles login and quick-add task flows */
 
 import { isLoggedIn, clearTokens, getUserTeams, getPendingTask, clearPendingTask, getAccessToken } from '../lib/auth';
-import { extensionLogin, createTask } from '../lib/api';
+import { extensionLogin, createTask, fetchAndStoreTeams } from '../lib/api';
 
 // DOM Elements
 const loginView = document.getElementById('login-view')!;
@@ -48,9 +48,14 @@ function todayDate(): string {
   return `${year}-${month}-${day}`;
 }
 
-/** Populate team dropdown from stored teams */
+/** Populate team dropdown — refresh from API, fall back to stored */
 async function loadTeams(): Promise<void> {
-  const teams = await getUserTeams();
+  let teams = await getUserTeams();
+  try {
+    teams = await fetchAndStoreTeams();
+  } catch {
+    // API unreachable or token expired — use cached teams
+  }
   // Clear existing options except placeholder
   taskTeam.innerHTML = '';
 
