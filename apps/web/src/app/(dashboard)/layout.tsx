@@ -40,15 +40,33 @@ export default function DashboardLayout({
           <h1 className="text-xl font-semibold">Daily Report</h1>
           <div className="flex items-center gap-4">
             <Link
+              href="/reports"
+              className={`text-sm hover:text-gray-900 ${
+                pathname.startsWith('/reports')
+                  ? 'font-medium text-gray-900'
+                  : 'text-gray-600 underline'
+              }`}
+            >
+              Reports
+            </Link>
+            <Link
               href="/teams"
-              className="text-sm text-gray-600 underline hover:text-gray-900"
+              className={`text-sm hover:text-gray-900 ${
+                pathname.startsWith('/teams')
+                  ? 'font-medium text-gray-900'
+                  : 'text-gray-600 underline'
+              }`}
             >
               Teams
             </Link>
             <span className="text-sm text-gray-600">{user?.email}</span>
             <Link
               href="/settings"
-              className="text-sm text-gray-600 underline hover:text-gray-900"
+              className={`text-sm hover:text-gray-900 ${
+                pathname.startsWith('/settings')
+                  ? 'font-medium text-gray-900'
+                  : 'text-gray-600 underline'
+              }`}
             >
               Settings
             </Link>
