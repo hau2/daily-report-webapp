@@ -1,11 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { useAuth } from '@/hooks/use-auth';
@@ -328,24 +326,26 @@ function PasswordCard() {
 
 export default function SettingsPage() {
   const { isAuthenticated, isLoading } = useAuth();
-  const router = useRouter();
 
-  const { data: userProfile, isLoading: isProfileLoading } = useQuery({
+  const { data: userProfile, isLoading: isProfileLoading, error: profileError } = useQuery({
     queryKey: ['users', 'me'],
     queryFn: () => api.get<User>('/users/me'),
     enabled: isAuthenticated,
   });
 
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [isAuthenticated, isLoading, router]);
-
   if (isLoading || isProfileLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-gray-500">Loading...</div>
+      </div>
+    );
+  }
+
+  if (profileError) {
+    return (
+      <div className="mx-auto max-w-2xl px-4 py-8">
+        <p className="text-red-600">Failed to load profile: {(profileError as Error).message}</p>
+        <p className="mt-2 text-sm text-gray-500">Make sure the backend is running and the database is set up.</p>
       </div>
     );
   }
