@@ -880,14 +880,14 @@ export default function DailyReportPage() {
     queryFn: () => api.get<TeamWithRole[]>('/teams/my'),
   });
 
-  // Auto-select first team if none selected, or restore selection
+  // Auto-select "All Teams" if multiple teams, or first team if single
   useEffect(() => {
     if (teams && teams.length > 0 && !selectedTeamId) {
-      setSelectedTeamId(teams[0].team.id);
+      setSelectedTeamId(teams.length > 1 ? ALL_TEAMS_ID : teams[0].team.id);
     }
     // If selected team is no longer in the list, reset (but keep ALL_TEAMS_ID)
     if (teams && selectedTeamId && selectedTeamId !== ALL_TEAMS_ID && !teams.find((t) => t.team.id === selectedTeamId)) {
-      setSelectedTeamId(teams[0]?.team.id ?? null);
+      setSelectedTeamId(teams.length > 1 ? ALL_TEAMS_ID : (teams[0]?.team.id ?? null));
     }
   }, [teams, selectedTeamId]);
 
