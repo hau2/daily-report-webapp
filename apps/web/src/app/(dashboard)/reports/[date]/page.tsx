@@ -13,6 +13,7 @@ import type {
   Task,
   CreateTaskInput,
   UpdateTaskInput,
+  StressLevel,
 } from '@daily-report/shared';
 import { createTaskSchema, updateTaskSchema } from '@daily-report/shared';
 import type { Team } from '@daily-report/shared';
@@ -784,6 +785,62 @@ function AllTeamsReportView({
   );
 }
 
+// ---- Stress Level Selector ----
+
+function StressLevelSelector({
+  value,
+  onChange,
+}: {
+  value: StressLevel | null;
+  onChange: (level: StressLevel) => void;
+}) {
+  const options: { level: StressLevel; label: string; base: string; selected: string }[] = [
+    { level: 'low', label: 'Low', base: 'bg-green-100 text-green-700', selected: 'bg-green-600 text-white' },
+    { level: 'medium', label: 'Medium', base: 'bg-yellow-100 text-yellow-700', selected: 'bg-yellow-500 text-white' },
+    { level: 'high', label: 'High', base: 'bg-red-100 text-red-700', selected: 'bg-red-600 text-white' },
+  ];
+
+  return (
+    <div className="space-y-2">
+      <p className="text-sm font-medium">How stressed are you feeling?</p>
+      <div className="flex gap-2">
+        {options.map((opt) => (
+          <button
+            key={opt.level}
+            type="button"
+            onClick={() => onChange(opt.level)}
+            className={`rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+              value === opt.level ? opt.selected : opt.base
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---- Stress Level Badge (read-only) ----
+
+function StressLevelBadgeInline({ stressLevel }: { stressLevel: StressLevel | null }) {
+  if (!stressLevel) return null;
+
+  const config: Record<StressLevel, { className: string; label: string }> = {
+    low: { className: 'bg-green-100 text-green-700', label: 'Stress: Low' },
+    medium: { className: 'bg-yellow-100 text-yellow-700', label: 'Stress: Medium' },
+    high: { className: 'bg-red-100 text-red-700', label: 'Stress: High' },
+  };
+
+  const { className, label } = config[stressLevel];
+
+  return (
+    <Badge variant="secondary" className={className}>
+      {label}
+    </Badge>
+  );
+}
+
 // ---- Main Page ----
 
 export default function DailyReportPage() {
@@ -792,6 +849,7 @@ export default function DailyReportPage() {
   const queryClient = useQueryClient();
   const date = params.date;
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
+  const [stressLevel, setStressLevel] = useState<StressLevel | null>(null);
 
   // Validate date format
   const isValidDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
@@ -828,10 +886,19 @@ export default function DailyReportPage() {
     enabled: !!teamId && isValidDate,
   });
 
+  // Sync stress level from report data
+  useEffect(() => {
+    if (reportData?.report?.stressLevel) {
+      setStressLevel(reportData.report.stressLevel as StressLevel);
+    } else {
+      setStressLevel(null);
+    }
+  }, [reportData]);
+
   // Submit report mutation
   const submitMutation = useMutation({
     mutationFn: (reportId: string) =>
-      api.post(`/reports/${reportId}/submit`),
+      api.post(`/reports/${reportId}/submit`, stressLevel ? { stressLevel } : {}),
     onSuccess: () => {
       toast.success('Report submitted successfully');
       void queryClient.invalidateQueries({
@@ -947,6 +1014,7 @@ export default function DailyReportPage() {
             <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-600">Submitted</Badge>
+                <StressLevelBadgeInline stressLevel={report.stressLevel} />
                 <span className="text-sm text-green-800">
                   {report.submittedAt &&
                     `Submitted on ${format(parseISO(report.submittedAt), 'MMM d, yyyy h:mm a')}`}
@@ -999,6 +1067,18 @@ export default function DailyReportPage() {
               onTeamChange={setSelectedTeamId}
             />
           )}
+
+          {/* Stress level selector - only for draft reports with tasks */}
+          {report &&
+            report.status === 'draft' &&
+            tasks.length > 0 && (
+              <div className="mt-6">
+                <StressLevelSelector
+                  value={stressLevel}
+                  onChange={setStressLevel}
+                />
+              </div>
+            )}
 
           {/* Submit button */}
           {report &&
