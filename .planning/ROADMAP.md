@@ -176,9 +176,9 @@ Plans:
 **Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 08-01-PLAN.md — Backend: shared analytics types, team analytics endpoint (aggregates), member analytics endpoint (individual), unit tests
-- [ ] 08-02-PLAN.md — Frontend: analytics page shell with tabs/time range, Team Overview tab with 4 summary cards + 4 charts (Recharts)
-- [ ] 08-03-PLAN.md — Frontend: Individual Member tab with member selector, 4 summary cards, 4 charts (hours, stress, tasks, submission calendar)
+- [x] 08-01-PLAN.md — Backend: shared analytics types, team analytics endpoint (aggregates), member analytics endpoint (individual), unit tests
+- [x] 08-02-PLAN.md — Frontend: analytics page shell with tabs/time range, Team Overview tab with 4 summary cards + 4 charts (Recharts)
+- [x] 08-03-PLAN.md — Frontend: Individual Member tab with member selector, 4 summary cards, 4 charts (hours, stress, tasks, submission calendar)
 
 ### Phase 9: Export Analytics
 **Goal**: Owners can download analytics charts as images, generate PDF reports, and export raw data as CSV
@@ -188,7 +188,10 @@ Plans:
   1. Owner can click a download button on any chart to save it as a PNG image
   2. Owner can download a full analytics report as a PDF containing all charts and summary data
   3. Owner can export raw analytics data as a CSV file for use in spreadsheets
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 09-01-PLAN.md — Frontend: export utilities (PNG/PDF/CSV), ChartCard wrapper with download button, PDF/CSV export buttons on analytics page
 
 ### Phase 10: Dark Mode
 **Goal**: Users can switch between light and dark themes, with their preference persisted and OS defaults respected
@@ -218,5 +221,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
-| 9. Export Analytics | v1.2 | 0/? | Not started | - |
+| 9. Export Analytics | v1.2 | 0/1 | Not started | - |
 | 10. Dark Mode | v1.2 | 0/1 | Planned | - |
