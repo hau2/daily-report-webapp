@@ -67,11 +67,11 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 
 ### Dashboard Analytics
 
-- [ ] **DASH-01**: Owner can view submission rate chart (% members submitted) over week/month/quarter
-- [ ] **DASH-02**: Owner can view hours worked chart per member over week/month/quarter
-- [ ] **DASH-03**: Owner can view team stress level trend chart over week/month/quarter
-- [ ] **DASH-04**: Owner can view task volume chart per member over week/month/quarter
-- [ ] **DASH-05**: Owner can toggle between week, month, and quarter time ranges
+- [x] **DASH-01**: Owner can view submission rate chart (% members submitted) over week/month/quarter
+- [x] **DASH-02**: Owner can view hours worked chart per member over week/month/quarter
+- [x] **DASH-03**: Owner can view team stress level trend chart over week/month/quarter
+- [x] **DASH-04**: Owner can view task volume chart per member over week/month/quarter
+- [x] **DASH-05**: Owner can toggle between week, month, and quarter time ranges
 
 ## v2 Requirements
 
@@ -153,11 +153,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MEMB-06 | Phase 6 | Complete |
 | STRESS-01 | Phase 7 | Complete |
 | STRESS-02 | Phase 7 | Complete |
-| DASH-01 | Phase 8 | Pending |
-| DASH-02 | Phase 8 | Pending |
-| DASH-03 | Phase 8 | Pending |
-| DASH-04 | Phase 8 | Pending |
-| DASH-05 | Phase 8 | Pending |
+| DASH-01 | Phase 8 | Complete |
+| DASH-02 | Phase 8 | Complete |
+| DASH-03 | Phase 8 | Complete |
+| DASH-04 | Phase 8 | Complete |
+| DASH-05 | Phase 8 | Complete |
 
 **Coverage:**
 - v1.0 requirements: 24 total (all complete)
