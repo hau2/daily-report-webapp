@@ -62,8 +62,8 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 
 ### Stress Level
 
-- [ ] **STRESS-01**: Member can select a stress level (Low/Medium/High) when submitting a daily report
-- [ ] **STRESS-02**: Owner can see each member's stress level on their daily report view
+- [x] **STRESS-01**: Member can select a stress level (Low/Medium/High) when submitting a daily report
+- [x] **STRESS-02**: Owner can see each member's stress level on their daily report view
 
 ### Dashboard Analytics
 
@@ -151,8 +151,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MEMB-04 | Phase 6 | Complete |
 | MEMB-05 | Phase 6 | Complete |
 | MEMB-06 | Phase 6 | Complete |
-| STRESS-01 | Phase 7 | Pending |
-| STRESS-02 | Phase 7 | Pending |
+| STRESS-01 | Phase 7 | Complete |
+| STRESS-02 | Phase 7 | Complete |
 | DASH-01 | Phase 8 | Pending |
 | DASH-02 | Phase 8 | Pending |
 | DASH-03 | Phase 8 | Pending |
