@@ -20,17 +20,32 @@ export class TasksService {
   ): Promise<DailyReport> {
     const client = this.supabaseService.getClient();
 
+    // Try to find existing report first
+    const { data: existing, error: findError } = await client
+      .from('daily_reports')
+      .select()
+      .eq('user_id', userId)
+      .eq('team_id', teamId)
+      .eq('report_date', date)
+      .maybeSingle();
+
+    if (findError) {
+      throw new Error(`Database error: ${findError.message}`);
+    }
+
+    if (existing) {
+      return this.mapReport(existing);
+    }
+
+    // No report exists — create a new draft
     const { data, error } = await client
       .from('daily_reports')
-      .upsert(
-        {
-          user_id: userId,
-          team_id: teamId,
-          report_date: date,
-          status: 'draft',
-        },
-        { onConflict: 'user_id,team_id,report_date' },
-      )
+      .insert({
+        user_id: userId,
+        team_id: teamId,
+        report_date: date,
+        status: 'draft',
+      })
       .select()
       .single();
 
