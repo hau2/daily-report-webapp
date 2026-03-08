@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### v1.1 Team Membership Management (In Progress)
 
 - [x] **Phase 6: Membership Management** - Remove member, leave team, transfer ownership, cancel invitation, delete team, historical data preservation
-- [ ] **Phase 7: Stress Level Tracking** - Stress level selection on report submission, visibility for team owner
+- [x] **Phase 7: Stress Level Tracking** - Stress level selection on report submission, visibility for team owner (completed 2026-03-08)
 - [ ] **Phase 8: Dashboard Analytics** - Submission rate, hours worked, stress trend, and task volume charts with time range toggle
 
 ## Phase Details
@@ -151,7 +151,7 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Member sees a stress level selector (Low / Medium / High) on the daily report page and can choose one before submitting
   2. Owner can see each member's selected stress level when viewing that member's daily report
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 07-01-PLAN.md — Backend: DB migration (stress_level column), shared types/schemas, submit endpoint accepts stressLevel, manager endpoint returns stressLevel
@@ -182,5 +182,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Manager Dashboard and Export | v1.0 | 3/3 | Complete | 2026-03-06 |
 | 5. Chrome Extension | v1.0 | 3/3 | Complete | 2026-03-07 |
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
-| 7. Stress Level Tracking | 1/2 | In Progress|  | - |
+| 7. Stress Level Tracking | 2/2 | Complete   | 2026-03-08 | - |
 | 8. Dashboard Analytics | v1.1 | 0/? | Not started | - |
