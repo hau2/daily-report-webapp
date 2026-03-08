@@ -228,7 +228,7 @@ export class TasksService {
     };
   }
 
-  async submitReport(userId: string, reportId: string): Promise<DailyReport> {
+  async submitReport(userId: string, reportId: string, stressLevel?: string): Promise<DailyReport> {
     // Check ownership
     const { status } = await this.assertReportOwner(reportId, userId);
 
@@ -257,6 +257,7 @@ export class TasksService {
       .update({
         status: 'submitted',
         submitted_at: new Date().toISOString(),
+        stress_level: stressLevel ?? null,
       })
       .eq('id', reportId)
       .select()
@@ -277,6 +278,7 @@ export class TasksService {
       reportDate: row.report_date as string,
       status: row.status as 'draft' | 'submitted',
       submittedAt: (row.submitted_at as string) ?? null,
+      stressLevel: (row.stress_level as string as DailyReport['stressLevel']) ?? null,
       createdAt: row.created_at as string,
       updatedAt: row.updated_at as string,
     };

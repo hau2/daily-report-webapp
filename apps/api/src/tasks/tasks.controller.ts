@@ -21,6 +21,7 @@ import type { AccessTokenUser } from '../auth/strategies/access-token.strategy';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { SubmitReportDto } from './dto/submit-report.dto';
 
 const DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -73,8 +74,12 @@ export class TasksController {
   }
 
   @Post('reports/:id/submit')
-  async submitReport(@Req() req: Request, @Param('id') id: string) {
+  async submitReport(
+    @Req() req: Request,
+    @Param('id') id: string,
+    @Body() dto: SubmitReportDto,
+  ) {
     const user = req.user as AccessTokenUser;
-    return this.tasksService.submitReport(user.userId, id);
+    return this.tasksService.submitReport(user.userId, id, dto.stressLevel);
   }
 }

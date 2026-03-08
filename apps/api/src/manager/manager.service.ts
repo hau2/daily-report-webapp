@@ -136,6 +136,7 @@ export class ManagerService {
         report,
         tasks,
         totalHours,
+        stressLevel: report?.stressLevel ?? null,
       };
 
       if (departedSet.has(userId)) {
@@ -290,6 +291,7 @@ export class ManagerService {
       reportDate: row.report_date as string,
       status: row.status as 'draft' | 'submitted',
       submittedAt: (row.submitted_at as string) ?? null,
+      stressLevel: (row.stress_level as string as DailyReport['stressLevel']) ?? null,
       createdAt: row.created_at as string,
       updatedAt: row.updated_at as string,
     };
