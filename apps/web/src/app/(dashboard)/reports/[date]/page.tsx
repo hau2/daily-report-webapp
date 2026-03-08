@@ -688,9 +688,11 @@ function DateNavigation({ date }: { date: string }) {
 function AllTeamsReportView({
   teams,
   date,
+  onSelectTeam,
 }: {
   teams: TeamWithRole[];
   date: string;
+  onSelectTeam?: (teamId: string) => void;
 }) {
   // Fetch reports for all teams in parallel
   const teamQueries = teams.map((t) => ({
@@ -760,12 +762,27 @@ function AllTeamsReportView({
                   </Badge>
                 )}
               </div>
-              <div className="text-sm font-medium">{totalHours}h</div>
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-medium">{totalHours}h</span>
+                {onSelectTeam && report?.status !== 'submitted' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => onSelectTeam(r.teamId)}
+                  >
+                    {report?.status === 'draft' ? 'Edit Report' : 'Add Report'}
+                  </Button>
+                )}
+              </div>
             </CardHeader>
             <CardContent>
-              {tasks.length === 0 ? (
+              {tasks.length === 0 && !onSelectTeam ? (
                 <p className="py-2 text-sm text-muted-foreground">
                   No tasks logged for this team.
+                </p>
+              ) : tasks.length === 0 ? (
+                <p className="py-2 text-sm text-muted-foreground">
+                  No tasks yet. Click &quot;Add Report&quot; to start.
                 </p>
               ) : (
                 <div className="space-y-2">
@@ -1024,7 +1041,7 @@ export default function DailyReportPage() {
 
       {/* All Teams view */}
       {isAllTeams && teams ? (
-        <AllTeamsReportView teams={teams} date={date} />
+        <AllTeamsReportView teams={teams} date={date} onSelectTeam={setSelectedTeamId} />
       ) : (
         <>
           {/* Current team name */}
