@@ -145,26 +145,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXT-04 | Phase 5 | Complete |
 | EXT-05 | Phase 5 | Complete |
 | UI-01 | Phase 4 | Complete |
-| MEMB-01 | — | Pending |
-| MEMB-02 | — | Pending |
-| MEMB-03 | — | Pending |
-| MEMB-04 | — | Pending |
-| MEMB-05 | — | Pending |
-| MEMB-06 | — | Pending |
-| STRESS-01 | — | Pending |
-| STRESS-02 | — | Pending |
-| DASH-01 | — | Pending |
-| DASH-02 | — | Pending |
-| DASH-03 | — | Pending |
-| DASH-04 | — | Pending |
-| DASH-05 | — | Pending |
+| MEMB-01 | Phase 6 | Pending |
+| MEMB-02 | Phase 6 | Pending |
+| MEMB-03 | Phase 6 | Pending |
+| MEMB-04 | Phase 6 | Pending |
+| MEMB-05 | Phase 6 | Pending |
+| MEMB-06 | Phase 6 | Pending |
+| STRESS-01 | Phase 7 | Pending |
+| STRESS-02 | Phase 7 | Pending |
+| DASH-01 | Phase 8 | Pending |
+| DASH-02 | Phase 8 | Pending |
+| DASH-03 | Phase 8 | Pending |
+| DASH-04 | Phase 8 | Pending |
+| DASH-05 | Phase 8 | Pending |
 
 **Coverage:**
 - v1.0 requirements: 24 total (all complete)
 - v1.1 requirements: 13 total
-- Mapped to phases: 0
-- Unmapped: 13 ⚠️
+- Mapped to phases: 13
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-06*
-*Last updated: 2026-03-08 after v1.1 requirements defined*
+*Last updated: 2026-03-08 after v1.1 roadmap created*

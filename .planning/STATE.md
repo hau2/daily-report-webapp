@@ -5,9 +5,9 @@ milestone_name: Team Membership Management
 status: active
 stopped_at: null
 last_updated: "2026-03-08T00:00:00.000Z"
-last_activity: 2026-03-08 -- Milestone v1.1 started
+last_activity: 2026-03-08 -- Roadmap created for v1.1 (Phases 6-8)
 progress:
-  total_phases: 0
+  total_phases: 3
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -18,24 +18,24 @@ progress:
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-03-06)
+See: .planning/PROJECT.md (updated 2026-03-08)
 
 **Core value:** Make daily reporting effortless -- quick task entry throughout the day, easy review and adjustment at end of day, clear visibility for managers.
-**Current focus:** v1.1 Team Membership Management
+**Current focus:** v1.1 Team Membership Management -- Phase 6: Membership Management
 
 ## Current Position
 
-Phase: Not started (defining requirements)
-Plan: —
-Status: Defining requirements
-Last activity: 2026-03-08 -- Milestone v1.1 started
+Phase: 6 of 8 (Membership Management) -- first phase of v1.1
+Plan: --
+Status: Ready to plan
+Last activity: 2026-03-08 -- Roadmap created for v1.1 (Phases 6-8)
 
 Progress: [░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
+- Total plans completed (v1.1): 0
 - Average duration: -
 - Total execution time: 0 hours
 
@@ -50,24 +50,6 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: -
 
 *Updated after each plan completion*
-| Phase 01-foundation-and-auth P01 | 3 | 3 tasks | 9 files |
-| Phase 01-foundation-and-auth P02 | 7 | 2 tasks | 14 files |
-| Phase 01-foundation-and-auth P03 | 8 | 3 tasks | 21 files |
-| Phase 01-foundation-and-auth P04 | 6 | 2 tasks | 5 files |
-| Phase 01-foundation-and-auth P05 | 3 | 2 tasks | 10 files |
-| Phase 02-team-management P01 | 3 | 2 tasks | 6 files |
-| Phase 02-team-management P02 | 4 | 2 tasks | 10 files |
-| Phase 02-team-management P03 | 3 | 2 tasks | 7 files |
-| Phase 03 P01 | 2 | 2 tasks | 6 files |
-| Phase 03 P02 | 4 | 2 tasks | 7 files |
-| Phase 03 P03 | 3 | 2 tasks | 4 files |
-| Phase 03 P04 | 2 | 1 tasks | 0 files |
-| Phase 04 P01 | 4 | 2 tasks | 7 files |
-| Phase 04 P02 | 3 | 2 tasks | 3 files |
-| Phase 04 P03 | 3 | 1 tasks | 0 files |
-| Phase 05 P01 | 2 | 2 tasks | 6 files |
-| Phase 05 P02 | 3 | 2 tasks | 13 files |
-| Phase 05 P03 | 5 | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -76,56 +58,9 @@ Progress: [░░░░░░░░░░] 0%
 Decisions are logged in PROJECT.md Key Decisions table.
 Recent decisions affecting current work:
 
-- [Roadmap]: Prisma 7 selected as ORM (per STACK.md recommendation over Drizzle)
-- [Roadmap]: NestJS handles all auth; Supabase used as pure database with RLS as defense-in-depth
-- [Roadmap]: Chrome extension built last (Phase 5) but task API designed with team_id from Phase 3 to support future multi-team
-- [Phase 01-foundation-and-auth]: Supabase JS client (not Prisma) used as data access layer per user override of original roadmap
-- [Phase 01-foundation-and-auth]: Service-role key used for all backend queries; singleton client pattern with onModuleInit
-- [Phase 01-foundation-and-auth]: argon2 added to pnpm.onlyBuiltDependencies for native module compilation
-- [Phase 01-foundation-and-auth]: Express types use 'import type' throughout auth module — express is transitive dep only, not direct; avoids ESM runtime resolution failure
-- [Phase 01-foundation-and-auth]: vi.mock('argon2', ...) at module level required for ESM native modules — vi.spyOn cannot override non-configurable exports
-- [Phase 01-foundation-and-auth]: JwtModule.register({}) with empty config — signing options (secret, expiresIn) passed per-call in signAsync for per-token control
-- [Phase 01-foundation-and-auth]: useEffect redirect in route group layouts (not Next.js middleware) for client-side auth state management
-- [Phase 01-foundation-and-auth]: GET /auth/me returns JWT payload {userId, email} as lightweight auth check; Plan 05 adds full /users/me profile endpoint
-- [Phase 01-foundation-and-auth]: 401-to-refresh interceptor in api-client.ts retries once before failing — prevents loops while providing transparent token rotation
-- [Phase 01-foundation-and-auth]: vi.mock with inline class (class MockResend) avoids ESM hoisting limitation where outer-scope variables are undefined in vi.mock factories
-- [Phase 01-foundation-and-auth]: forgot-password page uses finally block to always show success UI regardless of API error -- prevents email enumeration
-- [Phase 01-foundation-and-auth]: reset-password uses local Zod schema with .refine() for confirmPassword match, not shared resetPasswordSchema
-- [Phase 01-foundation-and-auth]: UsersService.getProfile uses narrow SELECT (no password_hash/refresh_token_hash) to prevent accidental exposure
-- [Phase 01-foundation-and-auth]: Password change nullifies refresh_token_hash to force re-login (settings page calls logout after success)
-- [Phase 01-foundation-and-auth]: Settings page uses three independent form Cards (Profile/Email/Password) -- each has isolated react-hook-form instance and useMutation
-- [Phase 02-team-management]: SHA-256 used for team_invitations token_hash (not argon2) — invitation tokens have JWT entropy; no password-stretching needed
-- [Phase 02-team-management]: Invitations logic kept inside TeamsModule (not separate module) to avoid circular injection
-- [Phase 02-team-management]: Partial unique index WHERE used_at IS NULL on team_invitations (team_id, invitee_email) allows re-invitation after acceptance
-- [Phase 02-team-management]: Route literal before param: POST /teams/invitations/accept declared before POST /teams/:id/invitations to prevent NestJS matching 'invitations' as :id
-- [Phase 02-team-management]: DTO properties use ! definite-assignment assertion in strict TypeScript — class-validator initializes at runtime, not compile time
-- [Phase 02-team-management]: Login page uses local useMutation for ?next= redirect — avoids modifying shared useAuth hook
-- [Phase 02-team-management]: JWT payload decoded client-side with atob() for display only — backend authoritative for validation
-- [Phase 02-team-management]: Team detail page filters /teams/my by id to avoid needing GET /teams/:id endpoint not in scope
-- [Phase 02-team-management]: Phase 2 verification deferred to human checkpoint — automated tests cover service layer, browser verification confirms full UX flow including email delivery and redirect chains
-- [Phase 03]: 12 test stubs (not 11) created matching all listed behaviors in plan
-- [Phase 03]: MockQueryBuilder extended with upsert/gt/lt/gte/lte for Plan 02 service needs
-- [Phase 03]: Single controller (no prefix) handles both /tasks and /reports routes for v1 simplicity
-- [Phase 03]: assertReportOwner returns { status } to combine ownership + editability check in one DB call
-- [Phase 03]: Auto-select first team for v1 (single-team users) -- avoids team picker complexity
-- [Phase 03]: Inline edit toggle pattern for task rows -- simpler than modal approach
-- [Phase 03]: Active nav state uses pathname.startsWith() for route group matching
-- [Phase 03]: All 8 browser test scenarios passed -- Phase 3 task management and daily reports verified complete
-- [Phase 04]: Call-order-based mock pattern for multi-table query testing -- separate query builders per from() call with index counter
-- [Phase 04]: CSV export via @Res passthrough:false with explicit try/catch -- NestJS exception filters bypassed when using raw Response
-- [Phase 04]: useState toggle for collapsible member report cards -- simpler than shadcn Collapsible for this use case
-- [Phase 04]: NavLink helper component extracted in layout for consistent active state styling across desktop and mobile nav
-- [Phase 04]: date state managed via useState (not URL params) in manager dashboard -- avoids unnecessary page reloads
-- [Phase 04]: All 6 browser test scenarios passed -- Phase 4 manager dashboard, CSV export, and mobile responsiveness verified complete
-- [Phase 05]: generateTokens() extracted from generateTokensAndSetCookies for reuse by extension auth endpoints
-- [Phase 05]: Cookie extractor first, Bearer header second in AccessTokenStrategy -- web app priority, extension fallback
-- [Phase 05]: RefreshTokenStrategy unchanged -- extension uses dedicated /auth/extension-refresh with body-based token
-- [Phase 05]: CORS allows any chrome-extension:// origin (extension ID changes between dev loads)
-- [Phase 05]: Plain Vite with custom plugin instead of @crxjs/vite-plugin (beta) -- simpler for MV3 extension
-- [Phase 05]: Relative base path (./) in Vite config -- Chrome extensions load files relative to extension root
-- [Phase 05]: Auto-select first team for single-team users in extension popup -- matches web app Phase 3 behavior
-- [Phase 05]: All 6 browser test scenarios passed -- Phase 5 Chrome extension verified complete
-- [Phase 05]: Two bugs fixed during verification: extension team dropdown response shape mismatch (ec1594e), web app searchable team selector for multi-team users (0ad5b4e)
+- [Roadmap v1.1]: 3 phases (6-8) derived from 13 requirements across 3 categories (membership, stress, dashboard)
+- [Roadmap v1.1]: Phase 7 depends on Phase 6 to ensure membership lifecycle is stable before adding stress tracking
+- [Roadmap v1.1]: Phase 8 depends on Phase 7 because DASH-03 (stress trend chart) requires stress data from STRESS-01
 
 ### Pending Todos
 
@@ -138,6 +73,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-07T17:15:00Z
-Stopped at: Completed 05-03-PLAN.md -- All phases complete, v1 ready for deployment
+Last session: 2026-03-08
+Stopped at: Roadmap created for v1.1 -- ready to plan Phase 6
 Resume file: None

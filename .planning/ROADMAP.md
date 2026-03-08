@@ -2,7 +2,12 @@
 
 ## Overview
 
-This roadmap delivers a daily reporting web app where team members log tasks throughout the day and submit reports to their manager, with a Chrome extension for frictionless task capture. The build follows the dependency chain: auth foundation first, then team structure, then task/report workflow, then manager visibility and export, and finally the Chrome extension which depends on all prior APIs being stable.
+This roadmap delivers a daily reporting web app where team members log tasks throughout the day and submit reports to their manager, with a Chrome extension for frictionless task capture. v1.0 delivered the core platform (auth, teams, tasks, manager dashboard, Chrome extension). v1.1 adds team membership lifecycle management, stress level tracking on reports, and an analytics dashboard for team owners.
+
+## Milestones
+
+- v1.0 MVP - Phases 1-5 (shipped 2026-03-07)
+- v1.1 Team Membership Management - Phases 6-8 (in progress)
 
 ## Phases
 
@@ -12,13 +17,27 @@ This roadmap delivers a daily reporting web app where team members log tasks thr
 
 Decimal phases appear between their surrounding integers in numeric order.
 
+<details>
+<summary>v1.0 MVP (Phases 1-5) - SHIPPED 2026-03-07</summary>
+
 - [x] **Phase 1: Foundation and Auth** - Monorepo scaffold, database schema, user registration/login, session management (completed 2026-03-06)
 - [x] **Phase 2: Team Management** - Team creation, member invitations, role separation (manager vs member) (completed 2026-03-06)
 - [x] **Phase 3: Task Management and Daily Reports** - Task CRUD, daily report view, end-of-day review, report submission (completed 2026-03-06)
 - [x] **Phase 4: Manager Dashboard and Export** - Manager views, submission tracking, CSV export, responsive design (completed 2026-03-06)
-- [x] **Phase 5: Chrome Extension** - Highlight-to-add workflow, auto-captured URLs, extension auth (completed 2026-03-06)
+- [x] **Phase 5: Chrome Extension** - Highlight-to-add workflow, auto-captured URLs, extension auth (completed 2026-03-07)
+
+</details>
+
+### v1.1 Team Membership Management (In Progress)
+
+- [ ] **Phase 6: Membership Management** - Remove member, leave team, transfer ownership, cancel invitation, delete team, historical data preservation
+- [ ] **Phase 7: Stress Level Tracking** - Stress level selection on report submission, visibility for team owner
+- [ ] **Phase 8: Dashboard Analytics** - Submission rate, hours worked, stress trend, and task volume charts with time range toggle
 
 ## Phase Details
+
+<details>
+<summary>v1.0 Phase Details (Phases 1-5)</summary>
 
 ### Phase 1: Foundation and Auth
 **Goal**: Users can create accounts, log in, and maintain sessions across the application
@@ -33,11 +52,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans:** 5/5 plans complete
 
 Plans:
-- [ ] 01-01-PLAN.md — Remove Prisma, install Supabase JS + auth deps, create SupabaseModule, shared types, test mocks
-- [ ] 01-02-PLAN.md — NestJS auth backend (register, login, dual JWT cookies, refresh, logout)
-- [ ] 01-03-PLAN.md — Next.js auth pages (login, register), API client, auth hook, protected dashboard
-- [ ] 01-04-PLAN.md — Email verification and password reset (Resend EmailService, backend endpoints, frontend pages)
-- [ ] 01-05-PLAN.md — User profile settings (UsersModule, GET/PATCH /users/me, settings page)
+- [x] 01-01-PLAN.md — Remove Prisma, install Supabase JS + auth deps, create SupabaseModule, shared types, test mocks
+- [x] 01-02-PLAN.md — NestJS auth backend (register, login, dual JWT cookies, refresh, logout)
+- [x] 01-03-PLAN.md — Next.js auth pages (login, register), API client, auth hook, protected dashboard
+- [x] 01-04-PLAN.md — Email verification and password reset (Resend EmailService, backend endpoints, frontend pages)
+- [x] 01-05-PLAN.md — User profile settings (UsersModule, GET/PATCH /users/me, settings page)
 
 ### Phase 2: Team Management
 **Goal**: Users can form teams with clear manager/member roles and invite others to join
@@ -50,10 +69,10 @@ Plans:
 **Plans:** 4/4 plans complete
 
 Plans:
-- [ ] 02-01-PLAN.md — DB migration (teams/team_members/team_invitations), shared Team types/schemas, Wave 0 test stubs
-- [ ] 02-02-PLAN.md — TeamsModule backend (service, controller, DTOs, TeamManagerGuard, invitation email method)
-- [ ] 02-03-PLAN.md — Frontend teams pages (/teams, /teams/new, /teams/[id]), /join accept page, login ?next= redirect
-- [ ] 02-04-PLAN.md — Human verification of complete Phase 2 end-to-end flows
+- [x] 02-01-PLAN.md — DB migration (teams/team_members/team_invitations), shared Team types/schemas, Wave 0 test stubs
+- [x] 02-02-PLAN.md — TeamsModule backend (service, controller, DTOs, TeamManagerGuard, invitation email method)
+- [x] 02-03-PLAN.md — Frontend teams pages (/teams, /teams/new, /teams/[id]), /join accept page, login ?next= redirect
+- [x] 02-04-PLAN.md — Human verification of complete Phase 2 end-to-end flows
 
 ### Phase 3: Task Management and Daily Reports
 **Goal**: Users can log tasks throughout the day, review and adjust them, and submit a daily report
@@ -82,7 +101,7 @@ Plans:
   2. Manager can see a clear list of members who have not submitted their report today
   3. Manager can export team reports to a CSV file
   4. The web app is responsive and usable on mobile browsers for both members and managers
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md — Backend ManagerModule (shared types, service with tests, controller, 3 endpoints behind TeamManagerGuard)
@@ -105,15 +124,54 @@ Plans:
 - [x] 05-02-PLAN.md — Chrome extension build: MV3 workspace, service worker, context menu, popup (login + quick-add), Bearer auth API client
 - [x] 05-03-PLAN.md — Human verification of complete Phase 5 end-to-end flows
 
+</details>
+
+### Phase 6: Membership Management
+**Goal**: Team owners and members have full control over team membership lifecycle -- removing, leaving, transferring, and dissolving teams while preserving historical data
+**Depends on**: Phase 2 (teams and membership already exist)
+**Requirements**: MEMB-01, MEMB-02, MEMB-03, MEMB-04, MEMB-05, MEMB-06
+**Success Criteria** (what must be TRUE):
+  1. Owner can remove a member from the team, and that member no longer sees the team or can submit reports to it
+  2. Member can leave a team voluntarily, and the team disappears from their team list
+  3. Owner can transfer ownership to another member, after which the previous owner becomes a regular member and the new owner gains all owner capabilities
+  4. Owner can cancel a pending invitation, preventing the invitee from joining via that link
+  5. Owner can delete a team entirely (with confirmation), removing it from all members' team lists
+  6. After a member departs (removed or left), their historical daily reports remain visible to the owner
+**Plans**: TBD
+
+### Phase 7: Stress Level Tracking
+**Goal**: Daily reports capture how stressed a member is feeling, giving owners visibility into team wellbeing
+**Depends on**: Phase 3 (daily reports exist), Phase 6 (membership context)
+**Requirements**: STRESS-01, STRESS-02
+**Success Criteria** (what must be TRUE):
+  1. Member sees a stress level selector (Low / Medium / High) on the daily report page and can choose one before submitting
+  2. Owner can see each member's selected stress level when viewing that member's daily report
+**Plans**: TBD
+
+### Phase 8: Dashboard Analytics
+**Goal**: Owners can visualize team trends over time through charts showing submission rates, hours, stress, and task volume
+**Depends on**: Phase 7 (stress data needed for stress trend chart), Phase 4 (manager views exist)
+**Requirements**: DASH-01, DASH-02, DASH-03, DASH-04, DASH-05
+**Success Criteria** (what must be TRUE):
+  1. Owner can view a submission rate chart showing the percentage of members who submitted their report, plotted over time
+  2. Owner can view an hours worked chart showing total hours per member over time
+  3. Owner can view a stress level trend chart showing team stress distribution over time
+  4. Owner can view a task volume chart showing number of tasks per member over time
+  5. Owner can toggle between week, month, and quarter time ranges, and all charts update accordingly
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
-| Phase | Plans Complete | Status | Completed |
-|-------|----------------|--------|-----------|
-| 1. Foundation and Auth | 5/5 | Complete   | 2026-03-06 |
-| 2. Team Management | 4/4 | Complete   | 2026-03-06 |
-| 3. Task Management and Daily Reports | 4/4 | Complete   | 2026-03-06 |
-| 4. Manager Dashboard and Export | 3/3 | Complete | 2026-03-06 |
-| 5. Chrome Extension | 3/3 | Complete   | 2026-03-07 |
+| Phase | Milestone | Plans Complete | Status | Completed |
+|-------|-----------|----------------|--------|-----------|
+| 1. Foundation and Auth | v1.0 | 5/5 | Complete | 2026-03-06 |
+| 2. Team Management | v1.0 | 4/4 | Complete | 2026-03-06 |
+| 3. Task Management and Daily Reports | v1.0 | 4/4 | Complete | 2026-03-06 |
+| 4. Manager Dashboard and Export | v1.0 | 3/3 | Complete | 2026-03-06 |
+| 5. Chrome Extension | v1.0 | 3/3 | Complete | 2026-03-07 |
+| 6. Membership Management | v1.1 | 0/? | Not started | - |
+| 7. Stress Level Tracking | v1.1 | 0/? | Not started | - |
+| 8. Dashboard Analytics | v1.1 | 0/? | Not started | - |
