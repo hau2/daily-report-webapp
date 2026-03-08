@@ -151,7 +151,11 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. Member sees a stress level selector (Low / Medium / High) on the daily report page and can choose one before submitting
   2. Owner can see each member's selected stress level when viewing that member's daily report
-**Plans**: TBD
+**Plans:** 2 plans
+
+Plans:
+- [ ] 07-01-PLAN.md — Backend: DB migration (stress_level column), shared types/schemas, submit endpoint accepts stressLevel, manager endpoint returns stressLevel
+- [ ] 07-02-PLAN.md — Frontend: stress level selector on daily report page, stress level badge on manager dashboard
 
 ### Phase 8: Dashboard Analytics
 **Goal**: Owners can visualize team trends over time through charts showing submission rates, hours, stress, and task volume
@@ -178,5 +182,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Manager Dashboard and Export | v1.0 | 3/3 | Complete | 2026-03-06 |
 | 5. Chrome Extension | v1.0 | 3/3 | Complete | 2026-03-07 |
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
-| 7. Stress Level Tracking | v1.1 | 0/? | Not started | - |
+| 7. Stress Level Tracking | v1.1 | 0/2 | Not started | - |
 | 8. Dashboard Analytics | v1.1 | 0/? | Not started | - |
