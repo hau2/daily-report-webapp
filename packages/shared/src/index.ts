@@ -16,6 +16,21 @@ export type {
   PendingMember,
   TeamReportsResponse,
 } from './types/manager';
+export type {
+  AnalyticsRange,
+  TeamAnalyticsSummary,
+  DailySubmissionRate,
+  HeatmapCell,
+  DailyStressDistribution,
+  MemberTaskVolume,
+  TeamAnalyticsResponse,
+  MemberAnalyticsSummary,
+  DailyHoursEntry,
+  DailyStressEntry,
+  DailyTaskCount,
+  SubmissionCalendarDay,
+  MemberAnalyticsResponse,
+} from './types/analytics';
 
 // Schemas
 export {
