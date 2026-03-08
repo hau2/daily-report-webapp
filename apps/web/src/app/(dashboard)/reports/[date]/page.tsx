@@ -662,6 +662,128 @@ function DateNavigation({ date }: { date: string }) {
   );
 }
 
+// ---- All Teams Report View (for past submitted dates) ----
+
+function AllTeamsReportView({
+  teams,
+  date,
+}: {
+  teams: TeamWithRole[];
+  date: string;
+}) {
+  // Fetch reports for all teams in parallel
+  const teamQueries = teams.map((t) => ({
+    teamId: t.team.id,
+    teamName: t.team.name,
+    role: t.role,
+  }));
+
+  const results = teamQueries.map((tq) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const query = useQuery({
+      queryKey: ['reports', 'daily', date, tq.teamId],
+      queryFn: () =>
+        api.get<DailyReportWithTasks | null>(
+          `/reports/daily?date=${date}&teamId=${tq.teamId}`,
+        ),
+    });
+    return { ...tq, ...query };
+  });
+
+  const isLoading = results.some((r) => r.isLoading);
+
+  if (isLoading) {
+    return (
+      <p className="py-4 text-center text-muted-foreground">
+        Loading reports...
+      </p>
+    );
+  }
+
+  const allTotalHours = results.reduce(
+    (sum, r) => sum + (r.data?.totalHours ?? 0),
+    0,
+  );
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-medium text-muted-foreground">
+          All Teams
+        </span>
+        <div className="text-sm font-medium">
+          Grand Total: <span className="text-lg">{allTotalHours}</span>h
+        </div>
+      </div>
+      {results.map((r) => {
+        const report = r.data?.report ?? null;
+        const tasks = r.data?.tasks ?? [];
+        const totalHours = r.data?.totalHours ?? 0;
+
+        return (
+          <Card key={r.teamId} className="mb-2">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <div className="flex items-center gap-2">
+                <CardTitle className="text-base">{r.teamName}</CardTitle>
+                {report?.status === 'submitted' && (
+                  <Badge className="bg-green-600">Submitted</Badge>
+                )}
+                {report?.status === 'draft' && (
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                    Draft
+                  </Badge>
+                )}
+                {!report && (
+                  <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                    No Report
+                  </Badge>
+                )}
+              </div>
+              <div className="text-sm font-medium">{totalHours}h</div>
+            </CardHeader>
+            <CardContent>
+              {tasks.length === 0 ? (
+                <p className="py-2 text-sm text-muted-foreground">
+                  No tasks logged for this team.
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {tasks.map((task) => (
+                    <div
+                      key={task.id}
+                      className="flex items-start justify-between rounded-lg border p-3"
+                    >
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium">{task.title}</span>
+                          <Badge variant="secondary">{task.estimatedHours}h</Badge>
+                        </div>
+                        {task.sourceLink && (
+                          <a
+                            href={task.sourceLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="mt-1 block text-sm text-blue-600 underline hover:text-blue-800"
+                          >
+                            {task.sourceLink}
+                          </a>
+                        )}
+                        {task.notes && (
+                          <p className="mt-1 text-sm text-muted-foreground">{task.notes}</p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        );
+      })}
+    </div>
+  );
+}
+
 // ---- Main Page ----
 
 export default function DailyReportPage() {
@@ -794,8 +916,8 @@ export default function DailyReportPage() {
         <DateNavigation date={date} />
       </div>
 
-      {/* Team selector */}
-      {teams && teams.length > 1 && teamId && (
+      {/* Team selector - for editing (today/draft) */}
+      {isDraft && teams && teams.length > 1 && teamId && (
         <div className="mb-6 flex items-center gap-3">
           <span className="text-sm font-medium text-muted-foreground">Team:</span>
           <TeamSelector
@@ -806,80 +928,96 @@ export default function DailyReportPage() {
         </div>
       )}
 
-      {/* Report status */}
-      {report && report.status === 'submitted' && (
-        <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
-          <div className="flex items-center gap-2">
-            <Badge className="bg-green-600">Submitted</Badge>
-            <span className="text-sm text-green-800">
-              {report.submittedAt &&
-                `Submitted on ${format(parseISO(report.submittedAt), 'MMM d, yyyy h:mm a')}`}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Task list */}
-      <Card className="mb-6">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0">
-          <CardTitle className="text-base">
-            Tasks ({tasks.length})
-          </CardTitle>
-          <div className="text-sm font-medium">
-            Total: <span className="text-lg">{totalHours}</span>h
-          </div>
-        </CardHeader>
-        <CardContent>
-          {reportLoading ? (
-            <p className="py-4 text-center text-muted-foreground">
-              Loading tasks...
-            </p>
-          ) : tasks.length === 0 ? (
-            <p className="py-4 text-center text-muted-foreground">
-              No tasks yet. Add your first task below.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {tasks.map((task) => (
-                <TaskRow
-                  key={task.id}
-                  task={task}
-                  isDraft={isDraft}
-                  date={date}
-                  teamId={teamId!}
-                />
-              ))}
+      {/* Past date: show all teams' reports grouped by team */}
+      {!isDraft && teams && teams.length > 1 ? (
+        <AllTeamsReportView teams={teams} date={date} />
+      ) : (
+        <>
+          {/* Current team name */}
+          {teams && teamId && (
+            <div className="mb-2">
+              <span className="text-sm font-medium text-muted-foreground">
+                {teams.find((t) => t.team.id === teamId)?.team.name}
+              </span>
             </div>
           )}
-        </CardContent>
-      </Card>
 
-      {/* Create task form - only for drafts */}
-      {isDraft && teamId && teams && (
-        <CreateTaskForm
-          date={date}
-          teamId={teamId}
-          teams={teams}
-          onTeamChange={setSelectedTeamId}
-        />
+          {/* Report status */}
+          {report && report.status === 'submitted' && (
+            <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+              <div className="flex items-center gap-2">
+                <Badge className="bg-green-600">Submitted</Badge>
+                <span className="text-sm text-green-800">
+                  {report.submittedAt &&
+                    `Submitted on ${format(parseISO(report.submittedAt), 'MMM d, yyyy h:mm a')}`}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Task list */}
+          <Card className="mb-6">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="text-base">
+                Tasks ({tasks.length})
+              </CardTitle>
+              <div className="text-sm font-medium">
+                Total: <span className="text-lg">{totalHours}</span>h
+              </div>
+            </CardHeader>
+            <CardContent>
+              {reportLoading ? (
+                <p className="py-4 text-center text-muted-foreground">
+                  Loading tasks...
+                </p>
+              ) : tasks.length === 0 ? (
+                <p className="py-4 text-center text-muted-foreground">
+                  No tasks yet. Add your first task below.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {tasks.map((task) => (
+                    <TaskRow
+                      key={task.id}
+                      task={task}
+                      isDraft={isDraft}
+                      date={date}
+                      teamId={teamId!}
+                    />
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Create task form - only for drafts */}
+          {isDraft && teamId && teams && (
+            <CreateTaskForm
+              date={date}
+              teamId={teamId}
+              teams={teams}
+              onTeamChange={setSelectedTeamId}
+            />
+          )}
+
+          {/* Submit button */}
+          {report &&
+            report.status === 'draft' &&
+            tasks.length > 0 && (
+              <div className="mt-6 flex justify-end">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={submitMutation.isPending}
+                  className="bg-green-600 hover:bg-green-700"
+                >
+                  {submitMutation.isPending
+                    ? 'Submitting...'
+                    : 'Submit Report'}
+                </Button>
+              </div>
+            )}
+        </>
       )}
-
-      {/* Submit button */}
-      {report &&
-        report.status === 'draft' &&
-        tasks.length > 0 && (
-          <div className="mt-6 flex justify-end">
-            <Button
-              onClick={handleSubmit}
-              disabled={submitMutation.isPending}
-              className="bg-green-600 hover:bg-green-700"
-            >
-              {submitMutation.isPending
-                ? 'Submitting...'
-                : 'Submit Report'}
-            </Button>
-          </div>
-        )}
     </div>
   );
 }

@@ -210,15 +210,36 @@ export class TeamsService {
       throw new BadRequestException('Invitation already used or not found');
     }
 
-    const { error: insertError } = await client
+    // Check if there's a soft-deleted membership (previously removed member re-joining)
+    const { data: existingMember } = await client
       .from('team_members')
-      .insert({ team_id: payload.teamId, user_id: currentUser.userId, role: 'member' });
+      .select('id, left_at')
+      .eq('team_id', payload.teamId)
+      .eq('user_id', currentUser.userId)
+      .single();
 
-    if (insertError) {
-      if (insertError.code === '23505') {
-        throw new ConflictException('Already a member of this team');
+    if (existingMember && !(existingMember as { left_at: string | null }).left_at) {
+      throw new ConflictException('Already a member of this team');
+    }
+
+    if (existingMember) {
+      // Re-activate soft-deleted membership
+      const { error: updateError } = await client
+        .from('team_members')
+        .update({ left_at: null, role: 'member', joined_at: new Date().toISOString() })
+        .eq('id', (existingMember as { id: string }).id);
+
+      if (updateError) {
+        throw new Error(`Database error: ${updateError.message}`);
       }
-      throw new Error(`Database error: ${insertError.message}`);
+    } else {
+      const { error: insertError } = await client
+        .from('team_members')
+        .insert({ team_id: payload.teamId, user_id: currentUser.userId, role: 'member' });
+
+      if (insertError) {
+        throw new Error(`Database error: ${insertError.message}`);
+      }
     }
 
     await client

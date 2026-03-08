@@ -68,6 +68,11 @@ function MemberReportCard({ member }: { member: TeamMemberReport }) {
               {displayName}
             </CardTitle>
             <StatusBadge status={member.status} />
+            {member.departed && (
+              <Badge variant="outline" className="border-gray-400 text-gray-500">
+                Departed
+              </Badge>
+            )}
           </div>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>{member.totalHours}h total</span>
