@@ -9,7 +9,6 @@ import { api } from '@/lib/api-client';
 import type { Team, AnalyticsRange } from '@daily-report/shared';
 import { Button } from '@/components/ui/button';
 import { TeamOverview } from '@/components/analytics/team-overview';
-import { MemberAnalytics } from '@/components/analytics/member-analytics';
 
 interface TeamWithRole {
   team: Team;
@@ -93,7 +92,9 @@ export default function AnalyticsPage() {
       {activeTab === 'team' ? (
         <TeamOverview teamId={teamId} range={range} />
       ) : (
-        <MemberAnalytics teamId={teamId} range={range} />
+        <div className="py-12 text-center text-muted-foreground">
+          Individual member view (coming soon)
+        </div>
       )}
     </div>
   );
