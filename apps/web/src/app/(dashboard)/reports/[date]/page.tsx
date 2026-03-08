@@ -983,8 +983,8 @@ export default function DailyReportPage() {
         <DateNavigation date={date} />
       </div>
 
-      {/* Team selector - for editing (today/draft) */}
-      {isDraft && teams && teams.length > 1 && teamId && (
+      {/* Team selector - visible when user has multiple teams */}
+      {teams && teams.length > 1 && teamId && (
         <div className="mb-6 flex items-center gap-3">
           <span className="text-sm font-medium text-muted-foreground">Team:</span>
           <TeamSelector
@@ -995,8 +995,13 @@ export default function DailyReportPage() {
         </div>
       )}
 
-      {/* Past date: show all teams' reports grouped by team */}
-      {!isDraft && teams && teams.length > 1 ? (
+      {/* All teams submitted: show grouped read-only view */}
+      {!isDraft && teams && teams.length > 1 && !teams.some((t) => {
+        // Check if any team still has a draft or missing report
+        const key = ['reports', 'daily', date, t.team.id];
+        const cached = queryClient.getQueryData<DailyReportWithTasks | null>(key);
+        return !cached?.report || cached.report.status === 'draft';
+      }) ? (
         <AllTeamsReportView teams={teams} date={date} />
       ) : (
         <>
