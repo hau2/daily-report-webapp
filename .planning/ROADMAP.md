@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 ### v1.1 Team Membership Management (In Progress)
 
-- [ ] **Phase 6: Membership Management** - Remove member, leave team, transfer ownership, cancel invitation, delete team, historical data preservation
+- [x] **Phase 6: Membership Management** - Remove member, leave team, transfer ownership, cancel invitation, delete team, historical data preservation
 - [ ] **Phase 7: Stress Level Tracking** - Stress level selection on report submission, visibility for team owner
 - [ ] **Phase 8: Dashboard Analytics** - Submission rate, hours worked, stress trend, and task volume charts with time range toggle
 
@@ -137,12 +137,12 @@ Plans:
   4. Owner can cancel a pending invitation, preventing the invitee from joining via that link
   5. Owner can delete a team entirely (with confirmation), removing it from all members' team lists
   6. After a member departs (removed or left), their historical daily reports remain visible to the owner
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
-- [ ] 06-01-PLAN.md — Backend: shared types, 5 membership management endpoints (remove, leave, transfer, cancel, delete), manager service update for historical data, unit tests
-- [ ] 06-02-PLAN.md — Frontend: team detail page UI for all membership actions (remove member, leave team, transfer ownership, cancel invitation, delete team)
-- [ ] 06-03-PLAN.md — Human verification of all Phase 6 end-to-end flows
+- [x] 06-01-PLAN.md — Backend: shared types, 5 membership management endpoints (remove, leave, transfer, cancel, delete), manager service update for historical data, unit tests
+- [x] 06-02-PLAN.md — Frontend: team detail page UI for all membership actions (remove member, leave team, transfer ownership, cancel invitation, delete team)
+- [x] 06-03-PLAN.md — Human verification of all Phase 6 end-to-end flows
 
 ### Phase 7: Stress Level Tracking
 **Goal**: Daily reports capture how stressed a member is feeling, giving owners visibility into team wellbeing
@@ -177,6 +177,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 3. Task Management and Daily Reports | v1.0 | 4/4 | Complete | 2026-03-06 |
 | 4. Manager Dashboard and Export | v1.0 | 3/3 | Complete | 2026-03-06 |
 | 5. Chrome Extension | v1.0 | 3/3 | Complete | 2026-03-07 |
-| 6. Membership Management | v1.1 | 0/3 | Not started | - |
+| 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 7. Stress Level Tracking | v1.1 | 0/? | Not started | - |
 | 8. Dashboard Analytics | v1.1 | 0/? | Not started | - |
