@@ -20,5 +20,10 @@ export const updateTaskSchema = z.object({
   notes: z.union([z.string().max(2000), z.null()]).optional(),
 });
 
+export const submitReportSchema = z.object({
+  stressLevel: z.enum(['low', 'medium', 'high']).optional(),
+});
+
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
+export type SubmitReportInput = z.infer<typeof submitReportSchema>;

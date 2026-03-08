@@ -10,7 +10,7 @@ export type {
   UpdateProfileRequest,
 } from './types/auth';
 export type { Team, TeamMember } from './types/team';
-export type { Task, DailyReport, DailyReportWithTasks } from './types/task';
+export type { Task, DailyReport, DailyReportWithTasks, StressLevel } from './types/task';
 export type {
   TeamMemberReport,
   PendingMember,
@@ -34,6 +34,7 @@ export {
 export {
   createTaskSchema,
   updateTaskSchema,
+  submitReportSchema,
 } from './schemas/task.schema';
 
 // Schema inferred types
@@ -53,4 +54,5 @@ export type {
 export type {
   CreateTaskInput,
   UpdateTaskInput,
+  SubmitReportInput,
 } from './schemas/task.schema';

@@ -1,3 +1,5 @@
+export type StressLevel = 'low' | 'medium' | 'high';
+
 export interface Task {
   id: string;
   reportId: string;
@@ -17,6 +19,7 @@ export interface DailyReport {
   reportDate: string; // YYYY-MM-DD
   status: 'draft' | 'submitted';
   submittedAt: string | null;
+  stressLevel: StressLevel | null;
   createdAt: string;
   updatedAt: string;
 }

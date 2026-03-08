@@ -1,4 +1,4 @@
-import type { DailyReport, Task } from './task';
+import type { DailyReport, Task, StressLevel } from './task';
 
 export interface TeamMemberReport {
   userId: string;
@@ -8,6 +8,7 @@ export interface TeamMemberReport {
   report: DailyReport | null;
   tasks: Task[];
   totalHours: number;
+  stressLevel: StressLevel | null;
   departed?: boolean;
 }
 
