@@ -18,21 +18,44 @@ export class ManagerService {
   ): Promise<TeamReportsResponse> {
     const client = this.supabaseService.getClient();
 
-    // 1. Get team members
-    const { data: members, error: membersError } = await client
+    // 1. Get active team members (left_at is null)
+    const { data: activeMembers, error: membersError } = await client
       .from('team_members')
       .select('user_id, role')
-      .eq('team_id', teamId);
+      .eq('team_id', teamId)
+      .is('left_at', null);
 
     if (membersError) {
       throw new Error(`Database error: ${membersError.message}`);
     }
 
-    const userIds = (members ?? []).map(
+    const activeUserIds = (activeMembers ?? []).map(
       (m: { user_id: string }) => m.user_id,
     );
 
-    if (userIds.length === 0) {
+    // 3. Get daily reports for the date (need this before departed member check)
+    const { data: reports, error: reportsError } = await client
+      .from('daily_reports')
+      .select('*')
+      .eq('team_id', teamId)
+      .eq('report_date', date);
+
+    if (reportsError) {
+      throw new Error(`Database error: ${reportsError.message}`);
+    }
+
+    // Find departed members who have reports for this date
+    const departedUserIds: string[] = [];
+    for (const report of reports ?? []) {
+      const reportUserId = (report as Record<string, unknown>).user_id as string;
+      if (!activeUserIds.includes(reportUserId) && !departedUserIds.includes(reportUserId)) {
+        departedUserIds.push(reportUserId);
+      }
+    }
+
+    const allUserIds = [...activeUserIds, ...departedUserIds];
+
+    if (allUserIds.length === 0) {
       return { date, teamId, members: [] };
     }
 
@@ -40,7 +63,7 @@ export class ManagerService {
     const { data: users, error: usersError } = await client
       .from('users')
       .select('id, email, display_name')
-      .in('id', userIds);
+      .in('id', allUserIds);
 
     if (usersError) {
       throw new Error(`Database error: ${usersError.message}`);
@@ -52,17 +75,6 @@ export class ManagerService {
         u,
       ]),
     );
-
-    // 3. Get daily reports for the date
-    const { data: reports, error: reportsError } = await client
-      .from('daily_reports')
-      .select('*')
-      .eq('team_id', teamId)
-      .eq('report_date', date);
-
-    if (reportsError) {
-      throw new Error(`Database error: ${reportsError.message}`);
-    }
 
     const reportsByUser = new Map(
       (reports ?? []).map((r: Record<string, unknown>) => [
@@ -99,8 +111,9 @@ export class ManagerService {
       }
     }
 
-    // 5. Assemble per-member view
-    const memberReports: TeamMemberReport[] = userIds.map((userId: string) => {
+    // 5. Assemble per-member view (active + departed with reports)
+    const departedSet = new Set(departedUserIds);
+    const memberReports: TeamMemberReport[] = allUserIds.map((userId: string) => {
       const user = userMap.get(userId);
       const reportRow = reportsByUser.get(userId);
       const report = reportRow ? this.mapReport(reportRow as Record<string, unknown>) : null;
@@ -115,7 +128,7 @@ export class ManagerService {
         status = report.status;
       }
 
-      return {
+      const memberReport: TeamMemberReport = {
         userId,
         email: user?.email ?? '',
         displayName: user?.display_name ?? '',
@@ -124,6 +137,12 @@ export class ManagerService {
         tasks,
         totalHours,
       };
+
+      if (departedSet.has(userId)) {
+        memberReport.departed = true;
+      }
+
+      return memberReport;
     });
 
     return { date, teamId, members: memberReports };
@@ -135,11 +154,12 @@ export class ManagerService {
   ): Promise<PendingMember[]> {
     const client = this.supabaseService.getClient();
 
-    // 1. Get team members
+    // 1. Get active team members (left_at is null)
     const { data: members, error: membersError } = await client
       .from('team_members')
       .select('user_id, role')
-      .eq('team_id', teamId);
+      .eq('team_id', teamId)
+      .is('left_at', null);
 
     if (membersError) {
       throw new Error(`Database error: ${membersError.message}`);

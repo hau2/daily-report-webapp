@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { Test } from '@nestjs/testing';
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { TeamsService } from './teams.service';
@@ -202,6 +202,174 @@ describe('TeamsService', () => {
       expect(mockQueryBuilder.update).toHaveBeenCalledWith(
         expect.objectContaining({ used_at: expect.any(String) }),
       );
+    });
+  });
+
+  describe('removeMember', () => {
+    it('should throw BadRequestException if trying to remove yourself', async () => {
+      await expect(
+        service.removeMember('team-1', 'user-1', 'user-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw NotFoundException if target member not found', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+      await expect(
+        service.removeMember('team-1', 'user-1', 'user-2'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw BadRequestException if target is owner', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'member-2', role: 'owner' },
+        error: null,
+      });
+
+      await expect(
+        service.removeMember('team-1', 'user-1', 'user-2'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should set left_at on the member row on success', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'member-2', role: 'member' },
+        error: null,
+      });
+
+      await service.removeMember('team-1', 'user-1', 'user-2');
+
+      expect(mockQueryBuilder.update).toHaveBeenCalledWith(
+        expect.objectContaining({ left_at: expect.any(String) }),
+      );
+    });
+  });
+
+  describe('leaveTeam', () => {
+    it('should throw NotFoundException if user is not an active member', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+      await expect(
+        service.leaveTeam('team-1', 'user-1'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should throw BadRequestException if user is the owner', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'member-1', role: 'owner' },
+        error: null,
+      });
+
+      await expect(
+        service.leaveTeam('team-1', 'user-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should set left_at on the member row on success', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'member-1', role: 'member' },
+        error: null,
+      });
+
+      await service.leaveTeam('team-1', 'user-1');
+
+      expect(mockQueryBuilder.update).toHaveBeenCalledWith(
+        expect.objectContaining({ left_at: expect.any(String) }),
+      );
+    });
+  });
+
+  describe('transferOwnership', () => {
+    it('should throw BadRequestException if transferring to yourself', async () => {
+      await expect(
+        service.transferOwnership('team-1', 'user-1', 'user-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('should throw NotFoundException if target member not found', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: null,
+        error: null,
+      });
+
+      await expect(
+        service.transferOwnership('team-1', 'user-1', 'user-2'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should update target role to owner and current owner to member', async () => {
+      mockQueryBuilder.single.mockResolvedValueOnce({
+        data: { id: 'member-2', role: 'member' },
+        error: null,
+      });
+
+      await service.transferOwnership('team-1', 'user-1', 'user-2');
+
+      // update called twice: once for target (owner), once for current owner (member)
+      expect(mockQueryBuilder.update).toHaveBeenCalledWith({ role: 'owner' });
+      expect(mockQueryBuilder.update).toHaveBeenCalledWith({ role: 'member' });
+    });
+  });
+
+  describe('cancelInvitation', () => {
+    it('should throw NotFoundException if no pending invitation found', async () => {
+      // select() after delete returns empty array
+      mockQueryBuilder.select.mockResolvedValueOnce({
+        data: [],
+        error: null,
+      });
+
+      await expect(
+        service.cancelInvitation('team-1', 'invite@example.com'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('should delete the invitation on success', async () => {
+      mockQueryBuilder.select.mockResolvedValueOnce({
+        data: [{ id: 'inv-1' }],
+        error: null,
+      });
+
+      await service.cancelInvitation('team-1', 'invite@example.com');
+
+      expect(mockQueryBuilder.delete).toHaveBeenCalled();
+      expect(mockQueryBuilder.eq).toHaveBeenCalledWith('team_id', 'team-1');
+      expect(mockQueryBuilder.eq).toHaveBeenCalledWith('invitee_email', 'invite@example.com');
+    });
+  });
+
+  describe('deleteTeam', () => {
+    it('should delete all related data in correct order', async () => {
+      // The first chained query is .from('daily_reports').select('id').eq('team_id', teamId)
+      // which ends without .single() — the mock chain resolves via eq
+      // We need eq to resolve with data at some point for the select query
+      mockQueryBuilder.eq.mockResolvedValueOnce({
+        data: [{ id: 'report-1' }, { id: 'report-2' }],
+        error: null,
+      });
+
+      await service.deleteTeam('team-1');
+
+      // delete should have been called multiple times
+      expect(mockQueryBuilder.delete).toHaveBeenCalled();
+    });
+
+    it('should handle team with no reports', async () => {
+      mockQueryBuilder.eq.mockResolvedValueOnce({
+        data: [],
+        error: null,
+      });
+
+      await service.deleteTeam('team-1');
+
+      // Should still delete team_invitations, team_members, and team
+      expect(mockQueryBuilder.delete).toHaveBeenCalled();
     });
   });
 });

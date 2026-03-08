@@ -4,6 +4,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
@@ -67,7 +68,8 @@ export class TeamsService {
     const { data: memberships, error: membershipsError } = await client
       .from('team_members')
       .select('team_id, role')
-      .eq('user_id', userId);
+      .eq('user_id', userId)
+      .is('left_at', null);
 
     if (membershipsError) {
       throw new Error(`Database error: ${membershipsError.message}`);
@@ -235,7 +237,8 @@ export class TeamsService {
     const { data: members, error: membersError } = await client
       .from('team_members')
       .select('user_id, role, joined_at')
-      .eq('team_id', teamId);
+      .eq('team_id', teamId)
+      .is('left_at', null);
 
     if (membersError) {
       throw new Error(`Database error: ${membersError.message}`);
@@ -269,5 +272,209 @@ export class TeamsService {
         displayName: (user?.display_name as string) ?? null,
       };
     });
+  }
+
+  async removeMember(
+    teamId: string,
+    ownerUserId: string,
+    targetUserId: string,
+  ): Promise<void> {
+    if (targetUserId === ownerUserId) {
+      throw new BadRequestException('Cannot remove yourself; use leave instead');
+    }
+
+    const client = this.supabaseService.getClient();
+
+    const { data: member } = await client
+      .from('team_members')
+      .select('id, role')
+      .eq('team_id', teamId)
+      .eq('user_id', targetUserId)
+      .is('left_at', null)
+      .single();
+
+    if (!member) {
+      throw new NotFoundException('Member not found');
+    }
+
+    if ((member as { role: string }).role === 'owner') {
+      throw new BadRequestException('Cannot remove the team owner');
+    }
+
+    const { error } = await client
+      .from('team_members')
+      .update({ left_at: new Date().toISOString() })
+      .eq('id', (member as { id: string }).id);
+
+    if (error) {
+      throw new Error(`Database error: ${error.message}`);
+    }
+  }
+
+  async leaveTeam(teamId: string, userId: string): Promise<void> {
+    const client = this.supabaseService.getClient();
+
+    const { data: member } = await client
+      .from('team_members')
+      .select('id, role')
+      .eq('team_id', teamId)
+      .eq('user_id', userId)
+      .is('left_at', null)
+      .single();
+
+    if (!member) {
+      throw new NotFoundException('You are not an active member of this team');
+    }
+
+    if ((member as { role: string }).role === 'owner') {
+      throw new BadRequestException('Owner must transfer ownership before leaving');
+    }
+
+    const { error } = await client
+      .from('team_members')
+      .update({ left_at: new Date().toISOString() })
+      .eq('id', (member as { id: string }).id);
+
+    if (error) {
+      throw new Error(`Database error: ${error.message}`);
+    }
+  }
+
+  async transferOwnership(
+    teamId: string,
+    currentOwnerId: string,
+    targetUserId: string,
+  ): Promise<void> {
+    if (targetUserId === currentOwnerId) {
+      throw new BadRequestException('Cannot transfer ownership to yourself');
+    }
+
+    const client = this.supabaseService.getClient();
+
+    const { data: target } = await client
+      .from('team_members')
+      .select('id, role')
+      .eq('team_id', teamId)
+      .eq('user_id', targetUserId)
+      .is('left_at', null)
+      .single();
+
+    if (!target) {
+      throw new NotFoundException('Target member not found');
+    }
+
+    // Update target to owner
+    const { error: targetError } = await client
+      .from('team_members')
+      .update({ role: 'owner' })
+      .eq('team_id', teamId)
+      .eq('user_id', targetUserId)
+      .is('left_at', null);
+
+    if (targetError) {
+      throw new Error(`Database error: ${targetError.message}`);
+    }
+
+    // Demote current owner to member
+    const { error: ownerError } = await client
+      .from('team_members')
+      .update({ role: 'member' })
+      .eq('team_id', teamId)
+      .eq('user_id', currentOwnerId)
+      .is('left_at', null);
+
+    if (ownerError) {
+      throw new Error(`Database error: ${ownerError.message}`);
+    }
+  }
+
+  async cancelInvitation(
+    teamId: string,
+    inviteeEmail: string,
+  ): Promise<void> {
+    const client = this.supabaseService.getClient();
+
+    const { data, error } = await client
+      .from('team_invitations')
+      .delete()
+      .eq('team_id', teamId)
+      .eq('invitee_email', inviteeEmail)
+      .is('used_at', null)
+      .select();
+
+    if (error) {
+      throw new Error(`Database error: ${error.message}`);
+    }
+
+    if (!data || (data as unknown[]).length === 0) {
+      throw new NotFoundException('Pending invitation not found');
+    }
+  }
+
+  async deleteTeam(teamId: string): Promise<void> {
+    const client = this.supabaseService.getClient();
+
+    // Get all daily report IDs for this team
+    const { data: reports } = await client
+      .from('daily_reports')
+      .select('id')
+      .eq('team_id', teamId);
+
+    const reportIds = (reports ?? []).map((r: { id: string }) => r.id);
+
+    // Delete tasks for those reports
+    if (reportIds.length > 0) {
+      await client
+        .from('tasks')
+        .delete()
+        .in('report_id', reportIds);
+    }
+
+    // Delete daily reports
+    await client
+      .from('daily_reports')
+      .delete()
+      .eq('team_id', teamId);
+
+    // Delete team invitations
+    await client
+      .from('team_invitations')
+      .delete()
+      .eq('team_id', teamId);
+
+    // Delete team members
+    await client
+      .from('team_members')
+      .delete()
+      .eq('team_id', teamId);
+
+    // Delete team
+    await client
+      .from('teams')
+      .delete()
+      .eq('id', teamId);
+  }
+
+  async getPendingInvitations(
+    teamId: string,
+  ): Promise<Array<{ email: string; invitedAt: string; expiresAt: string }>> {
+    const client = this.supabaseService.getClient();
+
+    const { data, error } = await client
+      .from('team_invitations')
+      .select('invitee_email, created_at, expires_at')
+      .eq('team_id', teamId)
+      .is('used_at', null)
+      .gt('expires_at', new Date().toISOString());
+
+    if (error) {
+      throw new Error(`Database error: ${error.message}`);
+    }
+
+    return (data ?? []).map((row: { invitee_email: string; created_at: string; expires_at: string }) => ({
+      email: row.invitee_email,
+      invitedAt: row.created_at,
+      expiresAt: row.expires_at,
+    }));
   }
 }

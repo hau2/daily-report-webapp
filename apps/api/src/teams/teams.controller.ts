@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -19,6 +20,7 @@ import { TeamsService } from './teams.service';
 import { CreateTeamDto } from './dto/create-team.dto';
 import { InviteMemberDto } from './dto/invite-member.dto';
 import { AcceptInvitationDto } from './dto/accept-invitation.dto';
+import { TransferOwnershipDto } from './dto/transfer-ownership.dto';
 
 @Controller('teams')
 @UseGuards(AccessTokenGuard)
@@ -54,6 +56,12 @@ export class TeamsController {
     return this.teamsService.getTeamMembers(teamId);
   }
 
+  @Get(':id/invitations')
+  @UseGuards(TeamManagerGuard)
+  async getPendingInvitations(@Param('id') teamId: string) {
+    return this.teamsService.getPendingInvitations(teamId);
+  }
+
   @Post(':id/invitations')
   @UseGuards(TeamManagerGuard)
   @HttpCode(HttpStatus.CREATED)
@@ -65,5 +73,59 @@ export class TeamsController {
     const user = req.user as AccessTokenUser;
     await this.teamsService.inviteMember(teamId, user.userId, dto);
     return { message: 'Invitation sent' };
+  }
+
+  @Post(':id/leave')
+  @HttpCode(HttpStatus.OK)
+  async leaveTeam(@Req() req: Request, @Param('id') teamId: string) {
+    const user = req.user as AccessTokenUser;
+    await this.teamsService.leaveTeam(teamId, user.userId);
+    return { message: 'Left team' };
+  }
+
+  @Post(':id/transfer-ownership')
+  @UseGuards(TeamManagerGuard)
+  @HttpCode(HttpStatus.OK)
+  async transferOwnership(
+    @Req() req: Request,
+    @Param('id') teamId: string,
+    @Body() dto: TransferOwnershipDto,
+  ) {
+    const user = req.user as AccessTokenUser;
+    await this.teamsService.transferOwnership(teamId, user.userId, dto.targetUserId);
+    return { message: 'Ownership transferred' };
+  }
+
+  @Delete(':id/members/:userId')
+  @UseGuards(TeamManagerGuard)
+  @HttpCode(HttpStatus.OK)
+  async removeMember(
+    @Req() req: Request,
+    @Param('id') teamId: string,
+    @Param('userId') targetUserId: string,
+  ) {
+    const user = req.user as AccessTokenUser;
+    await this.teamsService.removeMember(teamId, user.userId, targetUserId);
+    return { message: 'Member removed' };
+  }
+
+  @Delete(':id/invitations/:email')
+  @UseGuards(TeamManagerGuard)
+  @HttpCode(HttpStatus.OK)
+  async cancelInvitation(
+    @Param('id') teamId: string,
+    @Param('email') email: string,
+  ) {
+    const decodedEmail = decodeURIComponent(email);
+    await this.teamsService.cancelInvitation(teamId, decodedEmail);
+    return { message: 'Invitation cancelled' };
+  }
+
+  @Delete(':id')
+  @UseGuards(TeamManagerGuard)
+  @HttpCode(HttpStatus.OK)
+  async deleteTeam(@Param('id') teamId: string) {
+    await this.teamsService.deleteTeam(teamId);
+    return { message: 'Team deleted' };
   }
 }

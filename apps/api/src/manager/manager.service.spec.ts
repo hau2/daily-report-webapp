@@ -87,12 +87,9 @@ function setupGetTeamReportsMocks(
   const reportsQb = createMockQueryBuilder();
   const tasksQb = createMockQueryBuilder();
 
-  // team_members: .from('team_members').select('user_id, role').eq('team_id', teamId)
-  // Terminal call is eq (1 eq call)
-  membersQb.eq.mockResolvedValueOnce({ data: opts.members, error: null });
-
-  // users: .from('users').select('id, email, display_name').in('id', userIds)
-  usersQb.in.mockResolvedValueOnce({ data: opts.users, error: null });
+  // team_members: .from('team_members').select('user_id, role').eq('team_id', teamId).is('left_at', null)
+  // Terminal call is is (eq chains, is resolves)
+  membersQb.is.mockResolvedValueOnce({ data: opts.members, error: null });
 
   // daily_reports: .from('daily_reports').select('*').eq('team_id', ...).eq('report_date', ...)
   // First eq returns self, second eq resolves
@@ -100,13 +97,16 @@ function setupGetTeamReportsMocks(
     .mockReturnValueOnce(reportsQb)  // first .eq('team_id', ...)
     .mockResolvedValueOnce({ data: opts.reports, error: null }); // second .eq('report_date', ...)
 
+  // users: .from('users').select('id, email, display_name').in('id', userIds)
+  usersQb.in.mockResolvedValueOnce({ data: opts.users, error: null });
+
   // tasks: .from('tasks').select('*').in('report_id', ...).order('sort_order').order('created_at')
   // Last order resolves
   tasksQb.order
     .mockReturnValueOnce(tasksQb) // first .order('sort_order')
     .mockResolvedValueOnce({ data: opts.tasks, error: null }); // second .order('created_at')
 
-  const callOrder = [membersQb, usersQb, reportsQb, tasksQb];
+  const callOrder = [membersQb, reportsQb, usersQb, tasksQb];
   let callIndex = 0;
   mockClient.from.mockImplementation(() => {
     return callOrder[callIndex++] ?? createMockQueryBuilder();
@@ -131,7 +131,8 @@ function setupGetPendingMocks(
   const usersQb = createMockQueryBuilder();
   const reportsQb = createMockQueryBuilder();
 
-  membersQb.eq.mockResolvedValueOnce({ data: opts.members, error: null });
+  // team_members: .select().eq().is() -- terminal: is
+  membersQb.is.mockResolvedValueOnce({ data: opts.members, error: null });
   usersQb.in.mockResolvedValueOnce({ data: opts.users, error: null });
   reportsQb.eq
     .mockReturnValueOnce(reportsQb)

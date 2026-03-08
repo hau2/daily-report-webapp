@@ -17,6 +17,7 @@ export class TeamManagerGuard implements CanActivate {
       .select('role')
       .eq('team_id', teamId)
       .eq('user_id', user.userId)
+      .is('left_at', null)
       .single();
     return data?.role === 'owner';
   }
