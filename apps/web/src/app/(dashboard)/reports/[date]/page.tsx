@@ -133,14 +133,18 @@ function SearchableTeamSelect({
 
 // ---- Team Selector (searchable dropdown) ----
 
+const ALL_TEAMS_ID = '__all__';
+
 function TeamSelector({
   teams,
   selectedTeamId,
   onSelect,
+  showAllTeams = false,
 }: {
   teams: TeamWithRole[];
   selectedTeamId: string;
   onSelect: (teamId: string) => void;
+  showAllTeams?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
@@ -152,6 +156,7 @@ function TeamSelector({
   );
 
   const selectedTeam = teams.find((t) => t.team.id === selectedTeamId);
+  const displayName = selectedTeamId === ALL_TEAMS_ID ? 'All Teams' : (selectedTeam?.team.name ?? 'Select team');
 
   const handleClickOutside = useCallback((e: MouseEvent) => {
     if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -182,7 +187,7 @@ function TeamSelector({
         className="inline-flex items-center gap-2 rounded-md border bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
       >
         <span className="max-w-[200px] truncate">
-          {selectedTeam?.team.name ?? 'Select team'}
+          {displayName}
         </span>
         <svg
           className={`h-4 w-4 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
@@ -206,6 +211,21 @@ function TeamSelector({
             />
           </div>
           <div className="max-h-48 overflow-y-auto px-1 pb-1">
+            {showAllTeams && !search && (
+              <button
+                type="button"
+                onClick={() => {
+                  onSelect(ALL_TEAMS_ID);
+                  setOpen(false);
+                  setSearch('');
+                }}
+                className={`flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-sm hover:bg-accent ${
+                  selectedTeamId === ALL_TEAMS_ID ? 'bg-accent font-medium' : ''
+                }`}
+              >
+                <span>All Teams</span>
+              </button>
+            )}
             {filtered.length === 0 ? (
               <p className="px-2 py-1.5 text-sm text-muted-foreground">No teams found</p>
             ) : (
@@ -865,15 +885,17 @@ export default function DailyReportPage() {
     if (teams && teams.length > 0 && !selectedTeamId) {
       setSelectedTeamId(teams[0].team.id);
     }
-    // If selected team is no longer in the list, reset
-    if (teams && selectedTeamId && !teams.find((t) => t.team.id === selectedTeamId)) {
+    // If selected team is no longer in the list, reset (but keep ALL_TEAMS_ID)
+    if (teams && selectedTeamId && selectedTeamId !== ALL_TEAMS_ID && !teams.find((t) => t.team.id === selectedTeamId)) {
       setSelectedTeamId(teams[0]?.team.id ?? null);
     }
   }, [teams, selectedTeamId]);
 
   const teamId = selectedTeamId;
 
-  // Fetch daily report
+  const isAllTeams = selectedTeamId === ALL_TEAMS_ID;
+
+  // Fetch daily report (skip when viewing all teams)
   const {
     data: reportData,
     isLoading: reportLoading,
@@ -883,7 +905,7 @@ export default function DailyReportPage() {
       api.get<DailyReportWithTasks | null>(
         `/reports/daily?date=${date}&teamId=${teamId}`,
       ),
-    enabled: !!teamId && isValidDate,
+    enabled: !!teamId && !isAllTeams && isValidDate,
   });
 
   // Sync stress level from report data
@@ -904,6 +926,10 @@ export default function DailyReportPage() {
       void queryClient.invalidateQueries({
         queryKey: ['reports', 'daily', date, teamId],
       });
+      // Switch to "All Teams" view after submitting
+      if (teams && teams.length > 1) {
+        setSelectedTeamId(ALL_TEAMS_ID);
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Failed to submit report');
@@ -920,10 +946,10 @@ export default function DailyReportPage() {
   const formattedDate = format(parsedDate, 'EEEE, MMMM d, yyyy');
   const isViewingToday = isToday(parsedDate);
 
-  const report = reportData?.report ?? null;
-  const tasks = reportData?.tasks ?? [];
-  const totalHours = reportData?.totalHours ?? 0;
-  const isDraft = !report || report.status === 'draft';
+  const report = isAllTeams ? null : (reportData?.report ?? null);
+  const tasks = isAllTeams ? [] : (reportData?.tasks ?? []);
+  const totalHours = isAllTeams ? 0 : (reportData?.totalHours ?? 0);
+  const isDraft = isAllTeams ? false : (!report || report.status === 'draft');
 
   function handleSubmit() {
     if (!report) return;
@@ -984,24 +1010,20 @@ export default function DailyReportPage() {
       </div>
 
       {/* Team selector - visible when user has multiple teams */}
-      {teams && teams.length > 1 && teamId && (
+      {teams && teams.length > 1 && selectedTeamId && (
         <div className="mb-6 flex items-center gap-3">
           <span className="text-sm font-medium text-muted-foreground">Team:</span>
           <TeamSelector
             teams={teams}
-            selectedTeamId={teamId}
+            selectedTeamId={selectedTeamId}
             onSelect={setSelectedTeamId}
+            showAllTeams
           />
         </div>
       )}
 
-      {/* All teams submitted: show grouped read-only view */}
-      {!isDraft && teams && teams.length > 1 && !teams.some((t) => {
-        // Check if any team still has a draft or missing report
-        const key = ['reports', 'daily', date, t.team.id];
-        const cached = queryClient.getQueryData<DailyReportWithTasks | null>(key);
-        return !cached?.report || cached.report.status === 'draft';
-      }) ? (
+      {/* All Teams view */}
+      {isAllTeams && teams ? (
         <AllTeamsReportView teams={teams} date={date} />
       ) : (
         <>
