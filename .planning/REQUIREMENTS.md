@@ -3,9 +3,7 @@
 **Defined:** 2026-03-06
 **Core Value:** Make daily reporting effortless -- quick task entry throughout the day, easy review and adjustment at end of day, clear visibility for managers.
 
-## v1 Requirements
-
-Requirements for initial release. Each maps to roadmap phases.
+## v1.0 Requirements (Complete)
 
 ### Authentication
 
@@ -49,6 +47,32 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **UI-01**: Web app is responsive and usable on mobile browsers
 
+## v1.1 Requirements
+
+Requirements for milestone v1.1: Team Membership Management. Each maps to roadmap phases.
+
+### Membership Management
+
+- [ ] **MEMB-01**: Owner can remove a member from the team
+- [ ] **MEMB-02**: Member can leave a team voluntarily
+- [ ] **MEMB-03**: Owner can transfer ownership to another member (owner becomes regular member)
+- [ ] **MEMB-04**: Owner can cancel a pending invitation
+- [ ] **MEMB-05**: Owner can delete a team (with confirmation, preserves no data)
+- [ ] **MEMB-06**: Historical reports from departed members remain visible to the owner
+
+### Stress Level
+
+- [ ] **STRESS-01**: Member can select a stress level (Low/Medium/High) when submitting a daily report
+- [ ] **STRESS-02**: Owner can see each member's stress level on their daily report view
+
+### Dashboard Analytics
+
+- [ ] **DASH-01**: Owner can view submission rate chart (% members submitted) over week/month/quarter
+- [ ] **DASH-02**: Owner can view hours worked chart per member over week/month/quarter
+- [ ] **DASH-03**: Owner can view team stress level trend chart over week/month/quarter
+- [ ] **DASH-04**: Owner can view task volume chart per member over week/month/quarter
+- [ ] **DASH-05**: Owner can toggle between week, month, and quarter time ranges
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -70,7 +94,6 @@ Deferred to future release. Tracked but not in current roadmap.
 
 - **MGMT-04**: Manager can leave comments/feedback on submitted reports
 - **MGMT-05**: Manager can export reports to native Excel (.xlsx) format
-- **MGMT-06**: Manager can view weekly/monthly summary dashboard with aggregated hours
 
 ## Out of Scope
 
@@ -80,14 +103,17 @@ Explicitly excluded. Documented to prevent scope creep.
 |---------|--------|
 | Live timer / stopwatch | This is a daily report tool, not a time tracker. Manual hour estimation is the intended workflow. |
 | Screenshot monitoring | Destroys trust. Source links provide sufficient work evidence. |
-| Approval/reject workflow | Adds bureaucratic friction. Manager viewing is sufficient for v1. |
+| Approval/reject workflow | Adds bureaucratic friction. Manager viewing is sufficient. |
 | Category/tag system | Scope creep. Task title + source link provides enough context. |
 | Real-time notifications (WebSocket) | Daily reports are async by nature. Page refresh is sufficient. |
 | Billable vs non-billable hours | Turns product into invoicing tool. Different product category. |
 | Gantt charts / project management | Not a PM tool. Link to Jira/GitLab for project tracking. |
 | AI-generated summaries | Premature. Reports are already short (3-5 items). |
-| Native mobile app | Web responsive design is sufficient for v1. |
+| Native mobile app | Web responsive design is sufficient. |
 | Slack/Teams bot | Focus on web + extension as input channels. |
+| Custom stress level labels | Fixed Low/Medium/High sufficient for v1.1. |
+| Bulk member operations | Single-member actions sufficient for v1.1. |
+| Real-time notifications for membership changes | Not needed for v1.1. |
 
 ## Traceability
 
@@ -119,12 +145,26 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXT-04 | Phase 5 | Complete |
 | EXT-05 | Phase 5 | Complete |
 | UI-01 | Phase 4 | Complete |
+| MEMB-01 | — | Pending |
+| MEMB-02 | — | Pending |
+| MEMB-03 | — | Pending |
+| MEMB-04 | — | Pending |
+| MEMB-05 | — | Pending |
+| MEMB-06 | — | Pending |
+| STRESS-01 | — | Pending |
+| STRESS-02 | — | Pending |
+| DASH-01 | — | Pending |
+| DASH-02 | — | Pending |
+| DASH-03 | — | Pending |
+| DASH-04 | — | Pending |
+| DASH-05 | — | Pending |
 
 **Coverage:**
-- v1 requirements: 24 total
-- Mapped to phases: 24
-- Unmapped: 0
+- v1.0 requirements: 24 total (all complete)
+- v1.1 requirements: 13 total
+- Mapped to phases: 0
+- Unmapped: 13 ⚠️
 
 ---
 *Requirements defined: 2026-03-06*
-*Last updated: 2026-03-06 after roadmap creation*
+*Last updated: 2026-03-08 after v1.1 requirements defined*
