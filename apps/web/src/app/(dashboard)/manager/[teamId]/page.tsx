@@ -12,6 +12,7 @@ import type {
   PendingMember,
   TeamReportsResponse,
   Team,
+  StressLevel,
 } from '@daily-report/shared';
 import {
   Card,
@@ -50,6 +51,26 @@ function StatusBadge({ status }: { status: 'submitted' | 'draft' | 'none' }) {
   }
 }
 
+// ---- Stress Level Badge ----
+
+function StressLevelBadge({ stressLevel }: { stressLevel: StressLevel | null }) {
+  if (!stressLevel) return null;
+
+  const config: Record<StressLevel, { className: string; label: string }> = {
+    low: { className: 'bg-green-100 text-green-700', label: 'Low' },
+    medium: { className: 'bg-yellow-100 text-yellow-700', label: 'Medium' },
+    high: { className: 'bg-red-100 text-red-700', label: 'High' },
+  };
+
+  const { className, label } = config[stressLevel];
+
+  return (
+    <Badge variant="secondary" className={className}>
+      {label}
+    </Badge>
+  );
+}
+
 // ---- Member Report Card ----
 
 function MemberReportCard({ member }: { member: TeamMemberReport }) {
@@ -68,6 +89,9 @@ function MemberReportCard({ member }: { member: TeamMemberReport }) {
               {displayName}
             </CardTitle>
             <StatusBadge status={member.status} />
+            {member.status === 'submitted' && member.stressLevel && (
+              <StressLevelBadge stressLevel={member.stressLevel} />
+            )}
             {member.departed && (
               <Badge variant="outline" className="border-gray-400 text-gray-500">
                 Departed
