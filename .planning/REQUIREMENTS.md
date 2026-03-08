@@ -73,6 +73,18 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 - [x] **DASH-04**: Owner can view task volume chart per member over week/month/quarter
 - [x] **DASH-05**: Owner can toggle between week, month, and quarter time ranges
 
+### Export Analytics
+
+- [ ] **EXPORT-01**: Owner can download any analytics chart as a PNG image
+- [ ] **EXPORT-02**: Owner can download a full analytics report as a PDF
+- [ ] **EXPORT-03**: Owner can export raw analytics data as a CSV file
+
+### Dark Mode
+
+- [ ] **THEME-01**: User can toggle between light and dark mode from the UI
+- [ ] **THEME-02**: User's theme preference persists across sessions
+- [ ] **THEME-03**: App defaults to the user's OS/browser color scheme preference
+
 ## v2 Requirements
 
 Deferred to future release. Tracked but not in current roadmap.
@@ -159,10 +171,18 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-04 | Phase 8 | Complete |
 | DASH-05 | Phase 8 | Complete |
 
+| EXPORT-01 | Phase 9 | Planned |
+| EXPORT-02 | Phase 9 | Planned |
+| EXPORT-03 | Phase 9 | Planned |
+| THEME-01 | Phase 10 | Planned |
+| THEME-02 | Phase 10 | Planned |
+| THEME-03 | Phase 10 | Planned |
+
 **Coverage:**
 - v1.0 requirements: 24 total (all complete)
-- v1.1 requirements: 13 total
-- Mapped to phases: 13
+- v1.1 requirements: 13 total (all complete)
+- v1.2 requirements: 6 total
+- Mapped to phases: 6
 - Unmapped: 0
 
 ---

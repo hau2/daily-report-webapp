@@ -7,7 +7,8 @@ This roadmap delivers a daily reporting web app where team members log tasks thr
 ## Milestones
 
 - v1.0 MVP - Phases 1-5 (shipped 2026-03-07)
-- v1.1 Team Membership Management - Phases 6-8 (in progress)
+- v1.1 Team Membership Management - Phases 6-8 (complete)
+- v1.2 Export & Theming - Phases 9-10 (in progress)
 
 ## Phases
 
@@ -33,6 +34,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 6: Membership Management** - Remove member, leave team, transfer ownership, cancel invitation, delete team, historical data preservation
 - [x] **Phase 7: Stress Level Tracking** - Stress level selection on report submission, visibility for team owner (completed 2026-03-08)
 - [x] **Phase 8: Dashboard Analytics** - Submission rate, hours worked, stress trend, and task volume charts with time range toggle (completed 2026-03-08)
+
+### v1.2 Export & Theming (In Progress)
+
+- [ ] **Phase 9: Export Analytics** - Download charts as PNG/PDF, export raw analytics data as CSV
+- [ ] **Phase 10: Dark Mode** - Light/dark theme toggle with OS preference detection and persistent user preference
 
 ## Phase Details
 
@@ -174,10 +180,30 @@ Plans:
 - [ ] 08-02-PLAN.md — Frontend: analytics page shell with tabs/time range, Team Overview tab with 4 summary cards + 4 charts (Recharts)
 - [ ] 08-03-PLAN.md — Frontend: Individual Member tab with member selector, 4 summary cards, 4 charts (hours, stress, tasks, submission calendar)
 
+### Phase 9: Export Analytics
+**Goal**: Owners can download analytics charts as images, generate PDF reports, and export raw data as CSV
+**Depends on**: Phase 8 (analytics dashboard exists)
+**Requirements**: EXPORT-01, EXPORT-02, EXPORT-03
+**Success Criteria** (what must be TRUE):
+  1. Owner can click a download button on any chart to save it as a PNG image
+  2. Owner can download a full analytics report as a PDF containing all charts and summary data
+  3. Owner can export raw analytics data as a CSV file for use in spreadsheets
+**Plans**: TBD
+
+### Phase 10: Dark Mode
+**Goal**: Users can switch between light and dark themes, with their preference persisted and OS defaults respected
+**Depends on**: Phase 1 (auth/user system exists)
+**Requirements**: THEME-01, THEME-02, THEME-03
+**Success Criteria** (what must be TRUE):
+  1. User can toggle between light and dark mode via a button in the navigation/header
+  2. User's theme preference persists across sessions (stored in localStorage or user profile)
+  3. On first visit, the app defaults to the user's OS/browser color scheme preference (prefers-color-scheme)
+**Plans**: TBD
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -188,4 +214,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 5. Chrome Extension | v1.0 | 3/3 | Complete | 2026-03-07 |
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
-| 8. Dashboard Analytics | 3/3 | Complete   | 2026-03-08 | - |
+| 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
+| 9. Export Analytics | v1.2 | 0/? | Not started | - |
+| 10. Dark Mode | v1.2 | 0/? | Not started | - |
