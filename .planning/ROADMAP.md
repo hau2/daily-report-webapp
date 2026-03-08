@@ -198,7 +198,10 @@ Plans:
   1. User can toggle between light and dark mode via a button in the navigation/header
   2. User's theme preference persists across sessions (stored in localStorage or user profile)
   3. On first visit, the app defaults to the user's OS/browser color scheme preference (prefers-color-scheme)
-**Plans**: TBD
+**Plans:** 1 plan
+
+Plans:
+- [ ] 10-01-PLAN.md — Wire next-themes ThemeProvider, add toggle to nav header, replace all hardcoded gray/white colors with semantic dark-compatible tokens
 
 ## Progress
 
@@ -216,4 +219,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 9. Export Analytics | v1.2 | 0/? | Not started | - |
-| 10. Dark Mode | v1.2 | 0/? | Not started | - |
+| 10. Dark Mode | v1.2 | 0/1 | Planned | - |
