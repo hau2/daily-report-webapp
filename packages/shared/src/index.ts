@@ -29,6 +29,7 @@ export {
   createTeamSchema,
   inviteMemberSchema,
   acceptInvitationSchema,
+  transferOwnershipSchema,
 } from './schemas/team.schema';
 export {
   createTaskSchema,
@@ -47,6 +48,7 @@ export type {
   CreateTeamInput,
   InviteMemberInput,
   AcceptInvitationInput,
+  TransferOwnershipInput,
 } from './schemas/team.schema';
 export type {
   CreateTaskInput,

@@ -12,6 +12,7 @@ export interface TeamMember {
   userId: string;
   role: 'owner' | 'member';
   joinedAt: Date;
+  leftAt?: Date | null;
   email?: string;
   displayName?: string | null;
 }

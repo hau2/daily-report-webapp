@@ -8,6 +8,7 @@ export interface TeamMemberReport {
   report: DailyReport | null;
   tasks: Task[];
   totalHours: number;
+  departed?: boolean;
 }
 
 export interface PendingMember {
