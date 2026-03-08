@@ -154,11 +154,11 @@ Plans:
 **Plans:** 2/2 plans complete
 
 Plans:
-- [ ] 07-01-PLAN.md — Backend: DB migration (stress_level column), shared types/schemas, submit endpoint accepts stressLevel, manager endpoint returns stressLevel
-- [ ] 07-02-PLAN.md — Frontend: stress level selector on daily report page, stress level badge on manager dashboard
+- [x] 07-01-PLAN.md — Backend: DB migration (stress_level column), shared types/schemas, submit endpoint accepts stressLevel, manager endpoint returns stressLevel
+- [x] 07-02-PLAN.md — Frontend: stress level selector on daily report page, stress level badge on manager dashboard
 
 ### Phase 8: Dashboard Analytics
-**Goal**: Owners can visualize team trends over time through charts showing submission rates, hours, stress, and task volume
+**Goal**: Owners can visualize team trends over time through an analytics dashboard with Team Overview and Individual Member views, featuring summary KPI cards, multiple chart types, and time range filtering
 **Depends on**: Phase 7 (stress data needed for stress trend chart), Phase 4 (manager views exist)
 **Requirements**: DASH-01, DASH-02, DASH-03, DASH-04, DASH-05
 **Success Criteria** (what must be TRUE):
@@ -167,7 +167,12 @@ Plans:
   3. Owner can view a stress level trend chart showing team stress distribution over time
   4. Owner can view a task volume chart showing number of tasks per member over time
   5. Owner can toggle between week, month, and quarter time ranges, and all charts update accordingly
-**Plans**: TBD
+**Plans:** 3 plans
+
+Plans:
+- [ ] 08-01-PLAN.md — Backend: shared analytics types, team analytics endpoint (aggregates), member analytics endpoint (individual), unit tests
+- [ ] 08-02-PLAN.md — Frontend: analytics page shell with tabs/time range, Team Overview tab with 4 summary cards + 4 charts (Recharts)
+- [ ] 08-03-PLAN.md — Frontend: Individual Member tab with member selector, 4 summary cards, 4 charts (hours, stress, tasks, submission calendar)
 
 ## Progress
 
@@ -182,5 +187,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 4. Manager Dashboard and Export | v1.0 | 3/3 | Complete | 2026-03-06 |
 | 5. Chrome Extension | v1.0 | 3/3 | Complete | 2026-03-07 |
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
-| 7. Stress Level Tracking | 2/2 | Complete   | 2026-03-08 | - |
-| 8. Dashboard Analytics | v1.1 | 0/? | Not started | - |
+| 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
+| 8. Dashboard Analytics | v1.1 | 0/3 | Not started | - |
