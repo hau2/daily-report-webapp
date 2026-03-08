@@ -230,13 +230,15 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
                   <YAxis domain={[0, 100]} tickFormatter={(v) => `${v}%`} fontSize={12} />
                   <Tooltip
                     labelFormatter={(label) => formatShortDate(label as string)}
-                    formatter={(value: string | number, _name: string, props: Record<string, unknown>) => {
-                      const v = Number(value);
-                      const p = props?.payload as { submitted: number; total: number } | undefined;
-                      return [
-                        `${v.toFixed(0)}%${p ? ` (${p.submitted}/${p.total})` : ''}`,
-                        'Rate',
-                      ];
+                    content={({ active, payload, label }) => {
+                      if (!active || !payload?.length) return null;
+                      const entry = payload[0]?.payload as { rate: number; submitted: number; total: number };
+                      return (
+                        <div className="rounded border bg-white px-3 py-2 text-sm shadow">
+                          <p className="font-medium">{formatShortDate(label as string)}</p>
+                          <p>{entry.rate.toFixed(0)}% ({entry.submitted}/{entry.total})</p>
+                        </div>
+                      );
                     }}
                   />
                   <Line
@@ -395,7 +397,16 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
                     tick={{ fontSize: 11 }}
                   />
                   <Tooltip
-                    formatter={(value: string | number) => [Number(value), 'Tasks']}
+                    content={({ active, payload }) => {
+                      if (!active || !payload?.length) return null;
+                      const entry = payload[0]?.payload as { displayName: string; taskCount: number };
+                      return (
+                        <div className="rounded border bg-white px-3 py-2 text-sm shadow">
+                          <p className="font-medium">{entry.displayName}</p>
+                          <p>{entry.taskCount} tasks</p>
+                        </div>
+                      );
+                    }}
                   />
                   <Bar dataKey="taskCount" fill="#3b82f6" radius={[0, 4, 4, 0]} />
                 </BarChart>
