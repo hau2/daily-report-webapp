@@ -8,25 +8,40 @@ A web application where team members can log their daily tasks, track hours, and
 
 Make daily reporting effortless — quick task entry throughout the day, easy review and adjustment at end of day, clear visibility for managers.
 
+## Current Milestone: v1.1 Team Membership Management
+
+**Goal:** Give team owners and members full control over team membership — remove members, leave teams, transfer ownership, cancel invitations, and delete teams.
+
+**Target features:**
+- Owner can remove a member from the team
+- Member can voluntarily leave a team
+- Owner can transfer ownership to another member
+- Owner can cancel a pending invitation
+- Owner can delete a team entirely
+
 ## Requirements
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ User can sign up and log in with email/password — v1.0
+- ✓ User can create a team and invite members — v1.0
+- ✓ Team has flat structure: 1 owner/manager + members — v1.0
+- ✓ User can add tasks to their daily report (title, hours, source link, notes) — v1.0
+- ✓ User can review, edit, and adjust hours for tasks at end of day — v1.0
+- ✓ User can submit daily report to manager — v1.0
+- ✓ Manager can view each member's daily report — v1.0
+- ✓ Manager can see who hasn't submitted their report today — v1.0
+- ✓ Manager can export reports to CSV/Excel — v1.0
+- ✓ Chrome extension: highlight text on any page to quick-add a task with estimated hours — v1.0
+- ✓ Chrome extension: captures source URL (Jira, GitLab, etc.) automatically — v1.0
 
 ### Active
 
-- [ ] User can sign up and log in with email/password
-- [ ] User can create a team and invite members
-- [ ] Team has flat structure: 1 owner/manager + members
-- [ ] User can add tasks to their daily report (title, hours, source link, notes)
-- [ ] User can review, edit, and adjust hours for tasks at end of day
-- [ ] User can submit daily report to manager
-- [ ] Manager can view each member's daily report
-- [ ] Manager can see who hasn't submitted their report today
-- [ ] Manager can export reports to CSV/Excel
-- [ ] Chrome extension: highlight text on any page to quick-add a task with estimated hours
-- [ ] Chrome extension: captures source URL (Jira, GitLab, etc.) automatically
+- [ ] Owner can remove a member from the team
+- [ ] Member can leave a team voluntarily
+- [ ] Owner can transfer ownership to another member
+- [ ] Owner can cancel a pending invitation
+- [ ] Owner can delete a team
 
 ### Out of Scope
 
@@ -63,4 +78,4 @@ Make daily reporting effortless — quick task entry throughout the day, easy re
 | No approval workflow | Manager views only, reduces complexity | — Pending |
 
 ---
-*Last updated: 2026-03-06 after initialization*
+*Last updated: 2026-03-08 after milestone v1.1 started*
