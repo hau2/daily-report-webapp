@@ -5,7 +5,8 @@ import { useParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { format, addDays, subDays, isToday, parseISO } from 'date-fns';
-import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, BarChart3 } from 'lucide-react';
+import Link from 'next/link';
 import { api } from '@/lib/api-client';
 import type {
   TeamMemberReport,
@@ -327,6 +328,12 @@ export default function ManagerTeamDashboard() {
             <span className="sr-only sm:not-sr-only sm:mr-1">Next</span>
             <ChevronRight className="h-4 w-4" />
           </Button>
+          <Link href={`/manager/${teamId}/analytics`}>
+            <Button variant="outline" size="sm">
+              <BarChart3 className="mr-1 h-4 w-4" />
+              Analytics
+            </Button>
+          </Link>
           <Button size="sm" onClick={handleExport}>
             <Download className="mr-1 h-4 w-4" />
             Export CSV
