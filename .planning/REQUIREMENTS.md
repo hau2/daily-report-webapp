@@ -53,12 +53,12 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 
 ### Membership Management
 
-- [ ] **MEMB-01**: Owner can remove a member from the team
-- [ ] **MEMB-02**: Member can leave a team voluntarily
-- [ ] **MEMB-03**: Owner can transfer ownership to another member (owner becomes regular member)
-- [ ] **MEMB-04**: Owner can cancel a pending invitation
-- [ ] **MEMB-05**: Owner can delete a team (with confirmation, preserves no data)
-- [ ] **MEMB-06**: Historical reports from departed members remain visible to the owner
+- [x] **MEMB-01**: Owner can remove a member from the team
+- [x] **MEMB-02**: Member can leave a team voluntarily
+- [x] **MEMB-03**: Owner can transfer ownership to another member (owner becomes regular member)
+- [x] **MEMB-04**: Owner can cancel a pending invitation
+- [x] **MEMB-05**: Owner can delete a team (with confirmation, preserves no data)
+- [x] **MEMB-06**: Historical reports from departed members remain visible to the owner
 
 ### Stress Level
 
@@ -145,12 +145,12 @@ Which phases cover which requirements. Updated during roadmap creation.
 | EXT-04 | Phase 5 | Complete |
 | EXT-05 | Phase 5 | Complete |
 | UI-01 | Phase 4 | Complete |
-| MEMB-01 | Phase 6 | Pending |
-| MEMB-02 | Phase 6 | Pending |
-| MEMB-03 | Phase 6 | Pending |
-| MEMB-04 | Phase 6 | Pending |
-| MEMB-05 | Phase 6 | Pending |
-| MEMB-06 | Phase 6 | Pending |
+| MEMB-01 | Phase 6 | Complete |
+| MEMB-02 | Phase 6 | Complete |
+| MEMB-03 | Phase 6 | Complete |
+| MEMB-04 | Phase 6 | Complete |
+| MEMB-05 | Phase 6 | Complete |
+| MEMB-06 | Phase 6 | Complete |
 | STRESS-01 | Phase 7 | Pending |
 | STRESS-02 | Phase 7 | Pending |
 | DASH-01 | Phase 8 | Pending |
