@@ -38,7 +38,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### v1.2 Verification, Export & Theming (In Progress)
 
 - [ ] **Phase 9: Email Verification Enforcement** - Block unverified users from all features, resend verification, redirect flow
-- [ ] **Phase 10: Export Analytics** - Download charts as PNG/PDF, export raw analytics data as CSV
+- [x] **Phase 10: Export Analytics** - Download charts as PNG/PDF, export raw analytics data as CSV (completed 2026-03-09)
 - [ ] **Phase 11: Dark Mode** - Light/dark theme toggle with OS preference detection and persistent user preference
 
 ## Phase Details
@@ -204,7 +204,7 @@ Plans:
   1. Owner can click a download button on any chart to save it as a PNG image
   2. Owner can download a full analytics report as a PDF containing all charts and summary data
   3. Owner can export raw analytics data as a CSV file for use in spreadsheets
-**Plans:** 1/2 plans executed
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 10-01-PLAN.md — Export utility functions (PNG/PDF/CSV) and reusable ChartCard + ExportToolbar components
@@ -239,5 +239,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 9. Email Verification Enforcement | v1.2 | 1/2 | In progress | - |
-| 10. Export Analytics | 1/2 | In Progress|  | - |
+| 10. Export Analytics | 2/2 | Complete   | 2026-03-09 | - |
 | 11. Dark Mode | v1.2 | 0/1 | Not started | - |
