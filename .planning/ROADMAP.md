@@ -8,7 +8,7 @@ This roadmap delivers a daily reporting web app where team members log tasks thr
 
 - v1.0 MVP - Phases 1-5 (shipped 2026-03-07)
 - v1.1 Team Membership Management - Phases 6-8 (complete)
-- v1.2 Export & Theming - Phases 9-10 (in progress)
+- v1.2 Verification, Export & Theming - Phases 9-11 (in progress)
 
 ## Phases
 
@@ -35,10 +35,11 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 7: Stress Level Tracking** - Stress level selection on report submission, visibility for team owner (completed 2026-03-08)
 - [x] **Phase 8: Dashboard Analytics** - Submission rate, hours worked, stress trend, and task volume charts with time range toggle (completed 2026-03-08)
 
-### v1.2 Export & Theming (In Progress)
+### v1.2 Verification, Export & Theming (In Progress)
 
-- [ ] **Phase 9: Export Analytics** - Download charts as PNG/PDF, export raw analytics data as CSV
-- [ ] **Phase 10: Dark Mode** - Light/dark theme toggle with OS preference detection and persistent user preference
+- [ ] **Phase 9: Email Verification Enforcement** - Block unverified users from all features, resend verification, redirect flow
+- [ ] **Phase 10: Export Analytics** - Download charts as PNG/PDF, export raw analytics data as CSV
+- [ ] **Phase 11: Dark Mode** - Light/dark theme toggle with OS preference detection and persistent user preference
 
 ## Phase Details
 
@@ -180,7 +181,22 @@ Plans:
 - [x] 08-02-PLAN.md — Frontend: analytics page shell with tabs/time range, Team Overview tab with 4 summary cards + 4 charts (Recharts)
 - [x] 08-03-PLAN.md — Frontend: Individual Member tab with member selector, 4 summary cards, 4 charts (hours, stress, tasks, submission calendar)
 
-### Phase 9: Export Analytics
+### Phase 9: Email Verification Enforcement
+**Goal**: Unverified users are blocked from all app features until they verify their email, with a clear verification flow and resend option
+**Depends on**: Phase 1 (auth system with existing email verification)
+**Requirements**: VERIFY-01, VERIFY-02, VERIFY-03, VERIFY-04
+**Success Criteria** (what must be TRUE):
+  1. Unverified user cannot access any protected feature (dashboard, tasks, teams, reports, analytics)
+  2. Unverified user is redirected to a "verify your email" page with a resend button
+  3. Invited user must have a verified email before they can accept a team invitation
+  4. User can request a new verification email if the original expired or was lost
+**Plans:** 2 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Backend: EmailVerifiedGuard (global APP_GUARD), resend-verification endpoint with rate limiting, /auth/me returns emailVerified
+- [ ] 09-02-PLAN.md — Frontend: /verify-required page with resend button, auth hook email verification redirect, 403 interception in API client
+
+### Phase 10: Export Analytics
 **Goal**: Owners can download analytics charts as images, generate PDF reports, and export raw data as CSV
 **Depends on**: Phase 8 (analytics dashboard exists)
 **Requirements**: EXPORT-01, EXPORT-02, EXPORT-03
@@ -191,9 +207,9 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 09-01-PLAN.md — Frontend: export utilities (PNG/PDF/CSV), ChartCard wrapper with download button, PDF/CSV export buttons on analytics page
+- [ ] 10-01-PLAN.md — Frontend: export utilities (PNG/PDF/CSV), ChartCard wrapper with download button, PDF/CSV export buttons on analytics page
 
-### Phase 10: Dark Mode
+### Phase 11: Dark Mode
 **Goal**: Users can switch between light and dark themes, with their preference persisted and OS defaults respected
 **Depends on**: Phase 1 (auth/user system exists)
 **Requirements**: THEME-01, THEME-02, THEME-03
@@ -204,12 +220,12 @@ Plans:
 **Plans:** 1 plan
 
 Plans:
-- [ ] 10-01-PLAN.md — Wire next-themes ThemeProvider, add toggle to nav header, replace all hardcoded gray/white colors with semantic dark-compatible tokens
+- [ ] 11-01-PLAN.md — Wire next-themes ThemeProvider, add toggle to nav header, replace all hardcoded gray/white colors with semantic dark-compatible tokens
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10 -> 11
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
@@ -221,5 +237,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
-| 9. Export Analytics | v1.2 | 0/1 | Not started | - |
-| 10. Dark Mode | v1.2 | 0/1 | Planned | - |
+| 9. Email Verification Enforcement | v1.2 | 0/2 | Not started | - |
+| 10. Export Analytics | v1.2 | 0/1 | Not started | - |
+| 11. Dark Mode | v1.2 | 0/1 | Not started | - |
