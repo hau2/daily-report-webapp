@@ -3,9 +3,9 @@ gsd_state_version: 1.0
 milestone: v1.2
 milestone_name: Export & Theming
 status: in_progress
-stopped_at: v1.2 roadmap created, Phase 9 next
+stopped_at: Completed 09-01-PLAN.md
 last_updated: "2026-03-09"
-last_activity: 2026-03-09 -- Created v1.2 milestone with Phase 9 (Export Analytics) and Phase 10 (Dark Mode)
+last_activity: 2026-03-09 -- Completed Phase 9 Plan 1 (Backend Email Verification Enforcement)
 progress:
   total_phases: 10
   completed_phases: 8
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-08)
 
 **Core value:** Make daily reporting effortless -- quick task entry throughout the day, easy review and adjustment at end of day, clear visibility for managers.
-**Current focus:** v1.2 Export & Theming -- Phase 9: Export Analytics (next)
+**Current focus:** v1.2 -- Phase 9: Email Verification Enforcement (in progress)
 
 ## Current Position
 
-Phase: 9 of 10 (Export Analytics)
-Plan: 0 of ?
-Status: Not started — needs planning
-Last activity: 2026-03-09 -- Created v1.2 milestone
+Phase: 9 of 11 (Email Verification Enforcement)
+Plan: 1 of 2 complete
+Status: In progress
+Last activity: 2026-03-09 -- Completed 09-01 Backend Email Verification Enforcement
 
-Progress: [░░░░░░░░░░] 0% (Phase 9 not yet planned)
+Progress: [#####-----] 50% (1/2 plans complete)
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [░░░░░░░░░░] 0% (Phase 9 not yet planned)
 | Phase 08 P01 | 3min | 2 tasks | 6 files |
 | Phase 08 P03 | 4min | 2 tasks | 3 files |
 | Phase 08 P02 | 4min | 2 tasks | 5 files |
+| Phase 09 P01 | 2min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -81,6 +82,9 @@ Recent decisions affecting current work:
 
 - [Phase 08-03]: Custom CSS grid for submission calendar (no extra library dependency)
 - [Phase 08-03]: Color-coded hours: red above team avg (overwork), green below
+- [09-01]: In-memory Map for resend rate limiting (sufficient for single-server)
+- [09-01]: Global APP_GUARD with SkipEmailVerification decorator pattern for opt-out
+- [09-01]: GET /auth/me queries DB for emailVerified instead of relying on JWT claims
 
 ### Pending Todos
 
@@ -93,6 +97,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-08T18:25:27Z
-Stopped at: Completed 08-03-PLAN.md
+Last session: 2026-03-09T03:16:13Z
+Stopped at: Completed 09-01-PLAN.md
 Resume file: None

@@ -193,7 +193,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 09-01-PLAN.md — Backend: EmailVerifiedGuard (global APP_GUARD), resend-verification endpoint with rate limiting, /auth/me returns emailVerified
+- [x] 09-01-PLAN.md — Backend: EmailVerifiedGuard (global APP_GUARD), resend-verification endpoint with rate limiting, /auth/me returns emailVerified
 - [ ] 09-02-PLAN.md — Frontend: /verify-required page with resend button, auth hook email verification redirect, 403 interception in API client
 
 ### Phase 10: Export Analytics
@@ -237,6 +237,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 6. Membership Management | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
-| 9. Email Verification Enforcement | v1.2 | 0/2 | Not started | - |
+| 9. Email Verification Enforcement | v1.2 | 1/2 | In progress | - |
 | 10. Export Analytics | v1.2 | 0/1 | Not started | - |
 | 11. Dark Mode | v1.2 | 0/1 | Not started | - |

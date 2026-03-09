@@ -75,10 +75,10 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 
 ### Email Verification Enforcement
 
-- [ ] **VERIFY-01**: Unverified user is blocked from all protected endpoints (returns 403 with clear message)
+- [x] **VERIFY-01**: Unverified user is blocked from all protected endpoints (returns 403 with clear message)
 - [ ] **VERIFY-02**: Unverified user is redirected to a "verify your email" page after login
-- [ ] **VERIFY-03**: Invited user must have a verified email before accepting a team invitation
-- [ ] **VERIFY-04**: User can request a new verification email from the verification-required page
+- [x] **VERIFY-03**: Invited user must have a verified email before accepting a team invitation
+- [x] **VERIFY-04**: User can request a new verification email from the verification-required page
 
 ### Export Analytics
 
@@ -178,10 +178,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-04 | Phase 8 | Complete |
 | DASH-05 | Phase 8 | Complete |
 
-| VERIFY-01 | Phase 9 | Planned |
+| VERIFY-01 | Phase 9 | Complete |
 | VERIFY-02 | Phase 9 | Planned |
-| VERIFY-03 | Phase 9 | Planned |
-| VERIFY-04 | Phase 9 | Planned |
+| VERIFY-03 | Phase 9 | Complete |
+| VERIFY-04 | Phase 9 | Complete |
 | EXPORT-01 | Phase 10 | Planned |
 | EXPORT-02 | Phase 10 | Planned |
 | EXPORT-03 | Phase 10 | Planned |
