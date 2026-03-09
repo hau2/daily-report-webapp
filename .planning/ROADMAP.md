@@ -204,10 +204,11 @@ Plans:
   1. Owner can click a download button on any chart to save it as a PNG image
   2. Owner can download a full analytics report as a PDF containing all charts and summary data
   3. Owner can export raw analytics data as a CSV file for use in spreadsheets
-**Plans:** 1 plan
+**Plans:** 2 plans
 
 Plans:
-- [ ] 10-01-PLAN.md — Frontend: export utilities (PNG/PDF/CSV), ChartCard wrapper with download button, PDF/CSV export buttons on analytics page
+- [ ] 10-01-PLAN.md — Export utility functions (PNG/PDF/CSV) and reusable ChartCard + ExportToolbar components
+- [ ] 10-02-PLAN.md — Wire ChartCard into analytics charts, add ExportToolbar with PDF/CSV export to analytics page
 
 ### Phase 11: Dark Mode
 **Goal**: Users can switch between light and dark themes, with their preference persisted and OS defaults respected
@@ -238,5 +239,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 9. Email Verification Enforcement | v1.2 | 1/2 | In progress | - |
-| 10. Export Analytics | v1.2 | 0/1 | Not started | - |
+| 10. Export Analytics | v1.2 | 0/2 | Not started | - |
 | 11. Dark Mode | v1.2 | 0/1 | Not started | - |
