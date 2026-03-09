@@ -18,6 +18,7 @@ import { ResetPasswordDto } from './dto/reset-password.dto';
 import { ExtensionRefreshDto } from './dto/extension-refresh.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { AccessTokenGuard } from './guards/access-token.guard';
+import { SkipEmailVerification } from './guards/email-verified.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { AccessTokenUser } from './strategies/access-token.strategy';
 import { RefreshTokenUser } from './strategies/refresh-token.strategy';
@@ -103,6 +104,17 @@ export class AuthController {
     @Body() dto: ExtensionRefreshDto,
   ): Promise<{ accessToken: string; refreshToken: string }> {
     return this.authService.extensionRefresh(dto.refreshToken);
+  }
+
+  @Post('resend-verification')
+  @UseGuards(AccessTokenGuard)
+  @SkipEmailVerification()
+  @HttpCode(HttpStatus.OK)
+  async resendVerification(
+    @Req() req: Request,
+  ): Promise<{ message: string }> {
+    const user = req.user as AccessTokenUser;
+    return this.authService.resendVerification(user.userId);
   }
 
   @Get('me')

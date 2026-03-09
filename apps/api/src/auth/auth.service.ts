@@ -18,6 +18,8 @@ import { VerifyEmailDto } from './dto/verify-email.dto';
 
 @Injectable()
 export class AuthService {
+  private readonly verificationRateLimit = new Map<string, number>();
+
   constructor(
     private readonly supabaseService: SupabaseService,
     private readonly jwtService: JwtService,
@@ -261,6 +263,68 @@ export class AuthService {
     }
 
     return this.generateTokens(user.id, user.email);
+  }
+
+  async resendVerification(userId: string): Promise<{ message: string }> {
+    const client = this.supabaseService.getClient();
+    const { data: user } = await client
+      .from('users')
+      .select('id, email, email_verified')
+      .eq('id', userId)
+      .single();
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    if (user.email_verified) {
+      throw new BadRequestException('Email is already verified');
+    }
+
+    const lastSent = this.verificationRateLimit.get(userId);
+    if (lastSent && Date.now() - lastSent < 60_000) {
+      throw new BadRequestException(
+        'Please wait before requesting another verification email',
+      );
+    }
+
+    const jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
+    const verificationToken = await this.jwtService.signAsync(
+      { sub: user.id, purpose: 'email-verification' },
+      { secret: jwtSecret, expiresIn: '1h' },
+    );
+
+    await this.emailService.sendVerificationEmail(user.email, verificationToken);
+    this.verificationRateLimit.set(userId, Date.now());
+
+    return { message: 'Verification email sent' };
+  }
+
+  async getProfile(
+    userId: string,
+  ): Promise<{
+    userId: string;
+    email: string;
+    displayName: string | null;
+    emailVerified: boolean;
+  }> {
+    const client = this.supabaseService.getClient();
+    const { data: user } = await client
+      .from('users')
+      .select('id, email, display_name, email_verified')
+      .eq('id', userId)
+      .single();
+
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    return {
+      userId: user.id,
+      email: user.email,
+      displayName: user.display_name,
+      emailVerified: user.email_verified,
+    };
   }
 
   private async generateTokens(

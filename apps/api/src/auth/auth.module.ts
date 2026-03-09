@@ -5,6 +5,7 @@ import { EmailModule } from '../email/email.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { AccessTokenGuard } from './guards/access-token.guard';
+import { EmailVerifiedGuard } from './guards/email-verified.guard';
 import { RefreshTokenGuard } from './guards/refresh-token.guard';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
@@ -21,8 +22,9 @@ import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
     AccessTokenStrategy,
     RefreshTokenStrategy,
     AccessTokenGuard,
+    EmailVerifiedGuard,
     RefreshTokenGuard,
   ],
-  exports: [AuthService],
+  exports: [AuthService, EmailVerifiedGuard],
 })
 export class AuthModule {}
