@@ -73,6 +73,13 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 - [x] **DASH-04**: Owner can view task volume chart per member over week/month/quarter
 - [x] **DASH-05**: Owner can toggle between week, month, and quarter time ranges
 
+### Email Verification Enforcement
+
+- [ ] **VERIFY-01**: Unverified user is blocked from all protected endpoints (returns 403 with clear message)
+- [ ] **VERIFY-02**: Unverified user is redirected to a "verify your email" page after login
+- [ ] **VERIFY-03**: Invited user must have a verified email before accepting a team invitation
+- [ ] **VERIFY-04**: User can request a new verification email from the verification-required page
+
 ### Export Analytics
 
 - [ ] **EXPORT-01**: Owner can download any analytics chart as a PNG image
@@ -171,18 +178,22 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DASH-04 | Phase 8 | Complete |
 | DASH-05 | Phase 8 | Complete |
 
-| EXPORT-01 | Phase 9 | Planned |
-| EXPORT-02 | Phase 9 | Planned |
-| EXPORT-03 | Phase 9 | Planned |
-| THEME-01 | Phase 10 | Planned |
-| THEME-02 | Phase 10 | Planned |
-| THEME-03 | Phase 10 | Planned |
+| VERIFY-01 | Phase 9 | Planned |
+| VERIFY-02 | Phase 9 | Planned |
+| VERIFY-03 | Phase 9 | Planned |
+| VERIFY-04 | Phase 9 | Planned |
+| EXPORT-01 | Phase 10 | Planned |
+| EXPORT-02 | Phase 10 | Planned |
+| EXPORT-03 | Phase 10 | Planned |
+| THEME-01 | Phase 11 | Planned |
+| THEME-02 | Phase 11 | Planned |
+| THEME-03 | Phase 11 | Planned |
 
 **Coverage:**
 - v1.0 requirements: 24 total (all complete)
 - v1.1 requirements: 13 total (all complete)
-- v1.2 requirements: 6 total
-- Mapped to phases: 6
+- v1.2 requirements: 10 total
+- Mapped to phases: 10
 - Unmapped: 0
 
 ---
