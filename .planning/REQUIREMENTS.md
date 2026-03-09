@@ -76,7 +76,7 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 ### Email Verification Enforcement
 
 - [x] **VERIFY-01**: Unverified user is blocked from all protected endpoints (returns 403 with clear message)
-- [ ] **VERIFY-02**: Unverified user is redirected to a "verify your email" page after login
+- [x] **VERIFY-02**: Unverified user is redirected to a "verify your email" page after login
 - [x] **VERIFY-03**: Invited user must have a verified email before accepting a team invitation
 - [x] **VERIFY-04**: User can request a new verification email from the verification-required page
 
