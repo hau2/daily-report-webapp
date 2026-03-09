@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 import {
   Card,
@@ -20,6 +21,7 @@ export default function VerifyEmailPage() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token');
   const [state, setState] = useState<VerifyState>('loading');
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!token) {
@@ -29,13 +31,16 @@ export default function VerifyEmailPage() {
 
     api
       .post<{ message: string }>('/auth/verify-email', { token })
-      .then(() => {
+      .then(async () => {
+        // Clear stale auth cache and logout so user gets a fresh session
+        queryClient.clear();
+        try { await api.post('/auth/logout'); } catch {}
         setState('success');
       })
       .catch(() => {
         setState('error');
       });
-  }, [token]);
+  }, [token, queryClient]);
 
   if (state === 'loading') {
     return (
