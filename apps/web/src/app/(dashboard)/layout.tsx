@@ -8,6 +8,7 @@ import { Menu, X } from 'lucide-react';
 import { useAuth } from '@/hooks/use-auth';
 import { api } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
+import { ThemeToggle } from '@/components/theme-toggle';
 import type { Team } from '@daily-report/shared';
 
 interface TeamWithRole {
@@ -115,6 +116,7 @@ export default function DashboardLayout({
                 {link.label}
               </NavLink>
             ))}
+            <ThemeToggle />
             <span className="text-sm text-gray-600">{user?.email}</span>
             <Button
               variant="outline"
@@ -153,6 +155,7 @@ export default function DashboardLayout({
                 {link.label}
               </NavLink>
             ))}
+            <ThemeToggle />
             <span className="py-2 text-sm text-gray-600">{user?.email}</span>
             <Button
               variant="outline"
