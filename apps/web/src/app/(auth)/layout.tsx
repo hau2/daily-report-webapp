@@ -14,7 +14,7 @@ export default function AuthLayout({
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated && pathname !== '/join') {
+    if (!isLoading && isAuthenticated && pathname !== '/join' && pathname !== '/verify-required') {
       router.replace('/dashboard');
     }
   }, [isAuthenticated, isLoading, router, pathname]);

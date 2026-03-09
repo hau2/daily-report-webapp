@@ -9,6 +9,7 @@ import type { RegisterInput, LoginInput } from '@daily-report/shared';
 interface AuthUser {
   userId: string;
   email: string;
+  emailVerified: boolean;
 }
 
 async function fetchCurrentUser(): Promise<AuthUser | null> {
@@ -36,9 +37,17 @@ export function useAuth() {
   const loginMutation = useMutation({
     mutationFn: (credentials: LoginInput) =>
       api.post<{ message: string }>('/auth/login', credentials),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
-      router.push('/dashboard');
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ['auth', 'me'] });
+      const freshUser = await queryClient.fetchQuery({
+        queryKey: ['auth', 'me'],
+        queryFn: fetchCurrentUser,
+      });
+      if (freshUser && !freshUser.emailVerified) {
+        router.push('/verify-required');
+      } else {
+        router.push('/dashboard');
+      }
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Login failed');
@@ -50,7 +59,7 @@ export function useAuth() {
       api.post<{ message: string }>('/auth/register', data),
     onSuccess: () => {
       toast.success('Account created! Please check your email to verify.');
-      router.push('/login');
+      router.push('/verify-required');
     },
     onError: (error: Error) => {
       toast.error(error.message || 'Registration failed');
