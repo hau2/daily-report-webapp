@@ -82,9 +82,9 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 
 ### Export Analytics
 
-- [ ] **EXPORT-01**: Owner can download any analytics chart as a PNG image
-- [ ] **EXPORT-02**: Owner can download a full analytics report as a PDF
-- [ ] **EXPORT-03**: Owner can export raw analytics data as a CSV file
+- [x] **EXPORT-01**: Owner can download any analytics chart as a PNG image
+- [x] **EXPORT-02**: Owner can download a full analytics report as a PDF
+- [x] **EXPORT-03**: Owner can export raw analytics data as a CSV file
 
 ### Dark Mode
 
