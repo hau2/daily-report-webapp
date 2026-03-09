@@ -39,7 +39,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [ ] **Phase 9: Email Verification Enforcement** - Block unverified users from all features, resend verification, redirect flow
 - [x] **Phase 10: Export Analytics** - Download charts as PNG/PDF, export raw analytics data as CSV (completed 2026-03-09)
-- [ ] **Phase 11: Dark Mode** - Light/dark theme toggle with OS preference detection and persistent user preference
+- [x] **Phase 11: Dark Mode** - Light/dark theme toggle with OS preference detection and persistent user preference (completed 2026-03-09)
 
 ## Phase Details
 
@@ -218,7 +218,7 @@ Plans:
   1. User can toggle between light and dark mode via a button in the navigation/header
   2. User's theme preference persists across sessions (stored in localStorage or user profile)
   3. On first visit, the app defaults to the user's OS/browser color scheme preference (prefers-color-scheme)
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [ ] 11-01-PLAN.md — Wire next-themes ThemeProvider, add toggle to nav header, replace all hardcoded gray/white colors with semantic dark-compatible tokens
@@ -239,5 +239,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10
 | 7. Stress Level Tracking | v1.1 | 2/2 | Complete | 2026-03-08 |
 | 8. Dashboard Analytics | v1.1 | 3/3 | Complete | 2026-03-08 |
 | 9. Email Verification Enforcement | v1.2 | 1/2 | In progress | - |
-| 10. Export Analytics | 2/2 | Complete   | 2026-03-09 | - |
-| 11. Dark Mode | v1.2 | 0/1 | Not started | - |
+| 10. Export Analytics | 2/2 | Complete    | 2026-03-09 | - |
+| 11. Dark Mode | 1/1 | Complete   | 2026-03-09 | - |

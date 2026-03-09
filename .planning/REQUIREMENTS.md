@@ -88,9 +88,9 @@ Requirements for milestone v1.1: Team Membership Management. Each maps to roadma
 
 ### Dark Mode
 
-- [ ] **THEME-01**: User can toggle between light and dark mode from the UI
-- [ ] **THEME-02**: User's theme preference persists across sessions
-- [ ] **THEME-03**: App defaults to the user's OS/browser color scheme preference
+- [x] **THEME-01**: User can toggle between light and dark mode from the UI
+- [x] **THEME-02**: User's theme preference persists across sessions
+- [x] **THEME-03**: App defaults to the user's OS/browser color scheme preference
 
 ## v2 Requirements
 
