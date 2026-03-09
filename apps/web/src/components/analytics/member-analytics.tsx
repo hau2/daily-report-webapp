@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import {
@@ -18,6 +18,7 @@ import {
 } from 'recharts';
 import { api } from '@/lib/api-client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ChartCard } from './chart-card';
 import type {
   AnalyticsRange,
   MemberAnalyticsResponse,
@@ -28,6 +29,8 @@ import type {
 interface MemberAnalyticsProps {
   teamId: string;
   range: AnalyticsRange;
+  chartRefsCollector?: React.MutableRefObject<HTMLDivElement[]>;
+  onDataReady?: (data: MemberAnalyticsResponse) => void;
 }
 
 const stressToNumber: Record<string, number> = { low: 1, medium: 2, high: 3 };
@@ -132,8 +135,13 @@ function SubmissionCalendar({ data }: { data: SubmissionCalendarDay[] }) {
   );
 }
 
-export function MemberAnalytics({ teamId, range }: MemberAnalyticsProps) {
+export function MemberAnalytics({ teamId, range, chartRefsCollector, onDataReady }: MemberAnalyticsProps) {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+  const chartRef1 = useRef<HTMLDivElement>(null);
+  const chartRef2 = useRef<HTMLDivElement>(null);
+  const chartRef3 = useRef<HTMLDivElement>(null);
+  const chartRef4 = useRef<HTMLDivElement>(null);
 
   // Fetch team members list
   const { data: teamReports, isLoading: isMembersLoading } = useQuery({
@@ -192,6 +200,20 @@ export function MemberAnalytics({ teamId, range }: MemberAnalyticsProps) {
       count: d.count,
     }));
   }, [analytics]);
+
+  useEffect(() => {
+    if (chartRefsCollector) {
+      chartRefsCollector.current = [chartRef1, chartRef2, chartRef3, chartRef4]
+        .map((r) => r.current)
+        .filter(Boolean) as HTMLDivElement[];
+    }
+  }, [chartRefsCollector]);
+
+  useEffect(() => {
+    if (analytics && onDataReady) {
+      onDataReady(analytics);
+    }
+  }, [analytics, onDataReady]);
 
   if (isMembersLoading) {
     return <p className="text-muted-foreground py-8 text-center">Loading members...</p>;
@@ -329,11 +351,8 @@ export function MemberAnalytics({ teamId, range }: MemberAnalyticsProps) {
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Hours Worked */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Hours Worked</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div ref={chartRef1}>
+              <ChartCard title="Hours Worked" filename="hours-worked">
                 {hoursData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <ComposedChart data={hoursData}>
@@ -355,15 +374,12 @@ export function MemberAnalytics({ teamId, range }: MemberAnalyticsProps) {
                 ) : (
                   <p className="text-sm text-muted-foreground">No hours data available.</p>
                 )}
-              </CardContent>
-            </Card>
+              </ChartCard>
+            </div>
 
             {/* Stress Timeline */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Stress Timeline</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div ref={chartRef2}>
+              <ChartCard title="Stress Timeline" filename="stress-timeline">
                 {stressData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <LineChart data={stressData}>
@@ -395,15 +411,12 @@ export function MemberAnalytics({ teamId, range }: MemberAnalyticsProps) {
                 ) : (
                   <p className="text-sm text-muted-foreground">No stress data available.</p>
                 )}
-              </CardContent>
-            </Card>
+              </ChartCard>
+            </div>
 
             {/* Task Breakdown */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Task Breakdown</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div ref={chartRef3}>
+              <ChartCard title="Task Breakdown" filename="task-breakdown">
                 {taskData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={250}>
                     <BarChart data={taskData}>
@@ -417,18 +430,15 @@ export function MemberAnalytics({ teamId, range }: MemberAnalyticsProps) {
                 ) : (
                   <p className="text-sm text-muted-foreground">No task data available.</p>
                 )}
-              </CardContent>
-            </Card>
+              </ChartCard>
+            </div>
 
             {/* Submission Calendar */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Submission Calendar</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div ref={chartRef4}>
+              <ChartCard title="Submission Calendar" filename="submission-calendar">
                 <SubmissionCalendar data={analytics.submissionCalendar} />
-              </CardContent>
-            </Card>
+              </ChartCard>
+            </div>
           </div>
         </>
       )}

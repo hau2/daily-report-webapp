@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useRef, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { format, parseISO } from 'date-fns';
 import {
@@ -26,14 +26,15 @@ import type {
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { SummaryCard } from './summary-card';
+import { ChartCard } from './chart-card';
 
 interface TeamOverviewProps {
   teamId: string;
   range: AnalyticsRange;
+  chartRefsCollector?: React.MutableRefObject<HTMLDivElement[]>;
+  onDataReady?: (data: TeamAnalyticsResponse) => void;
 }
 
 // --- Heatmap helpers ---
@@ -86,7 +87,12 @@ function formatShortDate(dateStr: string): string {
 
 // --- Main component ---
 
-export function TeamOverview({ teamId, range }: TeamOverviewProps) {
+export function TeamOverview({ teamId, range, chartRefsCollector, onDataReady }: TeamOverviewProps) {
+  const chartRef1 = useRef<HTMLDivElement>(null);
+  const chartRef2 = useRef<HTMLDivElement>(null);
+  const chartRef3 = useRef<HTMLDivElement>(null);
+  const chartRef4 = useRef<HTMLDivElement>(null);
+
   const { data, isLoading } = useQuery({
     queryKey: ['team-analytics', teamId, range],
     queryFn: () =>
@@ -107,6 +113,20 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
         : [],
     [data],
   );
+
+  useEffect(() => {
+    if (chartRefsCollector) {
+      chartRefsCollector.current = [chartRef1, chartRef2, chartRef3, chartRef4]
+        .map((r) => r.current)
+        .filter(Boolean) as HTMLDivElement[];
+    }
+  }, [chartRefsCollector]);
+
+  useEffect(() => {
+    if (data && onDataReady) {
+      onDataReady(data);
+    }
+  }, [data, onDataReady]);
 
   if (isLoading) {
     return (
@@ -209,11 +229,8 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
       {/* Charts */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Submission Rate Line Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Submission Rate</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div ref={chartRef1}>
+          <ChartCard title="Submission Rate" filename="submission-rate">
             {data.submissionRates.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
                 No data for this period
@@ -252,77 +269,73 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
                 </LineChart>
               </ResponsiveContainer>
             )}
-          </CardContent>
-        </Card>
+          </ChartCard>
+        </div>
 
         {/* Workload Heatmap */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Workload Heatmap</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div ref={chartRef2}>
+          <ChartCard title="Workload Heatmap" filename="workload-heatmap">
             {heatmap.rows.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
                 No data for this period
               </p>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr>
-                      <th className="sticky left-0 bg-card px-2 py-1 text-left font-medium">
-                        Member
-                      </th>
-                      {heatmap.dates.map((d) => (
-                        <th key={d} className="px-2 py-1 text-center font-medium">
-                          {formatShortDate(d)}
+              <>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-xs">
+                    <thead>
+                      <tr>
+                        <th className="sticky left-0 bg-card px-2 py-1 text-left font-medium">
+                          Member
                         </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {heatmap.rows.map((row) => (
-                      <tr key={row.userId}>
-                        <td className="sticky left-0 bg-card px-2 py-1 font-medium whitespace-nowrap">
-                          {row.displayName}
-                        </td>
-                        {heatmap.dates.map((d) => {
-                          const hours = row.cells.get(d) ?? 0;
-                          return (
-                            <td
-                              key={d}
-                              className={`px-2 py-1 text-center ${heatmapCellColor(hours)}`}
-                            >
-                              {hours > 0 ? hours.toFixed(1) : '-'}
-                            </td>
-                          );
-                        })}
+                        {heatmap.dates.map((d) => (
+                          <th key={d} className="px-2 py-1 text-center font-medium">
+                            {formatShortDate(d)}
+                          </th>
+                        ))}
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                    </thead>
+                    <tbody>
+                      {heatmap.rows.map((row) => (
+                        <tr key={row.userId}>
+                          <td className="sticky left-0 bg-card px-2 py-1 font-medium whitespace-nowrap">
+                            {row.displayName}
+                          </td>
+                          {heatmap.dates.map((d) => {
+                            const hours = row.cells.get(d) ?? 0;
+                            return (
+                              <td
+                                key={d}
+                                className={`px-2 py-1 text-center ${heatmapCellColor(hours)}`}
+                              >
+                                {hours > 0 ? hours.toFixed(1) : '-'}
+                              </td>
+                            );
+                          })}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <span className="inline-block h-3 w-3 rounded bg-green-200" /> &le;8h
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="inline-block h-3 w-3 rounded bg-yellow-200" /> 8-10h
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <span className="inline-block h-3 w-3 rounded bg-red-200" /> &gt;10h
+                  </span>
+                </div>
+              </>
             )}
-            <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1">
-                <span className="inline-block h-3 w-3 rounded bg-green-200" /> &le;8h
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="inline-block h-3 w-3 rounded bg-yellow-200" /> 8-10h
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="inline-block h-3 w-3 rounded bg-red-200" /> &gt;10h
-              </span>
-            </div>
-          </CardContent>
-        </Card>
+          </ChartCard>
+        </div>
 
         {/* Stress Trend Stacked Area Chart */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Stress Trend</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div ref={chartRef3}>
+          <ChartCard title="Stress Trend" filename="stress-trend">
             {data.stressTrend.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
                 No data for this period
@@ -368,15 +381,12 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
                 </AreaChart>
               </ResponsiveContainer>
             )}
-          </CardContent>
-        </Card>
+          </ChartCard>
+        </div>
 
         {/* Task Volume by Member */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Task Volume by Member</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <div ref={chartRef4}>
+          <ChartCard title="Task Volume by Member" filename="task-volume">
             {sortedTaskVolume.length === 0 ? (
               <p className="py-8 text-center text-sm text-muted-foreground">
                 No data for this period
@@ -412,8 +422,8 @@ export function TeamOverview({ teamId, range }: TeamOverviewProps) {
                 </BarChart>
               </ResponsiveContainer>
             )}
-          </CardContent>
-        </Card>
+          </ChartCard>
+        </div>
       </div>
     </div>
   );
