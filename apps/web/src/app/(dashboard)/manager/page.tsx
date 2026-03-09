@@ -73,7 +73,7 @@ export default function ManagerIndexPage() {
       <div className="space-y-3">
         {managedTeams.map(({ team }) => (
           <Link key={team.id} href={`/manager/${team.id}`}>
-            <Card className="cursor-pointer transition-colors hover:bg-gray-50">
+            <Card className="cursor-pointer transition-colors hover:bg-muted">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-base font-medium">
                   {team.name}

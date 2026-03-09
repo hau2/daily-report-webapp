@@ -28,11 +28,11 @@ function NavLink({
   mobile?: boolean;
 }) {
   const baseClass = mobile
-    ? 'py-2 text-base hover:text-gray-900'
-    : 'text-sm hover:text-gray-900';
+    ? 'py-2 text-base hover:text-foreground'
+    : 'text-sm hover:text-foreground';
   const activeClass = active
-    ? 'font-medium text-gray-900'
-    : 'text-gray-600 underline';
+    ? 'font-medium text-foreground'
+    : 'text-muted-foreground underline';
 
   return (
     <Link href={href} className={`${baseClass} ${activeClass}`}>
@@ -81,7 +81,7 @@ export default function DashboardLayout({
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
@@ -105,7 +105,7 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen flex-col">
-      <header className="sticky top-0 z-10 border-b bg-white px-4 py-3 sm:px-6">
+      <header className="sticky top-0 z-10 border-b bg-background px-4 py-3 sm:px-6">
         <div className="flex items-center justify-between">
           <h1 className="text-xl font-semibold">Daily Report</h1>
 
@@ -117,7 +117,7 @@ export default function DashboardLayout({
               </NavLink>
             ))}
             <ThemeToggle />
-            <span className="text-sm text-gray-600">{user?.email}</span>
+            <span className="text-sm text-muted-foreground">{user?.email}</span>
             <Button
               variant="outline"
               size="sm"
@@ -156,7 +156,7 @@ export default function DashboardLayout({
               </NavLink>
             ))}
             <ThemeToggle />
-            <span className="py-2 text-sm text-gray-600">{user?.email}</span>
+            <span className="py-2 text-sm text-muted-foreground">{user?.email}</span>
             <Button
               variant="outline"
               size="sm"

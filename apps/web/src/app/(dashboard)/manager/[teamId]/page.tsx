@@ -39,13 +39,13 @@ function StatusBadge({ status }: { status: 'submitted' | 'draft' | 'none' }) {
       return <Badge className="bg-green-600">Submitted</Badge>;
     case 'draft':
       return (
-        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+        <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
           Draft
         </Badge>
       );
     case 'none':
       return (
-        <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+        <Badge variant="secondary" className="bg-muted text-muted-foreground">
           No Report
         </Badge>
       );
@@ -58,9 +58,9 @@ function StressLevelBadge({ stressLevel }: { stressLevel: StressLevel | null }) 
   if (!stressLevel) return null;
 
   const config: Record<StressLevel, { className: string; label: string }> = {
-    low: { className: 'bg-green-100 text-green-700', label: 'Low' },
-    medium: { className: 'bg-yellow-100 text-yellow-700', label: 'Medium' },
-    high: { className: 'bg-red-100 text-red-700', label: 'High' },
+    low: { className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', label: 'Low' },
+    medium: { className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', label: 'Medium' },
+    high: { className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', label: 'High' },
   };
 
   const { className, label } = config[stressLevel];
@@ -94,7 +94,7 @@ function MemberReportCard({ member }: { member: TeamMemberReport }) {
               <StressLevelBadge stressLevel={member.stressLevel} />
             )}
             {member.departed && (
-              <Badge variant="outline" className="border-gray-400 text-gray-500">
+              <Badge variant="outline" className="border-border text-muted-foreground">
                 Departed
               </Badge>
             )}
@@ -169,9 +169,9 @@ function MemberReportCard({ member }: { member: TeamMemberReport }) {
 function PendingPanel({ pending }: { pending: PendingMember[] }) {
   if (pending.length === 0) {
     return (
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20">
         <CardHeader>
-          <CardTitle className="text-base font-medium text-green-800">
+          <CardTitle className="text-base font-medium text-green-800 dark:text-green-400">
             All members submitted
           </CardTitle>
         </CardHeader>
@@ -180,13 +180,13 @@ function PendingPanel({ pending }: { pending: PendingMember[] }) {
   }
 
   return (
-    <Card className="border-amber-200 bg-amber-50">
+    <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20">
       <CardHeader>
         <div className="flex items-center gap-2">
-          <CardTitle className="text-base font-medium text-amber-800">
+          <CardTitle className="text-base font-medium text-amber-800 dark:text-amber-400">
             Pending Submissions
           </CardTitle>
-          <Badge variant="secondary" className="bg-amber-200 text-amber-900">
+          <Badge variant="secondary" className="bg-amber-200 text-amber-900 dark:bg-amber-900/30 dark:text-amber-400">
             {pending.length}
           </Badge>
         </div>
@@ -198,12 +198,12 @@ function PendingPanel({ pending }: { pending: PendingMember[] }) {
               key={member.userId}
               className="flex items-center justify-between text-sm"
             >
-              <span className="font-medium text-amber-900">
+              <span className="font-medium text-amber-900 dark:text-amber-400">
                 {member.displayName || member.email}
               </span>
               <Badge
                 variant="outline"
-                className="border-amber-300 text-amber-700"
+                className="border-amber-300 text-amber-700 dark:border-amber-700 dark:text-amber-400"
               >
                 {member.reportStatus === 'draft' ? 'Draft' : 'Not started'}
               </Badge>

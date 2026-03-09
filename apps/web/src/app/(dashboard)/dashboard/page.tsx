@@ -33,7 +33,7 @@ export default function DashboardPage() {
       <h2 className="text-2xl font-bold">
         Welcome, {user?.email ?? 'there'}!
       </h2>
-      <p className="mt-2 text-gray-600">Your dashboard will appear here.</p>
+      <p className="mt-2 text-muted-foreground">Your dashboard will appear here.</p>
 
       <div className="mt-6">
         {!isTeamsLoading && teams && teams.length === 0 && (

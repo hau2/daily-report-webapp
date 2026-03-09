@@ -28,10 +28,10 @@ export function SummaryCard({
 }: SummaryCardProps) {
   const trendColor =
     trend !== undefined && trend > 0
-      ? 'text-green-600'
+      ? 'text-green-600 dark:text-green-400'
       : trend !== undefined && trend < 0
-        ? 'text-red-600'
-        : 'text-gray-400';
+        ? 'text-red-600 dark:text-red-400'
+        : 'text-muted-foreground';
 
   const TrendIcon =
     trend !== undefined && trend > 0

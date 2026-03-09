@@ -71,10 +71,10 @@ function buildHeatmapRows(data: HeatmapCell[]): {
 }
 
 function heatmapCellColor(hours: number): string {
-  if (hours === 0) return 'bg-gray-100 text-gray-400';
-  if (hours <= 8) return 'bg-green-200 text-green-800';
-  if (hours <= 10) return 'bg-yellow-200 text-yellow-800';
-  return 'bg-red-200 text-red-800';
+  if (hours === 0) return 'bg-muted text-muted-foreground';
+  if (hours <= 8) return 'bg-green-200 text-green-800 dark:bg-green-900/40 dark:text-green-400';
+  if (hours <= 10) return 'bg-yellow-200 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400';
+  return 'bg-red-200 text-red-800 dark:bg-red-900/40 dark:text-red-400';
 }
 
 function formatShortDate(dateStr: string): string {
@@ -208,9 +208,9 @@ export function TeamOverview({ teamId, range, chartRefsCollector, onDataReady }:
                   />
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span className="text-green-600">Low {summary.stressDistribution.low}</span>
-                  <span className="text-yellow-600">Med {summary.stressDistribution.medium}</span>
-                  <span className="text-red-600">High {summary.stressDistribution.high}</span>
+                  <span className="text-green-600 dark:text-green-400">Low {summary.stressDistribution.low}</span>
+                  <span className="text-yellow-600 dark:text-yellow-400">Med {summary.stressDistribution.medium}</span>
+                  <span className="text-red-600 dark:text-red-400">High {summary.stressDistribution.high}</span>
                 </div>
               </>
             ) : (
@@ -251,7 +251,7 @@ export function TeamOverview({ teamId, range, chartRefsCollector, onDataReady }:
                       if (!active || !payload?.length) return null;
                       const entry = payload[0]?.payload as { rate: number; submitted: number; total: number };
                       return (
-                        <div className="rounded border bg-white px-3 py-2 text-sm shadow">
+                        <div className="rounded border bg-popover px-3 py-2 text-sm shadow text-popover-foreground">
                           <p className="font-medium">{formatShortDate(label as string)}</p>
                           <p>{entry.rate.toFixed(0)}% ({entry.submitted}/{entry.total})</p>
                         </div>
@@ -261,7 +261,7 @@ export function TeamOverview({ teamId, range, chartRefsCollector, onDataReady }:
                   <Line
                     type="monotone"
                     dataKey="rate"
-                    stroke="#3b82f6"
+                    stroke="var(--chart-1)"
                     strokeWidth={2}
                     dot={{ r: 3 }}
                     activeDot={{ r: 5 }}
@@ -411,14 +411,14 @@ export function TeamOverview({ teamId, range, chartRefsCollector, onDataReady }:
                       if (!active || !payload?.length) return null;
                       const entry = payload[0]?.payload as { displayName: string; taskCount: number };
                       return (
-                        <div className="rounded border bg-white px-3 py-2 text-sm shadow">
+                        <div className="rounded border bg-popover px-3 py-2 text-sm shadow text-popover-foreground">
                           <p className="font-medium">{entry.displayName}</p>
                           <p>{entry.taskCount} tasks</p>
                         </div>
                       );
                     }}
                   />
-                  <Bar dataKey="taskCount" fill="#3b82f6" radius={[0, 4, 4, 0]} />
+                  <Bar dataKey="taskCount" fill="var(--chart-1)" radius={[0, 4, 4, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             )}

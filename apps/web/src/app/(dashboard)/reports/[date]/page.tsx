@@ -328,7 +328,7 @@ function TaskRow({
 
   if (isEditing) {
     return (
-      <div className="rounded-lg border bg-gray-50 p-4">
+      <div className="rounded-lg border bg-muted p-4">
         <Form {...editForm}>
           <form
             onSubmit={editForm.handleSubmit(onEditSubmit)}
@@ -752,12 +752,12 @@ function AllTeamsReportView({
                   <Badge className="bg-green-600">Submitted</Badge>
                 )}
                 {report?.status === 'draft' && (
-                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
                     Draft
                   </Badge>
                 )}
                 {!report && (
-                  <Badge variant="secondary" className="bg-gray-100 text-gray-600">
+                  <Badge variant="secondary" className="bg-muted text-muted-foreground">
                     No Report
                   </Badge>
                 )}
@@ -832,9 +832,9 @@ function StressLevelSelector({
   onChange: (level: StressLevel) => void;
 }) {
   const options: { level: StressLevel; label: string; base: string; selected: string }[] = [
-    { level: 'low', label: 'Low', base: 'bg-green-100 text-green-700', selected: 'bg-green-600 text-white' },
-    { level: 'medium', label: 'Medium', base: 'bg-yellow-100 text-yellow-700', selected: 'bg-yellow-500 text-white' },
-    { level: 'high', label: 'High', base: 'bg-red-100 text-red-700', selected: 'bg-red-600 text-white' },
+    { level: 'low', label: 'Low', base: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', selected: 'bg-green-600 text-white' },
+    { level: 'medium', label: 'Medium', base: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', selected: 'bg-yellow-500 text-white' },
+    { level: 'high', label: 'High', base: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', selected: 'bg-red-600 text-white' },
   ];
 
   return (
@@ -864,9 +864,9 @@ function StressLevelBadgeInline({ stressLevel }: { stressLevel: StressLevel | nu
   if (!stressLevel) return null;
 
   const config: Record<StressLevel, { className: string; label: string }> = {
-    low: { className: 'bg-green-100 text-green-700', label: 'Stress: Low' },
-    medium: { className: 'bg-yellow-100 text-yellow-700', label: 'Stress: Medium' },
-    high: { className: 'bg-red-100 text-red-700', label: 'Stress: High' },
+    low: { className: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400', label: 'Stress: Low' },
+    medium: { className: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400', label: 'Stress: Medium' },
+    high: { className: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400', label: 'Stress: High' },
   };
 
   const { className, label } = config[stressLevel];
@@ -1055,11 +1055,11 @@ export default function DailyReportPage() {
 
           {/* Report status */}
           {report && report.status === 'submitted' && (
-            <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+            <div className="mb-6 rounded-lg border border-green-200 bg-green-50 px-4 py-3 dark:border-green-800 dark:bg-green-900/20">
               <div className="flex items-center gap-2">
                 <Badge className="bg-green-600">Submitted</Badge>
                 <StressLevelBadgeInline stressLevel={report.stressLevel} />
-                <span className="text-sm text-green-800">
+                <span className="text-sm text-green-800 dark:text-green-400">
                   {report.submittedAt &&
                     `Submitted on ${format(parseISO(report.submittedAt), 'MMM d, yyyy h:mm a')}`}
                 </span>

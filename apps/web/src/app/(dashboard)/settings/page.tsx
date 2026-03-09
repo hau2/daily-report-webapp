@@ -336,7 +336,7 @@ export default function SettingsPage() {
   if (isLoading || isProfileLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+        <div className="text-muted-foreground">Loading...</div>
       </div>
     );
   }
@@ -345,7 +345,7 @@ export default function SettingsPage() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-8">
         <p className="text-red-600">Failed to load profile: {(profileError as Error).message}</p>
-        <p className="mt-2 text-sm text-gray-500">Make sure the backend is running and the database is set up.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Make sure the backend is running and the database is set up.</p>
       </div>
     );
   }

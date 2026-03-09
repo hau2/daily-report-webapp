@@ -120,7 +120,7 @@ function SubmissionCalendar({ data }: { data: SubmissionCalendarDay[] }) {
                   ? 'bg-transparent'
                   : day.submitted
                     ? 'bg-green-500'
-                    : 'bg-gray-200'
+                    : 'bg-gray-200 dark:bg-gray-700'
               }`}
               title={
                 day
@@ -231,12 +231,12 @@ export function MemberAnalytics({ teamId, range, chartRefsCollector, onDataReady
 
   const stressBadgeColor =
     summary?.mostCommonStress === 'low'
-      ? 'bg-green-100 text-green-800'
+      ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400'
       : summary?.mostCommonStress === 'medium'
-        ? 'bg-yellow-100 text-yellow-800'
+        ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400'
         : summary?.mostCommonStress === 'high'
-          ? 'bg-red-100 text-red-800'
-          : 'bg-gray-100 text-gray-800';
+          ? 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'
+          : 'bg-muted text-muted-foreground';
 
   return (
     <div className="space-y-6">
@@ -296,8 +296,8 @@ export function MemberAnalytics({ teamId, range, chartRefsCollector, onDataReady
                 <p
                   className={`text-2xl font-bold ${
                     summary.avgHours > summary.teamAvgHours
-                      ? 'text-red-600'
-                      : 'text-green-600'
+                      ? 'text-red-600 dark:text-red-400'
+                      : 'text-green-600 dark:text-green-400'
                   }`}
                 >
                   {summary.avgHours.toFixed(1)}h
@@ -361,10 +361,10 @@ export function MemberAnalytics({ teamId, range, chartRefsCollector, onDataReady
                       <YAxis tick={{ fontSize: 12 }} />
                       <Tooltip />
                       <Legend />
-                      <Bar dataKey="hours" fill="#3b82f6" name="Hours" />
+                      <Bar dataKey="hours" fill="var(--chart-1)" name="Hours" />
                       <Line
                         dataKey="teamAvg"
-                        stroke="#f97316"
+                        stroke="var(--chart-3)"
                         strokeDasharray="5 5"
                         name="Team Avg"
                         dot={false}
@@ -401,7 +401,7 @@ export function MemberAnalytics({ teamId, range, chartRefsCollector, onDataReady
                       />
                       <Line
                         dataKey="value"
-                        stroke="#6b7280"
+                        stroke="var(--chart-5)"
                         name="Stress"
                         dot={<StressDot />}
                         connectNulls
@@ -424,7 +424,7 @@ export function MemberAnalytics({ teamId, range, chartRefsCollector, onDataReady
                       <XAxis dataKey="date" tick={{ fontSize: 12 }} />
                       <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
                       <Tooltip />
-                      <Bar dataKey="count" fill="#3b82f6" name="Tasks" />
+                      <Bar dataKey="count" fill="var(--chart-1)" name="Tasks" />
                     </BarChart>
                   </ResponsiveContainer>
                 ) : (
