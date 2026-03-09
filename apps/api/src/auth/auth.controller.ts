@@ -46,6 +46,7 @@ export class AuthController {
 
   @Post('refresh')
   @UseGuards(RefreshTokenGuard)
+  @SkipEmailVerification()
   @HttpCode(HttpStatus.OK)
   async refresh(
     @Req() req: Request,
@@ -57,6 +58,7 @@ export class AuthController {
 
   @Post('logout')
   @UseGuards(AccessTokenGuard)
+  @SkipEmailVerification()
   @HttpCode(HttpStatus.OK)
   async logout(
     @Req() req: Request,
@@ -119,7 +121,9 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(AccessTokenGuard)
-  getMe(@Req() req: Request): AccessTokenUser {
-    return req.user as AccessTokenUser;
+  @SkipEmailVerification()
+  async getMe(@Req() req: Request) {
+    const user = req.user as AccessTokenUser;
+    return this.authService.getProfile(user.userId);
   }
 }
