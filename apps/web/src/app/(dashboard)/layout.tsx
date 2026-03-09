@@ -61,6 +61,12 @@ export default function DashboardLayout({
     }
   }, [isAuthenticated, isLoading, router, pathname]);
 
+  useEffect(() => {
+    if (!isLoading && isAuthenticated && user && !user.emailVerified) {
+      router.replace('/verify-required');
+    }
+  }, [isLoading, isAuthenticated, user, router]);
+
   // Check if user is a manager of any team
   const { data: teams } = useQuery({
     queryKey: ['teams', 'my'],
@@ -80,6 +86,10 @@ export default function DashboardLayout({
   }
 
   if (!isAuthenticated) {
+    return null;
+  }
+
+  if (user && !user.emailVerified) {
     return null;
   }
 

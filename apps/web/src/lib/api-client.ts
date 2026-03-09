@@ -35,6 +35,25 @@ async function apiClient<T>(
     }
   }
 
+  // Redirect to verify-required on 403 "Email not verified"
+  if (response.status === 403) {
+    try {
+      const body = await response.clone().json();
+      if (
+        typeof body?.message === 'string' &&
+        body.message.toLowerCase().includes('email not verified')
+      ) {
+        if (typeof window !== 'undefined') {
+          window.location.href = '/verify-required';
+        }
+        throw new Error(body.message);
+      }
+    } catch (e) {
+      if (e instanceof Error && e.message.toLowerCase().includes('email not verified'))
+        throw e;
+    }
+  }
+
   if (!response.ok) {
     let errorMessage = `Request failed with status ${response.status}`;
     try {
